@@ -153,7 +153,7 @@ function gameOverMenu() {
     let move = prompt(`DEFEAT!\n\nEnter 1 to start over.\nEnter 2 to exit game.`);
     if (move === "1") {
         init();
-    } else if (move === "2" {
+    } else if (move === "2") {
     } else {
         alert("Invalid input!");
     }
