@@ -1,4 +1,4 @@
-# project_1
+# Space_Battle
 Developer: Blake Thollaug
 
 Last update: 02/24/2022
