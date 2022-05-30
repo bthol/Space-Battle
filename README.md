@@ -1,4 +1,4 @@
-# Terminal-Game
+# Project_1
 Developer: Blake Thollaug
 
 Last update: 02/24/2022
