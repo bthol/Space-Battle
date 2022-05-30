@@ -1,0 +1,63 @@
+* {
+    font-family: 'Coda', cursive;
+    text-align: center;
+    color: white;
+    background-color: rgb(20, 53, 80);
+}
+
+body {
+    margin: 0 auto;
+    letter-spacing: .1em;
+}
+
+/* .bouncy{
+    animation: bouncy 5s infinite linear;
+    position:relative;
+}
+@keyframes bouncy {
+    0%{top:0em}
+    40%{top:0em}
+    43%{top:-0.9em}
+    46%{top:0em}
+    48%{top:-0.4em}
+    50%{top:0em}
+    100%{top:0em;}
+} */
+
+.bouncy {
+    animation: slidein 3s;
+}
+@keyframes slidein {
+    from {
+      margin: 0em 12em;
+    }
+    to {
+      margin: 0em 1em;
+    }
+}
+
+.button {
+    border: .5px solid #FFFFFF;
+    color:#DDDDDD;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    padding: .5em 1em;
+    margin: 0em 1em;
+    transition: all 0.1s;
+    background-color: hsl(207, 60%, 40%);
+}
+.button:hover {
+    color: #FFFFFF;
+    border-color:#DDDDDD;
+    box-shadow: inset 0 -0.6em 1em -0.35em hsla(0, 0%, 0%, 0.5);
+}
+
+#page-title {
+    color: rgb(243, 168, 30);
+    background-color: #656565;
+    border-bottom: 2px solid hsl(0, 0%, 75%);
+    letter-spacing: 1em;
+    font-size: xx-large;
+    text-transform: uppercase;
+    margin-top: 0em;
+}

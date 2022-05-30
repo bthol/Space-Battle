@@ -101,14 +101,12 @@ function gameOverMenu() {
 function newEnemy() {
     currentShip = aliens[Math.floor(Math.random() * aliens.length)];
     alert(`A ${currentShip.name} approaches...`);
-    gameplayMenu();
 };
 
 function newBossEnemy() {
     currentShip = bosses[bossCount];
     alert(`BOSS FIGHT!\n\nThe ${currentShip.name} approaches...`);
     bossCount += 1;
-    gameplayMenu();
 };
 
 ////////////////////////////DEFENSIVE MOVES////////////////////////////////////////

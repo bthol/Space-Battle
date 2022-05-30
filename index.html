@@ -7,13 +7,15 @@
     <title></title>
     <script defer src="JS/main.js"></script>
     <link rel="stylesheet" href="CSS/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Coda&family=Monofett&display=swap" rel="stylesheet">
 </head>
 <body>
     <section>
-        <h1>Space Battle</h1>
+        <h1 id="page-title">Space Battle</h1>
     </section>
     <section>
-        <p id="alert"></p>
         <div class="sprites">
             <img src="" alt="alien">
             <img src="" alt="spaceship">
@@ -21,10 +23,11 @@
         </div>
     </section>
     <section>
+        <p id="alert"></p>
         <p id="prompt"></p>
-        <button id="btn1">1</button>
-        <button id="btn2">2</button>
-        <button id="btn3">3</button>
+        <button id="btn1" class="button bouncy">1</button>
+        <button id="btn2" class="button bouncy" style="animation-delay:0.07s">2</button>
+        <button id="btn3" class="button bouncy" style="animation-delay:0.14s">3</button>
     </section>
 </body>
 </html>
