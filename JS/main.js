@@ -12,7 +12,7 @@ let bossCount = 0;
 const userShip = {
     name: "User",
     hull: 25,
-    pulsebeam: {firepower: 2, accuracy: .6},
+    pulsebeam: {firepower: 3, accuracy: .6},
     lazercannon: {firepower: 5, accuracy: .75}
 };
 
@@ -29,7 +29,7 @@ const bosses = [
     {name: "Mothership", hull: 20, firepower: 4, accuracy: .5}
 ];
 
-const bossRound = [2, 4, 6, 8];
+const bossRound = [10, 20, 30, 40];
 
 ////////////////////////DOM Element Selectors////////////////////////
 const btnEl1 = document.querySelector(`#btn1`);
@@ -230,4 +230,3 @@ function buttonTester3() {
     } else {
     }
 };
-
