@@ -8,6 +8,8 @@ let currentShip;
 let enemiesDefeated = 0;
 let bossCount = 0;
 
+const bossRound = [10, 20, 30, 40];
+
 /////////////////////data structures/////////////////////////////////
 const userShip = {
     name: "User",
@@ -28,8 +30,6 @@ const bosses = [
     {name: "General", hull: 10, firepower: 4, accuracy: .5},
     {name: "Mothership", hull: 20, firepower: 4, accuracy: .5}
 ];
-
-const bossRound = [10, 20, 30, 40];
 
 ////////////////////////DOM Element Selectors////////////////////////
 const btnEl1 = document.querySelector(`#btn1`);
@@ -122,6 +122,7 @@ function repair() {
             userShip.hull += 25 - userShip.hull;
         }
         alienAttack();
+        gameplayMenu();
     } else {
         alert(`repair: ${10 - repairCharge} turns to charge`)
     }
@@ -197,6 +198,8 @@ function bossTest() {
         gameplayMenu();
     } else if (enemiesDefeated === bossRound[0] + 1 || enemiesDefeated === bossRound[1] + 1 || enemiesDefeated === bossRound[2] + 1 || enemiesDefeated === bossRound[3] + 1) {
         userShip.hull = 25;
+        newEnemy();
+        gameplayMenu();
     } else {
         newEnemy();
         gameplayMenu();
