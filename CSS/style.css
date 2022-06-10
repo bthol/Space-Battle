@@ -11,30 +11,18 @@ body {
 }
 
 .bouncy{
-    animation: bouncy 5s infinite linear;
+    animation: bouncy 8s infinite ease-in;
     position:relative;
 }
 @keyframes bouncy {
     0%{top:0em}
     40%{top:0em}
-    43%{top:-0.9em}
+    43%{top:-0.5em}
     46%{top:0em}
-    48%{top:-0.4em}
+    48%{top:-0.1em}
     50%{top:0em}
     100%{top:0em;}
 }
-
-/* .bouncy {
-    animation: slidein 3s;
-}
-@keyframes slidein {
-    from {
-      margin: 0em 12em;
-    }
-    to {
-      margin: 0em 1em;
-    }
-} */
 
 .button {
     border: .5px solid #FFFFFF;
