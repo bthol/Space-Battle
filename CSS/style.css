@@ -2,7 +2,7 @@
     font-family: 'Coda', cursive;
     text-align: center;
     color: white;
-    background-color: rgb(20, 53, 80);
+    background-color: hsl(207, 44%, 18%);
 }
 
 body {
@@ -41,9 +41,9 @@ body {
 }
 
 #page-title {
-    color: rgb(243, 168, 30);
-    background-color: #656565;
-    border-bottom: 2px solid hsl(0, 0%, 75%);
+    color: hsl(39, 90%, 58%);
+    background-color: hsl(11, 63%, 25%);
+    border-bottom: 2px solid hsl(60, 5%, 75%);
     letter-spacing: 1em;
     font-size: xx-large;
     text-transform: uppercase;

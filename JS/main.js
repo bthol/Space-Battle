@@ -8,27 +8,29 @@ let currentShip;
 let enemiesDefeated = 0;
 let bossCount = 0;
 
-const bossRound = [10, 20, 30, 40];
+const bossRound = [2, 4, 6, 8, 10];
 
 /////////////////////data structures/////////////////////////////////
 const userShip = {
     name: "User",
     hull: 25,
-    pulsebeam: {firepower: 3, accuracy: .6},
-    lazercannon: {firepower: 5, accuracy: .75}
+    pulsebeam: {firepower: 2, accuracy: .6},
+    lazercannon: {firepower: 5, accuracy: .8}
 };
 
 const aliens = [
-    {name: "Fleetship", hull: 3, firepower: 1, accuracy: .6},
-    {name: "Tanker", hull: 5, firepower: 1, accuracy: .6},
-    {name: "Sentinel", hull: 4, firepower: 1, accuracy: .8}
+    {name: "Subort", hull: 2, score: 100, firepower: 1, accuracy: .4},
+    {name: "Hust", hull: 2, score: 100, firepower: 2, accuracy: .3},
+    {name: "", hull: 6, score: 300, firepower: 2, accuracy: .5},
+    {name: "Sentinel", hull: 4, score: 200, firepower: 2, accuracy: .8}
 ];
 
 const bosses = [
-    {name: "Commandship", hull: 10, firepower: 4, accuracy: .5},
-    {name: "Brigadier", hull: 10, firepower: 4, accuracy: .5},
-    {name: "General", hull: 10, firepower: 4, accuracy: .5},
-    {name: "Mothership", hull: 20, firepower: 4, accuracy: .5}
+    {name: "Morphuos", hull: 11, score: 1000, firepower: 3, accuracy: .5},
+    {name: "Mantlebrot", hull: 16, score: 1000, firepower: 4, accuracy: .4},
+    {name: "Grotek", hull: 13, score: 1000, firepower: 6, accuracy: .3},
+    {name: "The Harvester", hull: 19, score: 1000, firepower: 4, accuracy: .5},
+    {name: "The Liminal", hull: 23, score: 1000, firepower: 5, accuracy: .5}
 ];
 
 ////////////////////////DOM Element Selectors////////////////////////
@@ -61,7 +63,18 @@ function init() {
 };
 init();
 
-/////////////////////////GAME PAGE//////////////////////////////////////////////
+/////////////////////////User Data////////////////////////////////////////
+function nameEnter() {
+    const name = prompt("Enter name");
+    if (name === "") {
+        alert("Invalid input");
+        nameEnter();
+    } else if (name.length > 0) {
+        userShip.name = name;
+    } else {}
+};
+
+/////////////////////////GAME PAGE////////////////////////////////////////
 function mainMenu() {
     page = 0;
     alertEl.innerText = `Welcome to the Space Battle main menu.`;
@@ -77,8 +90,8 @@ function gameplayMenu() {
     btnEl1.innerText = `Pulsebeam`;
     btnEl2.innerText = `Lazercannon`;
     btnEl3.innerText = `Repair`;
-    alertEl.innerText = `${currentShip.name}`;
-    promptEl.innerText = `Name: ${userShip.name}\nHull integrity = ${userShip.hull}\n\nAliens Obliterated = ${enemiesDefeated}`;
+    alertEl.innerText = `Enemy: ${currentShip.name} \nLifeforce = ${currentShip.hull}`;
+    promptEl.innerText = `User: ${userShip.name}\nHull Integrity = ${userShip.hull}\n\nScore = ${enemiesDefeated}`;
 };
 
 function gameOverMenu() {
@@ -96,6 +109,15 @@ function gameOverMenu() {
         gameOverMenu();
     }
 };
+
+function gameWinMenu() {
+    page = 3;
+    alertEl.innerText = `Welcome to the Space Battle main menu.`;
+    btnEl1.innerText = `Play`;
+    btnEl2.innerText = `Restart`;
+    btnEl3.innerText = `Quit`;
+    promptEl.innerText = ``;
+}
 
 /////////////////////////ENEMY GENERATORS///////////////////////////////
 function newEnemy() {
@@ -208,6 +230,7 @@ function bossTest() {
 
 function buttonTester1() {
     if (page === 0) {
+        nameEnter();
         newEnemy();
         gameplayMenu();
     } else if (page === 1) {
