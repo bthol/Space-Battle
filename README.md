@@ -1,6 +1,6 @@
 # Space_Battle
 Developer: Blake Thollaug
 
-Last update: 02/24/2022
+Last update: 06/12/2022
 
-Description: This is my first coding project. Please judge accordingly.
+Description: This is a custom console game that I developed to practice javaScript logic and videogame design.
