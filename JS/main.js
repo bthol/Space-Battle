@@ -230,15 +230,21 @@ function winTest() {
 }
 
 function bossTest() {
-    if (enemiesDefeated === bossRound[0] || enemiesDefeated === bossRound[1] || enemiesDefeated === bossRound[2] || enemiesDefeated === bossRound[3]) {
-        userShip.hull = 25;
-        newBossEnemy();
-        gameplayMenu();
-    } else if (enemiesDefeated === bossRound[0] + 1 || enemiesDefeated === bossRound[1] + 1 || enemiesDefeated === bossRound[2] + 1 || enemiesDefeated === bossRound[3] + 1) {
-        userShip.hull = 25;
-        newEnemy();
-        gameplayMenu();
-    } else {
+    let bool = true;
+    for (let i = 0; i < bossRound.length; i++) {
+        if (enemiesDefeated === bossRound[i]) {
+            bool = false;
+            userShip.hull = 25;
+            newBossEnemy();
+            gameplayMenu();
+        } else if (enemiesDefeated === bossRound[i] + 1) {
+            bool = false;
+            userShip.hull = 25;
+            newEnemy();
+            gameplayMenu();
+        }
+    }
+    if (bool === true) {
         newEnemy();
         gameplayMenu();
     }
