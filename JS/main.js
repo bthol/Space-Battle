@@ -9,7 +9,8 @@ let enemyDamage;
 let enemiesDefeated = 0;
 let bossCount = 0;
 
-const bossRound = [2, 4, 6, 8, 10];
+const bossRound = [2];
+// const bossRound = [2, 4, 6, 8, 10];
 
 /////////////////////data structures (Characters)/////////////////////////////////
 const userShip = {
@@ -28,10 +29,10 @@ const aliens = [
 
 const bosses = [
     {name: "Morphuos", hull: 11, score: 2000, firepower: 3, accuracy: .5},
-    {name: "Mantlebrot", hull: 16, score: 2000, firepower: 4, accuracy: .4},
-    {name: "Grotek", hull: 13, score: 2000, firepower: 6, accuracy: .3},
-    {name: "Harvester", hull: 19, score: 2000, firepower: 4, accuracy: .5},
-    {name: "Liminal", hull: 23, score: 2000, firepower: 5, accuracy: .5}
+    // {name: "Mantlebrot", hull: 16, score: 2000, firepower: 4, accuracy: .4},
+    // {name: "Grotek", hull: 13, score: 2000, firepower: 6, accuracy: .3},
+    // {name: "Harvester", hull: 19, score: 2000, firepower: 4, accuracy: .5},
+    // {name: "Liminal", hull: 23, score: 5000, firepower: 5, accuracy: .5}
 ];
 
 ////////////////////////DOM Element Selectors////////////////////////
@@ -50,7 +51,7 @@ btnEl4.addEventListener('click', buttonTester4);
 
 /////////////////////////initilization/////////////////////////////////
 function init() {
-    userShip.hull = 25;
+    userShip.hull = 1;
     turn = -1;
     page = 0;
     cannonCharge = 0;
@@ -81,9 +82,9 @@ function nameEnter() {
 function mainMenu() {
     page = 0;
     alertEl.innerText = `Welcome to the Space Battle main menu.`;
-    btnEl1.innerText = `Play`;
-    btnEl2.innerText = `Restart`;
-    btnEl3.innerText = `Quit`;
+    btnEl1.innerText = `New Game`;
+    btnEl2.innerText = ``;
+    btnEl3.innerText = ``;
     btnEl4.innerText = ``;
     promptEl.innerText = ``;
 };
@@ -102,19 +103,12 @@ function gameplayMenu() {
 
 function gameOverMenu() {
     page = 2;
-    alertEl.innerText = `Defeat!`;
+    alertEl.innerText = `Defeat!\n\n${userShip.name} = ${userShip.score}`;
     btnEl1.innerText = `New Game`;
-    btnEl2.innerText = `Quit`;
+    btnEl2.innerText = `Main Menu`;
     btnEl3.innerText = ``;
     btnEl4.innerText = ``;
     promptEl.innerText = ``;
-    if (move === "1") {
-        init();
-    } else if (move === "2") {
-    } else {
-        alert("Invalid input!");
-        gameOverMenu();
-    }
 };
 
 function gameWinMenu() {
@@ -259,23 +253,24 @@ function buttonTester1() {
         pulsebeamAttack();
     } else if (page === 2) {
         init();
+        nameEnter();
+        newEnemy();
+        gameplayMenu();
     } else if (page === 3) {
         init();
     }
 };
 function buttonTester2() {
     if (page === 0) {
-        init();
-    } else if (page = 1) {
+    } else if (page === 1) {
         lazercannonAttack();
     } else if (page === 2) {
-        alertEl.innerText = `The game has been quit.`;
+        mainMenu();
     } else if (page === 3) {
     }
 };
 function buttonTester3() {
     if (page === 0) {
-        alertEl.innerText = `The game has been quit.`;
     } else if (page === 1) {
         repair();
     } else if (page === 2) {
