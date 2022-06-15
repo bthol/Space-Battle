@@ -51,7 +51,8 @@ btnEl4.addEventListener('click', buttonTester4);
 
 /////////////////////////initilization/////////////////////////////////
 function init() {
-    userShip.hull = 1;
+    userShip.hull = 25;
+    userShip.score = 0;
     turn = -1;
     page = 0;
     cannonCharge = 0;
@@ -225,17 +226,21 @@ function winTest() {
 
 function bossTest() {
     let bool = true;
-    for (let i = 0; i < bossRound.length; i++) {
-        if (enemiesDefeated === bossRound[i]) {
-            bool = false;
-            userShip.hull = 25;
-            newBossEnemy();
-            gameplayMenu();
-        } else if (enemiesDefeated === bossRound[i] + 1) {
-            bool = false;
-            userShip.hull = 25;
-            newEnemy();
-            gameplayMenu();
+    if (enemiesDefeated === bossRound[bossRound.length - 1] + 1) {
+        gameWinMenu();
+    } else {
+        for (let i = 0; i < bossRound.length; i++) {
+            if (enemiesDefeated === bossRound[i]) {
+                bool = false;
+                userShip.hull = 25;
+                newBossEnemy();
+                gameplayMenu();
+            } else if (enemiesDefeated === bossRound[i] + 1) {
+                bool = false;
+                userShip.hull = 25;
+                newEnemy();
+                gameplayMenu();
+            }
         }
     }
     if (bool === true) {
@@ -258,6 +263,9 @@ function buttonTester1() {
         gameplayMenu();
     } else if (page === 3) {
         init();
+        nameEnter();
+        newEnemy();
+        gameplayMenu();
     }
 };
 function buttonTester2() {
