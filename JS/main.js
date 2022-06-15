@@ -9,9 +9,9 @@ let enemyDamage;
 let enemiesDefeated = 0;
 let bossCount = 0;
 
-const bossRound = [10, 20, 30, 40, 50];
+const bossRound = [2, 4, 6, 8, 10];
 
-/////////////////////data structures/////////////////////////////////
+/////////////////////data structures (Characters)/////////////////////////////////
 const userShip = {
     name: "User",
     score: 0,
@@ -94,8 +94,10 @@ function gameplayMenu() {
     btnEl1.innerText = `Pulsebeam`;
     btnEl2.innerText = `Lazercannon`;
     btnEl3.innerText = `Repair`;
+    btnEl4.innerText = ``;
     alertEl.innerText = `Enemy: ${currentShip.name} \nLifeforce = ${enemyDamage}`;
     promptEl.innerText = `User: ${userShip.name}\nHull Integrity = ${userShip.hull}\n\nScore = ${userShip.score}`;
+    winTest();
 };
 
 function gameOverMenu() {
@@ -104,6 +106,7 @@ function gameOverMenu() {
     btnEl1.innerText = `New Game`;
     btnEl2.innerText = `Quit`;
     btnEl3.innerText = ``;
+    btnEl4.innerText = ``;
     promptEl.innerText = ``;
     if (move === "1") {
         init();
@@ -120,6 +123,7 @@ function gameWinMenu() {
     btnEl1.innerText = `New Game`;
     btnEl2.innerText = ``;
     btnEl3.innerText = ``;
+    btnEl4.innerText = ``;
     promptEl.innerText = ``;
 }
 
@@ -218,6 +222,12 @@ function testDeath (x) {
         }
     }
 };
+
+function winTest() {
+    if (enemiesDefeated === bossRound[bossRound.length - 1] + 1) {
+        gameWinMenu();
+    }
+}
 
 function bossTest() {
     if (enemiesDefeated === bossRound[0] || enemiesDefeated === bossRound[1] || enemiesDefeated === bossRound[2] || enemiesDefeated === bossRound[3]) {
