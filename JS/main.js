@@ -9,8 +9,7 @@ let enemyDamage;
 let enemiesDefeated = 0;
 let bossCount = 0;
 
-const bossRound = [2];
-// const bossRound = [2, 4, 6, 8, 10];
+const bossRound = [10, 20, 30, 40, 50];
 
 /////////////////////data structures (Characters)/////////////////////////////////
 const userShip = {
@@ -23,16 +22,16 @@ const userShip = {
 
 const aliens = [
     {name: "Subort", hull: 2, score: 100, firepower: 1, accuracy: .4},
-    {name: "Tanker", hull: 6, score: 300, firepower: 2, accuracy: .4},
+    {name: "Tankbug", hull: 6, score: 300, firepower: 2, accuracy: .4},
     {name: "Sentinel", hull: 4, score: 200, firepower: 1, accuracy: .8}
 ];
 
 const bosses = [
     {name: "Morphuos", hull: 11, score: 2000, firepower: 3, accuracy: .5},
-    // {name: "Mantlebrot", hull: 16, score: 2000, firepower: 4, accuracy: .4},
-    // {name: "Grotek", hull: 13, score: 2000, firepower: 6, accuracy: .3},
-    // {name: "Harvester", hull: 19, score: 2000, firepower: 4, accuracy: .5},
-    // {name: "Liminal", hull: 23, score: 5000, firepower: 5, accuracy: .5}
+    {name: "Mantlebrot", hull: 16, score: 2000, firepower: 4, accuracy: .4},
+    {name: "Grotek", hull: 13, score: 2000, firepower: 6, accuracy: .3},
+    {name: "Harvester", hull: 19, score: 2000, firepower: 4, accuracy: .5},
+    {name: "Liminal", hull: 23, score: 5000, firepower: 5, accuracy: .5}
 ];
 
 ////////////////////////DOM Element Selectors////////////////////////
