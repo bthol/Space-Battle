@@ -49,8 +49,8 @@ btnEl3.addEventListener('click', buttonTester3);
 const btnEl4 = document.querySelector(`#btn4`);
 btnEl4.addEventListener('click', buttonTester4);
 
-const alertEl = document.querySelector(`#alert`);
-const promptEl = document.querySelector(`#prompt`);
+const text1 = document.querySelector(`#alert`);
+const text2 = document.querySelector(`#prompt`);
 
 
 /////////////////////////INITIALIZATION/////////////////////////////////
@@ -65,8 +65,8 @@ function init() {
     btnEl1.innerText = `default btn1`;
     btnEl2.innerText = `default btn2`;
     btnEl3.innerText = `default btn3`;
-    promptEl.innerText = `default prompt`;
-    alertEl.innerText = `default alert`;
+    text2.innerText = `default prompt`;
+    text1.innerText = `default alert`;
     mainPage();
 };
 init();
@@ -74,54 +74,53 @@ init();
 /////////////////////////GAME PAGE////////////////////////////////////////
 function mainPage() {
     page = 0;
-    alertEl.innerText = `Welcome to the Space Battle main menu.`;
+    text1.innerText = `Welcome to the Space Battle main menu.`;
+    text2.innerText = ``;
     btnEl1.innerText = `New Game`;
     btnEl2.innerText = `ScoreBoard`;
     btnEl3.innerText = ``;
     btnEl4.innerText = ``;
-    promptEl.innerText = ``;
 };
 
 function gameplayPage() {
     page = 1;
-    alertEl.innerText = ``;
+    text1.innerText = `Enemy: ${currentShip.name} \nLifeforce = ${enemyDamage}`;
+    text2.innerText = `User: ${userShip.name}\nHull Integrity = ${userShip.hull}\n\nScore = ${userShip.score}`;
     btnEl1.innerText = `Pulsebeam`;
     btnEl2.innerText = `Lazercannon`;
     btnEl3.innerText = `Repair`;
     btnEl4.innerText = ``;
-    alertEl.innerText = `Enemy: ${currentShip.name} \nLifeforce = ${enemyDamage}`;
-    promptEl.innerText = `User: ${userShip.name}\nHull Integrity = ${userShip.hull}\n\nScore = ${userShip.score}`;
     winTest();
 };
 
 function gameoverPage() {
     page = 2;
-    alertEl.innerText = `Defeat!\n\n${userShip.name} = ${userShip.score}`;
+    text1.innerText = `Defeat!\n\n${userShip.name} = ${userShip.score}`;
+    text2.innerText = ``;
     btnEl1.innerText = `New Game`;
     btnEl2.innerText = `Main Menu`;
     btnEl3.innerText = ``;
     btnEl4.innerText = ``;
-    promptEl.innerText = ``;
 };
 
 function gameWinPage() {
     page = 3;
-    alertEl.innerText = `You Win!\n\n${userShip.name} = ${userShip.score}`;
+    text1.innerText = `You Win!\n\n${userShip.name} = ${userShip.score}`;
+    text2.innerText = ``;
     btnEl1.innerText = `New Game`;
     btnEl2.innerText = `Main Menu`;
     btnEl3.innerText = ``;
     btnEl4.innerText = ``;
-    promptEl.innerText = ``;
 }
 
 function scoreboardPage() {
     page = 4;
-    alertEl.innerText = `Scoreboard\n\n${scoreBoard[0].name} : ${scoreBoard[0].score}\n${scoreBoard[1].name} : ${scoreBoard[1].score}\n${scoreBoard[2].name} : ${scoreBoard[2].score}\n${scoreBoard[3].name} : ${scoreBoard[3].score}\n${scoreBoard[4].name} : ${scoreBoard[4].score}\n${scoreBoard[5].name} : ${scoreBoard[5].score}\n${scoreBoard[6].name} : ${scoreBoard[6].score}\n${scoreBoard[7].name} : ${scoreBoard[7].score}\n${scoreBoard[8].name} : ${scoreBoard[8].score}\n${scoreBoard[9].name} : ${scoreBoard[9].score}\n`;
+    text1.innerText = `Scoreboard\n\n${scoreBoard[0].name} : ${scoreBoard[0].score}\n${scoreBoard[1].name} : ${scoreBoard[1].score}\n${scoreBoard[2].name} : ${scoreBoard[2].score}\n${scoreBoard[3].name} : ${scoreBoard[3].score}\n${scoreBoard[4].name} : ${scoreBoard[4].score}\n${scoreBoard[5].name} : ${scoreBoard[5].score}\n${scoreBoard[6].name} : ${scoreBoard[6].score}\n${scoreBoard[7].name} : ${scoreBoard[7].score}\n${scoreBoard[8].name} : ${scoreBoard[8].score}\n${scoreBoard[9].name} : ${scoreBoard[9].score}\n`;
+    text2.innerText = ``;
     btnEl1.innerText = `Back`;
     btnEl2.innerText = ``;
     btnEl3.innerText = ``;
     btnEl4.innerText = ``;
-    promptEl.innerText = ``;
 }
 
 //////////////////////////////////TESTS///////////////////////////////////////////
@@ -227,14 +226,23 @@ function buttonTester4() {
 function newEnemy() {
     currentShip = aliens[Math.floor(Math.random() * aliens.length)];
     enemyDamage = currentShip.hull;
-    alert(`A ${currentShip.name} approaches...`);
+    enemyAlert(0);
 };
 
 function newBossEnemy() {
     currentShip = bosses[bossCount];
     enemyDamage = currentShip.hull;
     bossCount += 1;
-    alert(`BOSS FIGHT!\n\nThe ${currentShip.name} approaches...`);
+    enemyAlert(1);
+};
+
+function enemyAlert(x) {
+    if (x === 0) {
+        alert(`A ${currentShip.name} approaches...`);
+    }
+    if (x === 1) {
+        alert(`BOSS FIGHT!\n\nThe ${currentShip.name} approaches...`);
+    }
 };
 
 ////////////////////////////DEFENSIVE MOVES////////////////////////////////////////
