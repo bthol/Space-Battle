@@ -6,8 +6,9 @@ let page;
 
 let cannonCharge = 0;
 let repairCharge = 0;
+let shieldCharge = 0;
 
-let currentShip;
+let currentEnemy;
 let enemyDamage;
 let enemiesDefeated = 0;
 let bossCount = 0;
@@ -25,18 +26,7 @@ const scoreBoard = [
     {name: "player", score: 100},
 ];
 
-/////////////////////////User Data////////////////////////////////////////
-function nameEnter() {
-    const name = prompt("Enter name");
-    if (name === "") {
-        alert("Invalid input");
-        nameEnter();
-    } else if (name.length > 0) {
-        userShip.name = name;
-    } else {}
-};
-
-///////////////////////////EVENT LISTENERS////////////////////////////
+///////////////////////////EVENT LISTENERS///////////////////////////////
 const btnEl1 = document.querySelector(`#btn1`);
 btnEl1.addEventListener('click', buttonTester1);
 
@@ -51,7 +41,6 @@ btnEl4.addEventListener('click', buttonTester4);
 
 const text1 = document.querySelector(`#alert`);
 const text2 = document.querySelector(`#prompt`);
-
 
 /////////////////////////INITIALIZATION/////////////////////////////////
 function init() {
@@ -71,7 +60,18 @@ function init() {
 };
 init();
 
-/////////////////////////GAME PAGE////////////////////////////////////////
+/////////////////////////User Data////////////////////////////////////////
+function nameEnter() {
+    const name = prompt("Enter name");
+    if (name === "") {
+        alert("Invalid input");
+        nameEnter();
+    } else if (name.length > 0) {
+        userShip.name = name;
+    } else {}
+};
+
+/////////////////////////GAME PAGES///////////////////////////////////////
 function mainPage() {
     page = 0;
     text1.innerText = `Welcome to the Space Battle main menu.`;
@@ -80,17 +80,18 @@ function mainPage() {
     btnEl2.innerText = `ScoreBoard`;
     btnEl3.innerText = ``;
     btnEl4.innerText = ``;
+    defaultDisplay();
 };
 
 function gameplayPage() {
     page = 1;
-    text1.innerText = `Enemy: ${currentShip.name} \nLifeforce = ${enemyDamage}`;
+    text1.innerText = `Enemy: ${currentEnemy.name} \nLifeforce = ${enemyDamage}`;
     text2.innerText = `User: ${userShip.name}\nHull Integrity = ${userShip.hull}\n\nScore = ${userShip.score}`;
     btnEl1.innerText = `Pulsebeam`;
     btnEl2.innerText = `Lazercannon`;
     btnEl3.innerText = `Repair`;
-    btnEl4.innerText = ``;
-    winTest();
+    btnEl4.innerText = `Shield`;
+    dynamicDisplay();
 };
 
 function gameoverPage() {
@@ -101,6 +102,7 @@ function gameoverPage() {
     btnEl2.innerText = `Main Menu`;
     btnEl3.innerText = ``;
     btnEl4.innerText = ``;
+    defaultDisplay();
 };
 
 function gameWinPage() {
@@ -111,7 +113,8 @@ function gameWinPage() {
     btnEl2.innerText = `Main Menu`;
     btnEl3.innerText = ``;
     btnEl4.innerText = ``;
-}
+    defaultDisplay();
+};
 
 function scoreboardPage() {
     page = 4;
@@ -121,59 +124,31 @@ function scoreboardPage() {
     btnEl2.innerText = ``;
     btnEl3.innerText = ``;
     btnEl4.innerText = ``;
-}
+    defaultDisplay();
+};
 
-//////////////////////////////////TESTS///////////////////////////////////////////
-function testDeath (x) {
-    if (x === 1) {
-        if (enemyDamage <= 0) {
-            enemiesDefeated += 1;
-            userShip.score += currentShip.score;
-            alert("Alien obliterated!");
-            bossTest();
-        } else {
-            alienAttack();
-        }
+//////////////////////////////////DISPLAY/////////////////////////////////
+function dynamicDisplay() {
+    if (cannonCharge >= 3) {
+        btnEl2.style.color = "#dedede";
     } else {
-        if (userShip.hull <= 0) {
-            gameoverPage();
-        } else {
-            gameplayPage();
-        }
+        btnEl2.style.color = "#00000080";
+    }
+    if (repairCharge >= 10) {
+        btnEl3.style.color = "#dedede";
+    } else {
+        btnEl3.style.color = "#00000080";
     }
 };
 
-function winTest() {
-    if (enemiesDefeated === bossRound[bossRound.length - 1] + 1) {
-        gameWinPage();
-    }
+function defaultDisplay() {
+    btnEl1.style.color = "#dedede";
+    btnEl2.style.color = "#dedede";
+    btnEl3.style.color = "#dedede";
+    btnEl4.style.color = "#dedede";
 }
 
-function bossTest() {
-    let bool = true;
-    if (enemiesDefeated === bossRound[bossRound.length - 1] + 1) {
-        gameWinPage();
-    } else {
-        for (let i = 0; i < bossRound.length; i++) {
-            if (enemiesDefeated === bossRound[i]) {
-                bool = false;
-                userShip.hull = 25;
-                newBossEnemy();
-                gameplayPage();
-            } else if (enemiesDefeated === bossRound[i] + 1) {
-                bool = false;
-                userShip.hull = 25;
-                newEnemy();
-                gameplayPage();
-            }
-        }
-    }
-    if (bool === true) {
-        newEnemy();
-        gameplayPage();
-    }
-}
-
+////////////////////////////////CONTROLS//////////////////////////////////////////
 function buttonTester1() {
     if (page === 0) {
         nameEnter();
@@ -204,6 +179,7 @@ function buttonTester2() {
         mainPage();
     } else if (page === 3) {
         mainPage();
+    } else if (page === 4) {
     }
 };
 function buttonTester3() {
@@ -212,36 +188,16 @@ function buttonTester3() {
         repair();
     } else if (page === 2) {
     } else if (page === 3) {
+    } else if (page === 4) {
     }
 };
 function buttonTester4() {
     if (page === 0) {
     } else if (page === 1) {
+        mainPage();
     } else if (page === 2) {
     } else if (page === 3) {
-    }
-};
-
-/////////////////////////ENEMY GENERATORS///////////////////////////////
-function newEnemy() {
-    currentShip = aliens[Math.floor(Math.random() * aliens.length)];
-    enemyDamage = currentShip.hull;
-    enemyAlert(0);
-};
-
-function newBossEnemy() {
-    currentShip = bosses[bossCount];
-    enemyDamage = currentShip.hull;
-    bossCount += 1;
-    enemyAlert(1);
-};
-
-function enemyAlert(x) {
-    if (x === 0) {
-        alert(`A ${currentShip.name} approaches...`);
-    }
-    if (x === 1) {
-        alert(`BOSS FIGHT!\n\nThe ${currentShip.name} approaches...`);
+    } else if (page === 4) {
     }
 };
 
@@ -269,10 +225,10 @@ function pulsebeamAttack() {
     repairCharge += 1;
     if (Math.random() < userShip.pulsebeam.accuracy) {
         enemyDamage -= userShip.pulsebeam.firepower;
-        alert(`Pulsebeam attack hit the ${currentShip.name}!`);
+        alert(`Pulsebeam attack hit the ${currentEnemy.name}!`);
         testDeath(1);
     } else {
-        alert(`Pulsebeam attack missed the ${currentShip.name}!`);
+        alert(`Pulsebeam attack missed the ${currentEnemy.name}!`);
         alienAttack();
     }
 };
@@ -283,10 +239,10 @@ function lazercannonAttack() {
         cannonCharge = 0;
         if (Math.random() < userShip.pulsebeam.accuracy) {
             enemyDamage -= userShip.lazercannon.firepower;
-            alert(`Lazercannon attack hit ${currentShip.name}!`);
+            alert(`Lazercannon attack hit ${currentEnemy.name}!`);
             testDeath(1);
         } else {
-            alert(`Lazercannon attack missed ${currentShip.name}!`);
+            alert(`Lazercannon attack missed ${currentEnemy.name}!`);
             alienAttack();
             gameplayPage();
         }
@@ -297,12 +253,81 @@ function lazercannonAttack() {
 };
 
 function alienAttack() {
-    if (Math.random() < currentShip.accuracy) {
-        userShip.hull -= currentShip.firepower;
-        alert(`${currentShip.name} hit ${userShip.name}!`);
+    if (Math.random() < currentEnemy.accuracy) {
+        userShip.hull -= currentEnemy.firepower;
+        alert(`${currentEnemy.name} hit ${userShip.name}!`);
         testDeath();
     } else {
-        alert(`${currentShip.name} missed ${userShip.name}!`);
+        alert(`${currentEnemy.name} missed ${userShip.name}!`);
+        gameplayPage();
+    }
+};
+
+/////////////////////////ENEMY GENERATORS///////////////////////////////
+function newEnemy() {
+    currentEnemy = aliens[Math.floor(Math.random() * aliens.length)];
+    enemyDamage = currentEnemy.hull;
+    enemyAlert(0);
+};
+
+function newBossEnemy() {
+    currentEnemy = bosses[bossCount];
+    enemyDamage = currentEnemy.hull;
+    bossCount += 1;
+    enemyAlert(1);
+};
+
+function enemyAlert(x) {
+    if (x === 0) {
+        alert(`A ${currentEnemy.name} approaches...`);
+    }
+    if (x === 1) {
+        alert(`BOSS FIGHT!\n\nThe ${currentEnemy.name} approaches...`);
+    }
+};
+
+//////////////////////////////////TESTS///////////////////////////////////////////
+function testDeath (x) {
+    if (x === 1) {
+        if (enemyDamage <= 0) {
+            enemiesDefeated += 1;
+            userShip.score += currentEnemy.score;
+            alert("Alien obliterated!");
+            bossTest();
+        } else {
+            alienAttack();
+        }
+    } else {
+        if (userShip.hull <= 0) {
+            gameoverPage();
+        } else {
+            gameplayPage();
+        }
+    }
+};
+
+function bossTest() {
+    let bool = true;
+    if (enemiesDefeated === bossRound[bossRound.length - 1] + 1) {
+        bool = false;
+        gameWinPage();
+    } else {
+        for (let i = 0; i < bossRound.length; i++) {
+            if (enemiesDefeated === bossRound[i]) {
+                bool = false;
+                userShip.hull = 25;
+                newBossEnemy();
+                gameplayPage();
+            } else if (enemiesDefeated === bossRound[i] + 1) {
+                bool = false;
+                userShip.hull = 25;
+                newEnemy();
+                gameplayPage();
+            }
+        }
+    }
+    if (bool === true) {
+        newEnemy();
         gameplayPage();
     }
 };
