@@ -3,10 +3,10 @@
     text-align: center;
 
     --color-background: #1e3548;
-    --color-background-2: #224442;
+    --color-background-2: #442822;
     --color-detailing: #afaf79;
-
     --color-font: #dedede;
+    --color-font-title: #fca903;
     --color-font-active: #FFFFFF;
 
     --color-button-background: #296ca3;
@@ -65,6 +65,7 @@ body {
 }
 
 #page-title {
+    color: var(--color-font-title);
     background-color: var(--color-background-2);
     border-bottom: .3vw solid var(--color-detailing);
     letter-spacing: 1em;
