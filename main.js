@@ -1,5 +1,5 @@
 //////////////////////////////MODULES//////////////////////////////////
-import { user, aliens, bosses, bossRound } from './modules/dataStructures.js';
+import { user, aliens, bosses, bossRound } from './JS-Modules/dataStructures.js';
 
 ///////////////////////STATE VARIABLES////////////////////////////////
 let page;
