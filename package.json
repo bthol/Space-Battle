@@ -2,7 +2,7 @@
   "name": "space-battle",
   "version": "1.0.0",
   "description": "Developer: Blake Thollaug",
-  "main": "main.js",
+  "main": "./JS/main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
