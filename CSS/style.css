@@ -1,40 +1,49 @@
+/* COLORS */
 * {
     font-family: 'Coda', cursive;
-    text-align: center;
-
+    
     --color-background: #1e3548;
     --color-background-2: #23201f;
     --color-crimson: #442822;
-
+    
     --color-detailing: #55322b;
     
     --color-font-1: #dedede;
     --color-font-2: hsl(40, 87%, 50%);
     --color-font-title: hsl(25, 97%, 55%);
-
+    
     --color-button-background: #296ca3;
     --color-button-shadow: #00000080;
-
+    
     background-color: var(--color-background);
 }
 
+/* ----------------------------LAYOUT---------------------------- */
 body {
     margin: 0 auto;
     letter-spacing: .1em;
+    text-align: center;
     height: 100vmin;
     color: var(--color-font-2);
 }
 
+.game-screen {
+    display: grid;
+    grid-template-rows: 2fr 1fr;
+    align-items: center;
+}
+
 /* TEXT */
 #page-title {
-    color: var(--color-font-title);
-    background-color: var(--color-background-2);
-    border-bottom: 3px solid var(--color-detailing);
     letter-spacing: 1em;
-    font-size: 6vmin;
+    font-size: 4vw;
     text-transform: uppercase;
     white-space: nowrap;
     margin-top: 0em;
+    width: 100%;
+    color: var(--color-font-title);
+    background-color: var(--color-background-2);
+    border-bottom: 3px solid var(--color-detailing);
 }
 
 #alert, #prompt {
@@ -44,7 +53,7 @@ body {
 /* BUTTON */
 .button {
     letter-spacing: .1em;
-    font-size: 3vmin;
+    font-size: 5vmin;
     text-transform: uppercase;
     padding: .5em 1em;
     border-style: none;
@@ -67,19 +76,19 @@ body {
 }
 #btn1 {
     grid-column-start: 2;
-    border-radius: 12px 0px 0px 0px;
+    border-radius: 25px 0px 0px 0px;
 }
 #btn2 {
     grid-column-start: 3;
-    border-radius: 0px 12px 0px 0px;
+    border-radius: 0px 25px 0px 0px;
 }
 #btn3 {
     grid-column-start: 3;
     grid-row-start: 2;
-    border-radius: 0px 0px 12px 0px;
+    border-radius: 0px 0px 25px 0px;
 }
 #btn4 {
     grid-column-start: 2;
     grid-row-start: 2;
-    border-radius: 0px 0px 0px 12px;
+    border-radius: 0px 0px 0px 25px;
 }
