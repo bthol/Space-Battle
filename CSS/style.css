@@ -3,16 +3,18 @@
     text-align: center;
 
     --color-background: #1e3548;
-    --color-background-2: #442822;
-    --color-detailing: #afaf79;
-    --color-font: #dedede;
-    --color-font-title: #fca903;
-    --color-font-active: #FFFFFF;
+    --color-background-2: #23201f;
+    --color-crimson: #442822;
+
+    --color-detailing: #55322b;
+    
+    --color-font-1: #dedede;
+    --color-font-2: hsl(40, 87%, 50%);
+    --color-font-title: hsl(25, 97%, 55%);
 
     --color-button-background: #296ca3;
     --color-button-shadow: #00000080;
 
-    color: var(--color-font);
     background-color: var(--color-background);
 }
 
@@ -20,21 +22,39 @@ body {
     margin: 0 auto;
     letter-spacing: .1em;
     height: 100vmin;
+    color: var(--color-font-2);
 }
 
+/* TEXT */
+#page-title {
+    color: var(--color-font-title);
+    background-color: var(--color-background-2);
+    border-bottom: 3px solid var(--color-detailing);
+    letter-spacing: 1em;
+    font-size: 6vmin;
+    text-transform: uppercase;
+    white-space: nowrap;
+    margin-top: 0em;
+}
+
+#alert, #prompt {
+    font-size: 4vmin;
+}
+
+/* BUTTON */
 .button {
-    background-color: var(--color-button-background);
     letter-spacing: .1em;
+    font-size: 3vmin;
     text-transform: uppercase;
     padding: .5em 1em;
     border-style: none;
+    background-color: var(--color-button-background);
     -webkit-box-shadow: inset 0 -0.6em 1em -0.35em var(--color-button-shadow);
     -moz-box-shadow: inset 0 -0.6em 1em -0.35em var(--color-button-shadow);
     box-shadow: inset 0 -0.6em 1em -0.35em var(--color-button-shadow);
     transition: all 0.1s;
 }
 .button:active {
-    color: var(--color-font-active);
     -webkit-box-shadow: none;
     -moz-box-shadow: none;
     box-shadow: none;
@@ -62,15 +82,4 @@ body {
     grid-column-start: 2;
     grid-row-start: 2;
     border-radius: 0px 0px 0px 12px;
-}
-
-#page-title {
-    color: var(--color-font-title);
-    background-color: var(--color-background-2);
-    border-bottom: .3vw solid var(--color-detailing);
-    letter-spacing: 1em;
-    font-size: 4vw;
-    text-transform: uppercase;
-    white-space: nowrap;
-    margin-top: 0em;
 }
