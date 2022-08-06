@@ -282,8 +282,10 @@ function enemyAttack() {
                 damage = 0;
             }
             user.shield -= currentEnemy.firepower;
+            if (user.shield < 0) {
+                user.shield = 0;
+            }
         } else {
-            user.shield = 0;
             damage = currentEnemy.firepower;
         }
         user.hull -= damage;
