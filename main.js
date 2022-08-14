@@ -40,9 +40,9 @@ const btnEl4 = document.querySelector(`#btn4`);
 btnEl4.addEventListener('click', buttonTester4);
 
 const text1 = document.querySelector(`#alert`);
-const text2 = document.querySelector(`#prompt`);
+const msgDisplay = document.querySelector(`#msg-display`);
 
-$(`body`).on("click", () => {console.log("JQuery working")})
+// $(`body`).on("click", () => {console.log("JQuery working")})
 
 /////////////////////////INITIALIZATION/////////////////////////////////
 function init() {
@@ -54,11 +54,6 @@ function init() {
     repairCharge = 0;
     enemiesDefeated = 0;
     bossCount = 0;
-    btnEl1.innerText = `default btn1`;
-    btnEl2.innerText = `default btn2`;
-    btnEl3.innerText = `default btn3`;
-    text2.innerText = `default prompt`;
-    text1.innerText = `default alert`;
     mainPage();
 };
 init();
@@ -77,19 +72,19 @@ function nameEnter() {
 /////////////////////////GAME PAGES///////////////////////////////////////
 function mainPage() {
     page = 0;
-    text1.innerText = `Welcome to the Space Battle main menu.`;
-    text2.innerText = ``;
+    text1.innerText = ``;
+    msgDisplay.innerText = `Welcome to the Space Battle main menu.`;
     btnEl1.innerText = `New Game`;
     btnEl2.innerText = `ScoreBoard`;
     btnEl3.innerText = ``;
-    btnEl4.innerText = ``;
+    btnEl4.innerText = `Quit`;
     defaultDisplay();
 };
 
 function gameplayPage() {
     page = 1;
-    text1.innerText = `Enemy: ${currentEnemy.name} \nLifeforce = ${enemyDamage}`;
-    text2.innerText = `User: ${user.name}\nHull Integrity = ${user.hull}\nShield Integrity = ${user.shield}\n\nScore = ${user.score}`;
+    text1.innerText = `Enemy: ${currentEnemy.name} \nLifeforce = ${enemyDamage}\n\nUser: ${user.name}\nHull Integrity = ${user.hull}\nShield Integrity = ${user.shield}\n\nScore = ${user.score}`;
+    msgDisplay.innerText = ``;
     btnEl1.innerText = `Pulsebeam`;
     btnEl2.innerText = `Lazercannon`;
     btnEl3.innerText = `Repair`;
@@ -100,29 +95,29 @@ function gameplayPage() {
 function gameoverPage() {
     page = 2;
     text1.innerText = `Defeat!\n\n${user.name} = ${user.score}`;
-    text2.innerText = ``;
+    msgDisplay.innerText = ``;
     btnEl1.innerText = `New Game`;
     btnEl2.innerText = `Main Menu`;
     btnEl3.innerText = ``;
-    btnEl4.innerText = ``;
+    btnEl4.innerText = `Quit`;
     defaultDisplay();
 };
 
 function gameWinPage() {
     page = 3;
     text1.innerText = `You Win!\n\n${user.name} = ${user.score}`;
-    text2.innerText = ``;
+    msgDisplay.innerText = ``;
     btnEl1.innerText = `New Game`;
     btnEl2.innerText = `Main Menu`;
     btnEl3.innerText = ``;
-    btnEl4.innerText = ``;
+    btnEl4.innerText = `Quit`;
     defaultDisplay();
 };
 
 function scoreboardPage() {
     page = 4;
     text1.innerText = `Scoreboard\n\n${scoreBoard[0].name} : ${scoreBoard[0].score}\n${scoreBoard[1].name} : ${scoreBoard[1].score}\n${scoreBoard[2].name} : ${scoreBoard[2].score}\n${scoreBoard[3].name} : ${scoreBoard[3].score}\n${scoreBoard[4].name} : ${scoreBoard[4].score}\n${scoreBoard[5].name} : ${scoreBoard[5].score}\n${scoreBoard[6].name} : ${scoreBoard[6].score}\n${scoreBoard[7].name} : ${scoreBoard[7].score}\n${scoreBoard[8].name} : ${scoreBoard[8].score}\n${scoreBoard[9].name} : ${scoreBoard[9].score}\n`;
-    text2.innerText = ``;
+    msgDisplay.innerText = ``;
     btnEl1.innerText = `Back`;
     btnEl2.innerText = ``;
     btnEl3.innerText = ``;
@@ -201,10 +196,13 @@ function buttonTester3() {
 };
 function buttonTester4() {
     if (page === 0) {
+        window.close();
     } else if (page === 1) {
         shield();
     } else if (page === 2) {
+        window.close();
     } else if (page === 3) {
+        window.close();
     } else if (page === 4) {
     }
 };

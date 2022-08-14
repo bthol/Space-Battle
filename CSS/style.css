@@ -29,7 +29,7 @@ body {
 
 .game-screen {
     display: grid;
-    grid-template-rows: 2fr 1fr;
+    grid-template-rows: 1fr;
     align-items: center;
 }
 
@@ -47,7 +47,7 @@ body {
     border-bottom: 3px solid var(--color-detailing);
 }
 
-#alert, #prompt {
+#msg-display {
     font-size: 4vmin;
 }
 
