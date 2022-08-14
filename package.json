@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/bthol/Space-Battle/issues"
   },
-  "homepage": "https://github.com/bthol/Space-Battle#readme"
+  "homepage": "https://github.com/bthol/Space-Battle#readme",
+  "dependencies": {
+    "jquery": "^3.6.0"
+  }
 }

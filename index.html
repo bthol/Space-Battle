@@ -7,24 +7,34 @@
     <title>Space Battle</title>
     <script defer type="module" src="./main.js"></script>
     <script defer type="module" src="./JS-Modules/dataStructures.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <link rel="stylesheet" href="CSS/style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Coda&family=Monofett&display=swap" rel="stylesheet">
 </head>
 <body>
-    <section>
+    <section id="top-screen-section">
         <h1 id="page-title">Space Battle</h1>
     </section>
-    <section>
-        <div class="sprites">
+    <section id="mid-screen-section" class="game-screen">
+        <div id="char-data-display">
+            <div id="enemy-display">
+                <p>Enemy Type: </p>
+                <p>Lifeforce: </p>
+            </div>
+            <div id="player-display">
+                <p>Player Name: </p>
+                <p>Hull Capacity: </p>
+                <p>Shields: </p>
+            </div>
         </div>
-    </section>
-    <section class="game-screen">
         <div class="grid-row-1">
             <p id="alert"></p>
             <p id="prompt"></p>
         </div>
+    </section>
+    <section id="bottom-screen-section">
         <div class="grid-row-2 button-container">
             <button id="btn1" class="button">1</button>
             <button id="btn2" class="button">2</button>

@@ -42,6 +42,8 @@ btnEl4.addEventListener('click', buttonTester4);
 const text1 = document.querySelector(`#alert`);
 const text2 = document.querySelector(`#prompt`);
 
+$(`body`).on("click", () => {console.log("JQuery working")})
+
 /////////////////////////INITIALIZATION/////////////////////////////////
 function init() {
     user.hull = 25;
