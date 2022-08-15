@@ -126,11 +126,9 @@ function gameWinPage() {
 function scoreboardPage() {
     page = 4;
 
-    const msg = $(`#msg-display`);
     for (let i = 0; i < scoreBoard.length; i++) {
-        msg.append(`<p class="page-4-node">${scoreBoard[i].name} : ${scoreBoard[i].score}</p>`)
+        msgDisplay.append(`<p class="page-4-node">${scoreBoard[i].name} : ${scoreBoard[i].score}</p>`)
     }
-    msgDisplay.text(``);
     btnEl1.text(`Back`);
     btnEl2.text(``);
     btnEl3.text(``);
