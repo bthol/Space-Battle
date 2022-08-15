@@ -43,8 +43,8 @@ const msgDisplay = $(`#msg-display`);
 
 /////////////////////////INITIALIZATION/////////////////////////////////
 function init() {
-    user.hull = 25;
-    user.shield = 4;
+    user.hull = 1;
+    user.shield = 1;
     user.score = 0;
     page = 0;
     cannonCharge = 0;
@@ -104,7 +104,7 @@ function gameplayPage() {
 function gameoverPage() {
     page = 2;
 
-    msgDisplay.innerText = `Defeat!\n\n${user.name} = ${user.score}`;
+    msgDisplay.text(`Defeat!\n\n${user.name} = ${user.score}`);
     btnEl1.text(`New Game`);
     btnEl2.text(`Main Menu`);
     btnEl3.text(``);
@@ -127,7 +127,7 @@ function scoreboardPage() {
     page = 4;
 
     for (let i = 0; i < scoreBoard.length; i++) {
-        msgDisplay.append(`<p class="page-4-node">${scoreBoard[i].name} : ${scoreBoard[i].score}</p>`)
+        msgDisplay.append(`<p class="page-4-node">${i + 1}.) ${scoreBoard[i].name} : ${scoreBoard[i].score}</p>`)
     }
     btnEl1.text(`Back`);
     btnEl2.text(``);
@@ -136,6 +136,7 @@ function scoreboardPage() {
     defaultDisplay();
 };
 
+//////////////////////////////////DISPLAY/////////////////////////////////
 function pageHanlder(p) {
     if (p === 0) {
         mainPage();
@@ -156,7 +157,6 @@ function pageHanlder(p) {
     }
 };
 
-//////////////////////////////////DISPLAY/////////////////////////////////
 function dynamicDisplay() {
     if (cannonCharge >= 3) {
         btnEl2.css("color", "#dedede");
@@ -370,7 +370,7 @@ function testDeath (x) {
         }
     } else {
         if (user.hull <= 0) {
-            gameoverPage();
+            pageHanlder(2);
         } else {
             gameplayPage();
         }
