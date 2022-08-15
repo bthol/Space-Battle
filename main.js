@@ -93,6 +93,8 @@ function gameWinPage() {
 function scoreboardPage() {
     page = 4;
 
+    msgDisplay.text(``);
+    msgDisplay.text(`Scoreboard`);
     for (let i = 0; i < scoreBoard.length; i++) {
         msgDisplay.append(`<p class="page-4-node">${i + 1}.) ${scoreBoard[i].name} : ${scoreBoard[i].score}</p>`)
     }
