@@ -55,7 +55,7 @@ body {
 .button {
     cursor: pointer;
     letter-spacing: .1em;
-    font-size: 5vmin;
+    font-size: x-large;
     text-transform: uppercase;
     padding: .5em 1em;
     border-style: none;

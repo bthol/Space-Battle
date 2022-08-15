@@ -27,21 +27,19 @@ const scoreBoard = [
 ];
 
 ///////////////////////////EVENT LISTENERS///////////////////////////////
-const btnEl1 = document.querySelector(`#btn1`);
-btnEl1.addEventListener('click', buttonTester1);
+const btnEl1 = $(`#btn1`);
+btnEl1.on('click', buttonTester1);
 
-const btnEl2 = document.querySelector(`#btn2`);
-btnEl2.addEventListener('click', buttonTester2);
+const btnEl2 = $(`#btn2`);
+btnEl2.on('click', buttonTester2);
 
-const btnEl3 = document.querySelector(`#btn3`);
-btnEl3.addEventListener('click', buttonTester3);
+const btnEl3 = $(`#btn3`);
+btnEl3.on('click', buttonTester3);
 
-const btnEl4 = document.querySelector(`#btn4`);
-btnEl4.addEventListener('click', buttonTester4);
+const btnEl4 = $(`#btn4`);
+btnEl4.on('click', buttonTester4);
 
-const msgDisplay = document.querySelector(`#msg-display`);
-
-// $(`body`).on("click", () => {console.log("JQuery working")})
+const msgDisplay = $(`#msg-display`);
 
 /////////////////////////INITIALIZATION/////////////////////////////////
 function init() {
@@ -72,17 +70,17 @@ function nameEnter() {
 function mainPage() {
     page = 0;
 
-    msgDisplay.innerText = `Welcome to the Space Battle main menu.`;
-    btnEl1.innerText = `New Game`;
-    btnEl2.innerText = `ScoreBoard`;
-    btnEl3.innerText = ``;
-    btnEl4.innerText = `Quit`;
+    msgDisplay.text(`Welcome to the Space Battle main menu.`);
+    btnEl1.text(`New Game`);
+    btnEl2.text(`ScoreBoard`);
+    btnEl3.text(``);
+    btnEl4.text(`Quit`);
     defaultDisplay();
 };
 
 function gameplayPage() {
     page = 1;
-    
+
     //NODE RESET
     $(`.page-1-node`).remove();
     // PLAYER
@@ -94,12 +92,12 @@ function gameplayPage() {
     $(`#enemy-display`).append(`<p class="page-1-node">Enemy Type: ${currentEnemy.name}</p>`);
     $(`#enemy-display`).append(`<p class="page-1-node">Lifeforce: ${enemyDamage}</p>`);
     // MESSAGE
-    msgDisplay.innerText = ``;
+    msgDisplay.text(``);
     // CONTROLS
-    btnEl1.innerText = `Pulsebeam`;
-    btnEl2.innerText = `Lazercannon`;
-    btnEl3.innerText = `Repair`;
-    btnEl4.innerText = `Shield`;
+    btnEl1.text(`Pulsebeam`);
+    btnEl2.text(`Lazercannon`);
+    btnEl3.text(`Repair`);
+    btnEl4.text(`Shield`);
     dynamicDisplay();
 };
 
@@ -107,32 +105,36 @@ function gameoverPage() {
     page = 2;
 
     msgDisplay.innerText = `Defeat!\n\n${user.name} = ${user.score}`;
-    btnEl1.innerText = `New Game`;
-    btnEl2.innerText = `Main Menu`;
-    btnEl3.innerText = ``;
-    btnEl4.innerText = `Quit`;
+    btnEl1.text(`New Game`);
+    btnEl2.text(`Main Menu`);
+    btnEl3.text(``);
+    btnEl4.text(`Quit`);
     defaultDisplay();
 };
 
 function gameWinPage() {
     page = 3;
 
-    msgDisplay.innerText = `You Win!\n\n${user.name} = ${user.score}`;
-    btnEl1.innerText = `New Game`;
-    btnEl2.innerText = `Main Menu`;
-    btnEl3.innerText = ``;
-    btnEl4.innerText = `Quit`;
+    msgDisplay.text(`You Win!\n\n${user.name} = ${user.score}`);
+    btnEl1.text(`New Game`);
+    btnEl2.text(`Main Menu`);
+    btnEl3.text(``);
+    btnEl4.text(`Quit`);
     defaultDisplay();
 };
 
 function scoreboardPage() {
     page = 4;
 
-    msgDisplay.innerText = `Scoreboard\n\n${scoreBoard[0].name} : ${scoreBoard[0].score}\n${scoreBoard[1].name} : ${scoreBoard[1].score}\n${scoreBoard[2].name} : ${scoreBoard[2].score}\n${scoreBoard[3].name} : ${scoreBoard[3].score}\n${scoreBoard[4].name} : ${scoreBoard[4].score}\n${scoreBoard[5].name} : ${scoreBoard[5].score}\n${scoreBoard[6].name} : ${scoreBoard[6].score}\n${scoreBoard[7].name} : ${scoreBoard[7].score}\n${scoreBoard[8].name} : ${scoreBoard[8].score}\n${scoreBoard[9].name} : ${scoreBoard[9].score}\n`;
-    btnEl1.innerText = `Back`;
-    btnEl2.innerText = ``;
-    btnEl3.innerText = ``;
-    btnEl4.innerText = ``;
+    const msg = $(`#msg-display`);
+    for (let i = 0; i < scoreBoard.length; i++) {
+        msg.append(`<p class="page-4-node">${scoreBoard[i].name} : ${scoreBoard[i].score}</p>`)
+    }
+    msgDisplay.text(``);
+    btnEl1.text(`Back`);
+    btnEl2.text(``);
+    btnEl3.text(``);
+    btnEl4.text(``);
     defaultDisplay();
 };
 
@@ -159,27 +161,33 @@ function pageHanlder(p) {
 //////////////////////////////////DISPLAY/////////////////////////////////
 function dynamicDisplay() {
     if (cannonCharge >= 3) {
-        btnEl2.style.color = "#dedede";
+        btnEl2.css("color", "#dedede");
+        btnEl2.css("fontSize", "x-large");
     } else {
-        btnEl2.style.color = "#00000080";
+        btnEl2.css("color", "#00000080");
+        btnEl2.css("fontSize", "medium");
     }
     if (repairCharge >= 10) {
-        btnEl3.style.color = "#dedede";
+        btnEl3.css("color", "#dedede");
+        btnEl3.css("fontSize", "x-large");
     } else {
-        btnEl3.style.color = "#00000080";
+        btnEl3.css("color", "#00000080");
+        btnEl3.css("fontSize", "medium");
     }
     if (shieldCharge >= 5) {
-        btnEl4.style.color = "#dedede";
+        btnEl4.css("color", "#dedede");
+        btnEl4.css("fontSize", "x-large");
     } else {
-        btnEl4.style.color = "#00000080";
+        btnEl4.css("color", "#00000080");
+        btnEl4.css("fontSize", "medium");
     }
 };
 
 function defaultDisplay() {
-    btnEl1.style.color = "#dedede";
-    btnEl2.style.color = "#dedede";
-    btnEl3.style.color = "#dedede";
-    btnEl4.style.color = "#dedede";
+    btnEl1.css("color", "#dedede");
+    btnEl2.css("color", "#dedede");
+    btnEl3.css("color", "#dedede");
+    btnEl4.css("color", "#dedede");
 }
 
 ////////////////////////////////CONTROLS//////////////////////////////////////////
