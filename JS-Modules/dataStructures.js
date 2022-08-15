@@ -23,9 +23,23 @@ const bosses = [
 
 const bossRound = [10, 20, 30, 40, 50];
 
+const scoreBoard = [
+    {name: "player", score: 100},
+    {name: "player", score: 100},
+    {name: "player", score: 100},
+    {name: "player", score: 100},
+    {name: "player", score: 100},
+    {name: "player", score: 100},
+    {name: "player", score: 100},
+    {name: "player", score: 100},
+    {name: "player", score: 100},
+    {name: "player", score: 100},
+];
+
 export {
     user,
     aliens,
     bosses,
-    bossRound
+    bossRound,
+    scoreBoard
 };

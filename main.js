@@ -1,30 +1,9 @@
 //////////////////////////////MODULES//////////////////////////////////
-import { user, aliens, bosses, bossRound } from './JS-Modules/dataStructures.js';
+import { user, aliens, bosses, bossRound, scoreBoard } from './JS-Modules/dataStructures.js';
 
-///////////////////////STATE VARIABLES////////////////////////////////
-let page;
+import { stateVars } from './JS-Modules/stateVariables.js';
+let { page, cannonCharge, shieldCharge, repairCharge, currentEnemy, enemiesDefeated, bossCount } = stateVars
 
-let cannonCharge = 0;
-let repairCharge = 0;
-let shieldCharge = 0;
-
-let currentEnemy;
-let enemyDamage;
-let enemiesDefeated = 0;
-let bossCount = 0;
-
-const scoreBoard = [
-    {name: "player", score: 100},
-    {name: "player", score: 100},
-    {name: "player", score: 100},
-    {name: "player", score: 100},
-    {name: "player", score: 100},
-    {name: "player", score: 100},
-    {name: "player", score: 100},
-    {name: "player", score: 100},
-    {name: "player", score: 100},
-    {name: "player", score: 100},
-];
 
 ///////////////////////////EVENT LISTENERS///////////////////////////////
 const btnEl1 = $(`#btn1`);
@@ -43,8 +22,8 @@ const msgDisplay = $(`#msg-display`);
 
 /////////////////////////INITIALIZATION/////////////////////////////////
 function init() {
-    user.hull = 1;
-    user.shield = 1;
+    user.hull = 25;
+    user.shield = 4;
     user.score = 0;
     page = 0;
     cannonCharge = 0;
@@ -90,7 +69,7 @@ function gameplayPage() {
     $(`#player-display`).append(`<p class="page-1-node">Score: ${user.score}</p>`);
     //ENEMY
     $(`#enemy-display`).append(`<p class="page-1-node">Enemy Type: ${currentEnemy.name}</p>`);
-    $(`#enemy-display`).append(`<p class="page-1-node">Lifeforce: ${enemyDamage}</p>`);
+    $(`#enemy-display`).append(`<p class="page-1-node">Lifeforce: ${currentEnemy.hull}</p>`);
     // MESSAGE
     msgDisplay.text(``);
     // CONTROLS
@@ -280,7 +259,7 @@ function pulsebeamAttack() {
     repairCharge += 1;
     shieldCharge += 1;
     if (Math.random() < user.pulsebeam.accuracy) {
-        enemyDamage -= user.pulsebeam.firepower;
+        currentEnemy.hull -= user.pulsebeam.firepower;
         alert(`Pulsebeam attack hit the ${currentEnemy.name}!`);
         testDeath(1);
     } else {
@@ -295,7 +274,7 @@ function lazercannonAttack() {
         repairCharge += 1;
         shieldCharge += 1;
         if (Math.random() < user.pulsebeam.accuracy) {
-            enemyDamage -= user.lazercannon.firepower;
+            currentEnemy.hull -= user.lazercannon.firepower;
             alert(`Lazercannon attack hit ${currentEnemy.name}!`);
             testDeath(1);
         } else {
@@ -337,13 +316,13 @@ function enemyAttack() {
 /////////////////////////ENEMY GENERATORS///////////////////////////////
 function newEnemy() {
     currentEnemy = aliens[Math.floor(Math.random() * aliens.length)];
-    enemyDamage = currentEnemy.hull;
+    currentEnemy.hull = currentEnemy.hull;
     enemyAlert(0);
 };
 
 function newBossEnemy() {
     currentEnemy = bosses[bossCount];
-    enemyDamage = currentEnemy.hull;
+    currentEnemy.hull = currentEnemy.hull;
     bossCount += 1;
     enemyAlert(1);
 };
@@ -360,7 +339,7 @@ function enemyAlert(x) {
 //////////////////////////////////TESTS///////////////////////////////////////////
 function testDeath (x) {
     if (x === 1) {
-        if (enemyDamage <= 0) {
+        if (currentEnemy.hull <= 0) {
             enemiesDefeated += 1;
             user.score += currentEnemy.score;
             alert("Alien obliterated!");
