@@ -8,6 +8,4 @@ let stateVars = {
     bossCount: 0
 }
 
-
-
-export {stateVars};
+export {stateVars };

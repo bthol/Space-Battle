@@ -2,25 +2,13 @@
 import { user, aliens, bosses, bossRound, scoreBoard } from './JS-Modules/dataStructures.js';
 
 import { stateVars } from './JS-Modules/stateVariables.js';
-let { page, cannonCharge, shieldCharge, repairCharge, currentEnemy, enemiesDefeated, bossCount } = stateVars
+let { page, cannonCharge, shieldCharge, repairCharge, currentEnemy, enemiesDefeated, bossCount } = stateVars;
 
-
-///////////////////////////EVENT LISTENERS///////////////////////////////
-const btnEl1 = $(`#btn1`);
-btnEl1.on('click', buttonTester1);
-
-const btnEl2 = $(`#btn2`);
-btnEl2.on('click', buttonTester2);
-
-const btnEl3 = $(`#btn3`);
-btnEl3.on('click', buttonTester3);
-
-const btnEl4 = $(`#btn4`);
-btnEl4.on('click', buttonTester4);
-
-const msgDisplay = $(`#msg-display`);
+import { btnEl1, btnEl2, btnEl3, btnEl4, msgDisplay, playerDisplay, enemyDisplay } from './JS-Modules/DOM.js';
 
 /////////////////////////INITIALIZATION/////////////////////////////////
+let currentEnemyHealth;
+
 function init() {
     user.hull = 25;
     user.shield = 4;
@@ -34,7 +22,7 @@ function init() {
 };
 init();
 
-/////////////////////////User Data////////////////////////////////////////
+/////////////////////////USER NAME ENTER////////////////////////////////////////
 function nameEnter() {
     const name = prompt("Enter name");
     if (name === "") {
@@ -63,13 +51,13 @@ function gameplayPage() {
     //NODE RESET
     $(`.page-1-node`).remove();
     // PLAYER
-    $(`#player-display`).append(`<p class="page-1-node">Player: ${user.name}</p>`);
-    $(`#player-display`).append(`<p class="page-1-node">Hull Integrity: ${user.hull}</p>`);
-    $(`#player-display`).append(`<p class="page-1-node">Shield Level: ${user.shield}</p>`);
-    $(`#player-display`).append(`<p class="page-1-node">Score: ${user.score}</p>`);
+    playerDisplay.append(`<p class="page-1-node">Player: ${user.name}</p>`);
+    playerDisplay.append(`<p class="page-1-node">Hull Integrity: ${user.hull}</p>`);
+    playerDisplay.append(`<p class="page-1-node">Shield Level: ${user.shield}</p>`);
+    playerDisplay.append(`<p class="page-1-node">Score: ${user.score}</p>`);
     //ENEMY
-    $(`#enemy-display`).append(`<p class="page-1-node">Enemy Type: ${currentEnemy.name}</p>`);
-    $(`#enemy-display`).append(`<p class="page-1-node">Lifeforce: ${currentEnemy.hull}</p>`);
+    enemyDisplay.append(`<p class="page-1-node">Enemy Type: ${currentEnemy.name}</p>`);
+    enemyDisplay.append(`<p class="page-1-node">Lifeforce: ${currentEnemyHealth}</p>`);
     // MESSAGE
     msgDisplay.text(``);
     // CONTROLS
@@ -142,21 +130,21 @@ function dynamicDisplay() {
         btnEl2.css("fontSize", "x-large");
     } else {
         btnEl2.css("color", "#00000080");
-        btnEl2.css("fontSize", "medium");
+        btnEl2.css("fontSize", "large");
     }
     if (repairCharge >= 10) {
         btnEl3.css("color", "#dedede");
         btnEl3.css("fontSize", "x-large");
     } else {
         btnEl3.css("color", "#00000080");
-        btnEl3.css("fontSize", "medium");
+        btnEl3.css("fontSize", "large");
     }
     if (shieldCharge >= 5) {
         btnEl4.css("color", "#dedede");
         btnEl4.css("fontSize", "x-large");
     } else {
         btnEl4.css("color", "#00000080");
-        btnEl4.css("fontSize", "medium");
+        btnEl4.css("fontSize", "large");
     }
 };
 
@@ -168,6 +156,7 @@ function defaultDisplay() {
 }
 
 ////////////////////////////////CONTROLS//////////////////////////////////////////
+btnEl1.on('click', buttonTester1);
 function buttonTester1() {
     if (page === 0) {
         nameEnter();
@@ -189,6 +178,8 @@ function buttonTester1() {
         mainPage();
     }
 };
+
+btnEl2.on('click', buttonTester2);
 function buttonTester2() {
     if (page === 0) {
         pageHanlder(4);
@@ -201,6 +192,8 @@ function buttonTester2() {
     } else if (page === 4) {
     }
 };
+
+btnEl3.on('click', buttonTester3);
 function buttonTester3() {
     if (page === 0) {
     } else if (page === 1) {
@@ -210,6 +203,8 @@ function buttonTester3() {
     } else if (page === 4) {
     }
 };
+
+btnEl4.on('click', buttonTester4);
 function buttonTester4() {
     if (page === 0) {
         window.close();
@@ -259,7 +254,7 @@ function pulsebeamAttack() {
     repairCharge += 1;
     shieldCharge += 1;
     if (Math.random() < user.pulsebeam.accuracy) {
-        currentEnemy.hull -= user.pulsebeam.firepower;
+        currentEnemyHealth -= user.pulsebeam.firepower;
         alert(`Pulsebeam attack hit the ${currentEnemy.name}!`);
         testDeath(1);
     } else {
@@ -274,7 +269,7 @@ function lazercannonAttack() {
         repairCharge += 1;
         shieldCharge += 1;
         if (Math.random() < user.pulsebeam.accuracy) {
-            currentEnemy.hull -= user.lazercannon.firepower;
+            currentEnemyHealth -= user.lazercannon.firepower;
             alert(`Lazercannon attack hit ${currentEnemy.name}!`);
             testDeath(1);
         } else {
@@ -316,13 +311,13 @@ function enemyAttack() {
 /////////////////////////ENEMY GENERATORS///////////////////////////////
 function newEnemy() {
     currentEnemy = aliens[Math.floor(Math.random() * aliens.length)];
-    currentEnemy.hull = currentEnemy.hull;
+    currentEnemyHealth = currentEnemy.hull;
     enemyAlert(0);
 };
 
 function newBossEnemy() {
     currentEnemy = bosses[bossCount];
-    currentEnemy.hull = currentEnemy.hull;
+    currentEnemyHealth = currentEnemy.hull;
     bossCount += 1;
     enemyAlert(1);
 };
@@ -339,7 +334,7 @@ function enemyAlert(x) {
 //////////////////////////////////TESTS///////////////////////////////////////////
 function testDeath (x) {
     if (x === 1) {
-        if (currentEnemy.hull <= 0) {
+        if (currentEnemyHealth <= 0) {
             enemiesDefeated += 1;
             user.score += currentEnemy.score;
             alert("Alien obliterated!");
@@ -360,7 +355,7 @@ function bossTest() {
     let bool = true;
     if (enemiesDefeated === bossRound[bossRound.length - 1] + 1) {
         bool = false;
-        gameWinPage();
+        pageHanlder(3);
     } else {
         for (let i = 0; i < bossRound.length; i++) {
             if (enemiesDefeated === bossRound[i]) {
