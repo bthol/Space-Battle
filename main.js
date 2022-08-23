@@ -129,24 +129,24 @@ function pageHanlder(p) {
 function dynamicDisplay() {
     if (cannonCharge >= 3) {
         btnEl2.css("color", "#dedede");
-        btnEl2.css("fontSize", "x-large");
+        btnEl2.css("fontSize", "3vw");
     } else {
         btnEl2.css("color", "#00000080");
-        btnEl2.css("fontSize", "large");
+        btnEl2.css("fontSize", "2.5vw");
     }
     if (repairCharge >= 10) {
         btnEl3.css("color", "#dedede");
-        btnEl3.css("fontSize", "x-large");
+        btnEl3.css("fontSize", "3vw");
     } else {
         btnEl3.css("color", "#00000080");
-        btnEl3.css("fontSize", "large");
+        btnEl3.css("fontSize", "2.5vw");
     }
     if (shieldCharge >= 5) {
         btnEl4.css("color", "#dedede");
-        btnEl4.css("fontSize", "x-large");
+        btnEl4.css("fontSize", "3vw");
     } else {
         btnEl4.css("color", "#00000080");
-        btnEl4.css("fontSize", "large");
+        btnEl4.css("fontSize", "2.5vw");
     }
 };
 
