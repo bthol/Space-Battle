@@ -51,13 +51,13 @@ function gameplayPage() {
     //NODE RESET
     $(`.page-1-node`).remove();
     // PLAYER
-    playerDisplay.append(`<p class="page-1-node">Player: ${user.name}</p>`);
-    playerDisplay.append(`<p class="page-1-node">Hull Integrity: ${user.hull}</p>`);
-    playerDisplay.append(`<p class="page-1-node">Shield Level: ${user.shield}</p>`);
-    playerDisplay.append(`<p class="page-1-node">Score: ${user.score}</p>`);
+    playerDisplay.append(`<div class="page-1-node">Player: ${user.name}</div>`);
+    playerDisplay.append(`<div class="page-1-node">Hull Integrity: ${user.hull}</div>`);
+    playerDisplay.append(`<div class="page-1-node">Shield Level: ${user.shield}</div>`);
+    playerDisplay.append(`<div class="page-1-node">Score: ${user.score}</div>`);
     //ENEMY
-    enemyDisplay.append(`<p class="page-1-node">Enemy Type: ${currentEnemy.name}</p>`);
-    enemyDisplay.append(`<p class="page-1-node">Lifeforce: ${currentEnemyHealth}</p>`);
+    enemyDisplay.append(`<div class="page-1-node">Enemy Type: ${currentEnemy.name}</div>`);
+    enemyDisplay.append(`<div class="page-1-node">Lifeforce: ${currentEnemyHealth}</div>`);
     // MESSAGE
     msgDisplay.text(``);
     // CONTROLS
