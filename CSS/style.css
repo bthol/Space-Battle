@@ -41,9 +41,9 @@ body {
 
 /* TEXT */
 #page-title {
+    font-size: 5vw;
     cursor: default;
     letter-spacing: 1em;
-    font-size: 4vw;
     text-transform: uppercase;
     white-space: nowrap;
     margin-top: 0em;
@@ -54,18 +54,18 @@ body {
 }
 
 #msg-display {
-    font-size: 3vw;
+    font-size: 5vmin;
 }
 
 .page-1-node {
-    font-size: 3vw;
+    font-size: 5vmin;
 }
 
 /* BUTTON */
 .button {
+    font-size: 5vmin;
     cursor: pointer;
     letter-spacing: .1em;
-    font-size: 3vw;
     text-transform: uppercase;
     padding: 2vmin 4vmin;
     border-style: none;
