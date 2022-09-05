@@ -132,21 +132,21 @@ body {
     width: 30vmin;
     background-color: gray;
 }
-.enemy-health-bar {
+#enemy-health-bar {
     height: 10px;
     width: 100%;
     border: 1px solid gray;
     background-color: green;
 }
-.player-health-bar {
+#player-health-bar {
     height: 10px;
-    width: 75%;
+    width: 80%;
     border: 1px solid gray;
     background-color: green;
 }
-.player-shield-bar {
+#player-shield-bar {
     height: 10px;
-    width: 25%;
+    width: 20%;
     border: 1px solid gray;
     background-color: blue;
 }
