@@ -58,10 +58,10 @@ function gameplayPage() {
     scoreDisplay.text(`Score: ${user.score}`);
     // PLAYER
     playerDisplay.append(`<div class="page-1-node">${user.name}</div>`);
-    playerDisplay.append(`<div class="page-1-node">${user.hull} ${user.shield} <div class="bar-back"><div id="player-health-bar"></div><div id="player-shield-bar"></div></div></div>`);
+    playerDisplay.append(`<div class="page-1-node"><div class="bar-back"><div id="player-health-bar"></div><div id="player-shield-bar"></div></div></div>`);
     // ENEMY
     enemyDisplay.append(`<div class="page-1-node">${currentEnemy.name}</div>`);
-    enemyDisplay.append(`<div class="page-1-node">${currentEnemyHealth} <div class="bar-back"><div id="enemy-health-bar"></div></div></div>`);
+    enemyDisplay.append(`<div class="page-1-node"><div class="bar-back"><div id="enemy-health-bar"></div></div></div>`);
     // CONTROLS
     btnEl1.text(`Pulsebeam`);
     btnEl2.text(`Lazercannon`);
@@ -116,6 +116,44 @@ function scoreboardPage() {
     btnEl4.text(``);
     defaultDisplay();
 };
+
+//////////////////////////////////DISPLAY/////////////////////////////////
+function dynamicButton() {
+    if (cannonCharge >= 3) {
+        btnEl2.css("color", "#dedede");
+        btnEl2.css("fontSize", "5vmin");
+    } else {
+        btnEl2.css("color", "#00000080");
+        btnEl2.css("fontSize", "4vmin");
+    }
+    if (repairCharge >= 10) {
+        btnEl3.css("color", "#dedede");
+        btnEl3.css("fontSize", "5vmin");
+    } else {
+        btnEl3.css("color", "#00000080");
+        btnEl3.css("fontSize", "4vmin");
+    }
+    if (shieldCharge >= 5) {
+        btnEl4.css("color", "#dedede");
+        btnEl4.css("fontSize", "5vmin");
+    } else {
+        btnEl4.css("color", "#00000080");
+        btnEl4.css("fontSize", "4vmin");
+    }
+};
+
+function dynamicBar() {
+    $(`#enemy-health-bar`).css("width", `${(currentEnemyHealth / currentEnemy.hull) * 100}%`);
+    $(`#player-health-bar`).css("width", `${(user.hull / 20) * 80}%`);
+    $(`#player-shield-bar`).css("width", `${(user.shield / 5) * 20}%`);
+};
+
+function defaultDisplay() {
+    btnEl1.css("color", "#dedede");
+    btnEl2.css("color", "#dedede");
+    btnEl3.css("color", "#dedede");
+    btnEl4.css("color", "#dedede");
+}
 
 ////////////////////////////////CONTROLS//////////////////////////////////////////
 function pageHandler(p) {
@@ -199,44 +237,6 @@ function buttonTester4() {
     } else if (page === 4) {
     }
 };
-
-//////////////////////////////////DISPLAY/////////////////////////////////
-function dynamicButton() {
-    if (cannonCharge >= 3) {
-        btnEl2.css("color", "#dedede");
-        btnEl2.css("fontSize", "5vmin");
-    } else {
-        btnEl2.css("color", "#00000080");
-        btnEl2.css("fontSize", "4vmin");
-    }
-    if (repairCharge >= 10) {
-        btnEl3.css("color", "#dedede");
-        btnEl3.css("fontSize", "5vmin");
-    } else {
-        btnEl3.css("color", "#00000080");
-        btnEl3.css("fontSize", "4vmin");
-    }
-    if (shieldCharge >= 5) {
-        btnEl4.css("color", "#dedede");
-        btnEl4.css("fontSize", "5vmin");
-    } else {
-        btnEl4.css("color", "#00000080");
-        btnEl4.css("fontSize", "4vmin");
-    }
-};
-
-function dynamicBar() {
-    $(`#enemy-health-bar`).css("width", `${(currentEnemyHealth / currentEnemy.hull) * 100}%`);
-    $(`#player-health-bar`).css("width", `${(user.hull / 20) * 80}%`);
-    $(`#player-shield-bar`).css("width", `${(user.shield / 5) * 20}%`);
-};
-
-function defaultDisplay() {
-    btnEl1.css("color", "#dedede");
-    btnEl2.css("color", "#dedede");
-    btnEl3.css("color", "#dedede");
-    btnEl4.css("color", "#dedede");
-}
 
 ////////////////////////////DEFENSIVE MOVES////////////////////////////////////////
 function repair() {
