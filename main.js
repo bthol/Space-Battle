@@ -4,7 +4,7 @@ import { user, aliens, bosses, bossRound, scoreBoard } from './JS-Modules/dataSt
 import { stateVars } from './JS-Modules/stateVariables.js';
 let { page, cannonCharge, shieldCharge, repairCharge, currentEnemy, enemiesDefeated, bossCount } = stateVars;
 
-import { btnEl1, btnEl2, btnEl3, btnEl4, msgDisplay, playerDisplay, enemyDisplay } from './JS-Modules/DOM.js';
+import { btnEl1, btnEl2, btnEl3, btnEl4, msgDisplay, scoreDisplay, playerDisplay, enemyDisplay } from './JS-Modules/DOM.js';
 
 /////////////////////////INITIALIZATION/////////////////////////////////
 let currentEnemyHealth;
@@ -37,11 +37,13 @@ function nameEnter() {
 function mainPage() {
     page = 0;
 
+    // MESSAGE
     msgDisplay.text(`Welcome to the Space Battle main menu.`);
+    // CONTROLS
     btnEl1.text(`New Game`);
     btnEl2.text(`ScoreBoard`);
-    btnEl3.text(``);
-    btnEl4.text(`Quit`);
+    btnEl3.text(`Quit`);
+    btnEl4.text(``);
     defaultDisplay();
 };
 
@@ -50,16 +52,16 @@ function gameplayPage() {
 
     //NODE RESET
     $(`.page-1-node`).remove();
-    // PLAYER
-    playerDisplay.append(`<div class="page-1-node">Player: ${user.name}</div>`);
-    playerDisplay.append(`<div class="page-1-node">Hull Integrity: ${user.hull}</div>`);
-    playerDisplay.append(`<div class="page-1-node">Shield Level: ${user.shield}</div>`);
-    playerDisplay.append(`<div class="page-1-node">Score: ${user.score}</div>`);
-    //ENEMY
-    enemyDisplay.append(`<div class="page-1-node">Enemy Type: ${currentEnemy.name}</div>`);
-    enemyDisplay.append(`<div class="page-1-node">Lifeforce: ${currentEnemyHealth}</div>`);
     // MESSAGE
     msgDisplay.text(``);
+    // SCORE
+    scoreDisplay.text(`Score: ${user.score}`);
+    // PLAYER
+    playerDisplay.append(`<div class="page-1-node">${user.name}</div>`);
+    playerDisplay.append(`<div class="page-1-node">${user.hull} ${user.shield} <div class="bar-back"><div class="player-health-bar"></div><div class="player-shield-bar"></div></div></div>`);
+    // ENEMY
+    enemyDisplay.append(`<div class="page-1-node">${currentEnemy.name}</div>`);
+    enemyDisplay.append(`<div class="page-1-node">${currentEnemyHealth} <div class="bar-back"><div class="enemy-health-bar"></div></div></div>`);
     // CONTROLS
     btnEl1.text(`Pulsebeam`);
     btnEl2.text(`Lazercannon`);
@@ -71,18 +73,26 @@ function gameplayPage() {
 function gameoverPage() {
     page = 2;
 
-    msgDisplay.text(`Defeat!\n\n${user.name} = ${user.score}`);
+    // MESSAGE
+    msgDisplay.text(`Defeat!`);
+    // SCORE
+    scoreDisplay.text(`${user.name} = ${user.score}`);
+    // CONTROLS
     btnEl1.text(`New Game`);
     btnEl2.text(`Main Menu`);
-    btnEl3.text(``);
-    btnEl4.text(`Quit`);
+    btnEl3.text(`Quit`);
+    btnEl4.text(``);
     defaultDisplay();
 };
 
 function gameWinPage() {
     page = 3;
 
-    msgDisplay.text(`You Win!\n\n${user.name} = ${user.score}`);
+    // MESSAGE
+    msgDisplay.text(`You Win!`);
+    // SCORE
+    scoreDisplay.text(`${user.name} = ${user.score}`)
+    // CONTROLS
     btnEl1.text(`New Game`);
     btnEl2.text(`Main Menu`);
     btnEl3.text(``);
@@ -93,11 +103,12 @@ function gameWinPage() {
 function scoreboardPage() {
     page = 4;
 
-    msgDisplay.text(``);
-    msgDisplay.text(`Scoreboard`);
+    // MESSAGE
+    msgDisplay.text(`SCOREBOARD`);
     for (let i = 0; i < scoreBoard.length; i++) {
         msgDisplay.append(`<p class="page-4-node">${i + 1}.) ${scoreBoard[i].name} : ${scoreBoard[i].score}</p>`)
     }
+    // CONTROLS
     btnEl1.text(`Back`);
     btnEl2.text(``);
     btnEl3.text(``);
@@ -106,26 +117,6 @@ function scoreboardPage() {
 };
 
 //////////////////////////////////DISPLAY/////////////////////////////////
-function pageHanlder(p) {
-    if (p === 0) {
-        mainPage();
-    }
-    if (p === 1) {
-        gameplayPage();
-    } else {
-        $(`.page-1-node`).remove();
-    }
-    if (p === 2) {
-        gameoverPage();
-    }
-    if (p === 3) {
-        gameWinPage();
-    }
-    if (p === 4) {
-        scoreboardPage();
-    }
-};
-
 function dynamicDisplay() {
     if (cannonCharge >= 3) {
         btnEl2.css("color", "#dedede");
@@ -157,40 +148,60 @@ function defaultDisplay() {
     btnEl4.css("color", "#dedede");
 }
 
+function pageHandler(p) {
+    if (p === 0) {
+        mainPage();
+    }
+    if (p === 1) {
+        gameplayPage();
+    } else {
+        $(`.page-1-node`).remove();
+    }
+    if (p === 2) {
+        gameoverPage();
+    }
+    if (p === 3) {
+        gameWinPage();
+    }
+    if (p === 4) {
+        scoreboardPage();
+    }
+};
+
 ////////////////////////////////CONTROLS//////////////////////////////////////////
 btnEl1.on('click', buttonTester1);
 function buttonTester1() {
     if (page === 0) {
         nameEnter();
         newEnemy();
-        gameplayPage();
+        pageHandler(1);
     } else if (page === 1) {
         pulsebeamAttack();
     } else if (page === 2) {
         init();
         nameEnter();
         newEnemy();
-        gameplayPage();
+        pageHandler(1);
     } else if (page === 3) {
         init();
         nameEnter();
         newEnemy();
-        gameplayPage();
+        pageHandler(1);
     } else if (page === 4) {
-        mainPage();
+        pageHandler(0);
     }
 };
 
 btnEl2.on('click', buttonTester2);
 function buttonTester2() {
     if (page === 0) {
-        pageHanlder(4);
+        pageHandler(4);
     } else if (page === 1) {
         lazercannonAttack();
     } else if (page === 2) {
-        mainPage();
+        pageHandler(0);
     } else if (page === 3) {
-        mainPage();
+        pageHandler(0);
     } else if (page === 4) {
     }
 };
@@ -198,9 +209,11 @@ function buttonTester2() {
 btnEl3.on('click', buttonTester3);
 function buttonTester3() {
     if (page === 0) {
+        window.close();
     } else if (page === 1) {
         repair();
     } else if (page === 2) {
+        window.close();
     } else if (page === 3) {
     } else if (page === 4) {
     }
@@ -209,11 +222,9 @@ function buttonTester3() {
 btnEl4.on('click', buttonTester4);
 function buttonTester4() {
     if (page === 0) {
-        window.close();
     } else if (page === 1) {
         shield();
     } else if (page === 2) {
-        window.close();
     } else if (page === 3) {
         window.close();
     } else if (page === 4) {
@@ -346,7 +357,7 @@ function testDeath (x) {
         }
     } else {
         if (user.hull <= 0) {
-            pageHanlder(2);
+            pageHandler(2);
         } else {
             gameplayPage();
         }
@@ -357,7 +368,7 @@ function bossTest() {
     let bool = true;
     if (enemiesDefeated === bossRound[bossRound.length - 1] + 1) {
         bool = false;
-        pageHanlder(3);
+        pageHandler(3);
     } else {
         for (let i = 0; i < bossRound.length; i++) {
             if (enemiesDefeated === bossRound[i]) {

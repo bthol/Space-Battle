@@ -14,7 +14,7 @@ const aliens = [
 ];
 
 const bosses = [
-    {name: "Morphuos", hull: 11, score: 2000, firepower: 3, accuracy: .5},
+    {name: "Morphuos", hull: 11, score: 2000, firepower: 3, accuracy: .4},
     {name: "Grotek", hull: 13, score: 2000, firepower: 6, accuracy: .2},
     {name: "Mantlebrot", hull: 16, score: 2000, firepower: 4, accuracy: .4},
     {name: "Harvester", hull: 19, score: 2000, firepower: 4, accuracy: .5},
