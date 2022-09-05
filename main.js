@@ -144,8 +144,8 @@ function dynamicButton() {
 
 function dynamicBar() {
     $(`#enemy-health-bar`).css("width", `${(currentEnemyHealth / currentEnemy.hull) * 100}%`);
-    $(`#player-health-bar`).css("width", `${(user.hull / 20) * 80}%`);
-    $(`#player-shield-bar`).css("width", `${(user.shield / 5) * 20}%`);
+    $(`#player-health-bar`).css("width", `${(user.hull / 20) * 100}%`);
+    $(`#player-shield-bar`).css("width", `${(user.shield / 5) * 100}%`);
 };
 
 function defaultDisplay() {
