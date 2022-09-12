@@ -278,7 +278,7 @@ function repair() {
 };
 
 function shield() {
-    if (shieldCharge >= 1) {
+    if (shieldCharge >= 5) {
         if (user.shield < 5) {
             shieldCharge = 0;
             user.shield += 2;
