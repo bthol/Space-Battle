@@ -7,6 +7,21 @@ let { page, cannonCharge, shieldCharge, repairCharge, currentEnemy, enemiesDefea
 import { btnEl1, btnEl2, btnEl3, btnEl4, msgDisplay, scoreDisplay, playerDisplay, enemyDisplay } from './JS-Modules/DOM.js';
 
 /////////////////////////INITIALIZATION/////////////////////////////////
+// Test for usable screen dimensions
+console.log(`innerheight: ${window.innerHeight} innerwidth: ${window.innerWidth}`);
+// Test for internet browser
+if (navigator.userAgent.indexOf('MSIE') > - 1 || navigator.userAgent.indexOf('Trident') > - 1) {
+    // Internet Explorer
+    // Set screen dimensions to usable screen
+    $(`#layout-wrap`).css("height", "document.documentElement.clientHeight");
+    $(`#layout-wrap`).css("width", "document.documentElement.clientWidth");
+} else {
+    // All other browsers
+    // Set screen dimensions to usable screen
+    $(`#layout-wrap`).css("height", "window.innerHeight");
+    $(`#layout-wrap`).css("width", "window.innerWidth");
+}
+
 let currentEnemyHealth;
 
 function init() {

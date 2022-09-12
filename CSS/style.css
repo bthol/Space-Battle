@@ -22,14 +22,13 @@
 body {
     margin: 0 auto;
     letter-spacing: .1em;
-    height: 100vh;
     color: var(--color-font-2);
 }
 
-.layout-wrap {
+#layout-wrap {
     display: grid;
     grid-template-rows: min-content 10fr 1fr;
-    height: 100%;
+    height: 100vh;
 }
 
 .game-screen {
@@ -66,7 +65,6 @@ body {
     background-color: var(--color-background-2);
     border-bottom: 1px solid var(--color-detailing);
 }
-
 
 .page-1-node {
     font-size: 5vmin;
