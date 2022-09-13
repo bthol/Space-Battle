@@ -134,20 +134,21 @@ body {
     background-color: gray;
 }
 #enemy-health-bar {
-    height: 10px;
+    height: 1vmin;
     grid-column: 1 / span 2;
-    border: 1px solid gray;
+    border: .1vmin solid white;
+    border-left: none;
     background-color: green;
 }
 #player-health-bar {
-    height: 10px;
-    border: 1px solid gray;
-    border-right: none;
+    height: 1vmin;
+    border: .1vmin solid white;
+    border-left: none;
     background-color: green;
 }
 #player-shield-bar {
-    height: 10px;
-    border: 1px solid gray;
+    height: 1vmin;
+    border: .1vmin solid white;
     border-left: none;
     background-color: blue;
 }

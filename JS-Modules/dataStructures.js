@@ -9,8 +9,8 @@ const user = {
 
 const aliens = [
     {name: "Subort", hull: 2, score: 100, firepower: 1, accuracy: .4},
-    {name: "Tankbug", hull: 6, score: 300, firepower: 2, accuracy: .4},
-    {name: "Sentinel", hull: 4, score: 200, firepower: 1, accuracy: .8}
+    {name: "Tankbug", hull: 7, score: 300, firepower: 2, accuracy: .4},
+    {name: "Sentinel", hull: 6, score: 200, firepower: 1, accuracy: .8}
 ];
 
 const bosses = [

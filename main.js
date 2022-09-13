@@ -7,16 +7,16 @@ let { page, cannonCharge, shieldCharge, repairCharge, currentEnemy, enemiesDefea
 import { btnEl1, btnEl2, btnEl3, btnEl4, msgDisplay, scoreDisplay, playerDisplay, enemyDisplay } from './JS-Modules/DOM.js';
 
 /////////////////////////INITIALIZATION/////////////////////////////////
-// Test for usable screen dimensions
-console.log(`innerheight: ${window.innerHeight} innerwidth: ${window.innerWidth}`);
+// Log for usable screen dimensions
+// console.log(`innerheight: ${window.innerHeight} innerwidth: ${window.innerWidth}`);
+
 // Test for internet browser
+// Set screen dimensions to usable screen
 if (navigator.userAgent.indexOf('MSIE') > - 1 || navigator.userAgent.indexOf('Trident') > - 1) {
     // Internet Explorer
-    // Set screen dimensions to usable screen
     $(`#layout-wrap`).css("height", "document.documentElement.clientHeight");
 } else {
     // All other browsers
-    // Set screen dimensions to usable screen
     $(`#layout-wrap`).css("height", "window.innerHeight");
 }
 
@@ -31,9 +31,9 @@ function init() {
     repairCharge = 0;
     enemiesDefeated = 0;
     bossCount = 0;
-    pageHandler(0);
 };
 init();
+pageHandler(0);
 
 /////////////////////////USER NAME ENTER////////////////////////////////////////
 function nameEnter() {
@@ -164,12 +164,17 @@ function dynamicBar() {
 function defaultDisplay() {
     btnEl1.css("color", "#dedede");
     btnEl2.css("color", "#dedede");
+    btnEl2.css("fontSize", "5vmin");
     btnEl3.css("color", "#dedede");
+    btnEl3.css("fontSize", "5vmin");
     btnEl4.css("color", "#dedede");
+    btnEl4.css("fontSize", "5vmin");
 }
 
 ////////////////////////////////CONTROLS//////////////////////////////////////////
 function pageHandler(p) {
+    msgDisplay.text(``);
+    scoreDisplay.text(``);
     if (p === 0) {
         mainPage();
     }
