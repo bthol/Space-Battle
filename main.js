@@ -1,5 +1,5 @@
 //////////////////////////////MODULES//////////////////////////////////
-import { user, aliens, bosses, bossRound, scoreBoard } from './JS-Modules/dataStructures.js';
+import { user, aliens, bosses, bossRound } from './JS-Modules/dataStructures.js';
 
 import { stateVars } from './JS-Modules/stateVariables.js';
 let { page, cannonCharge, shieldCharge, repairCharge, currentEnemy, enemiesDefeated, bossCount } = stateVars;
@@ -7,10 +7,6 @@ let { page, cannonCharge, shieldCharge, repairCharge, currentEnemy, enemiesDefea
 import { btnEl1, btnEl2, btnEl3, btnEl4, msgDisplay, scoreDisplay, playerDisplay, enemyDisplay } from './JS-Modules/DOM.js';
 
 /////////////////////////INITIALIZATION/////////////////////////////////
-// Log for usable screen dimensions
-// console.log(`innerheight: ${window.innerHeight} innerwidth: ${window.innerWidth}`);
-
-// Test for internet browser
 // Set screen dimensions to usable screen
 if (navigator.userAgent.indexOf('MSIE') > - 1 || navigator.userAgent.indexOf('Trident') > - 1) {
     // Internet Explorer
@@ -21,6 +17,26 @@ if (navigator.userAgent.indexOf('MSIE') > - 1 || navigator.userAgent.indexOf('Tr
 }
 
 let currentEnemyHealth;
+
+const scoreBoard = [
+    {name: "player", score: 100},
+    {name: "player", score: 100},
+    {name: "player", score: 100},
+    {name: "player", score: 100},
+    {name: "player", score: 100},
+    {name: "player", score: 100},
+    {name: "player", score: 100},
+    {name: "player", score: 100},
+    {name: "player", score: 100},
+    {name: "player", score: 100},
+];
+
+function requestData() {
+    $.get(`https://space-battle-api.herokuapp.com/`, function(data, status) {
+        console.log(`${data}`);
+    });
+};
+requestData();
 
 function init() {
     user.hull = 20;
@@ -38,10 +54,10 @@ pageHandler(0);
 /////////////////////////USER NAME ENTER////////////////////////////////////////
 function nameEnter() {
     const name = prompt("Enter name");
-    if (name === "") {
-        alert("Invalid input");
+    if (name === "" || name.length < 3 || name.length > 10) {
+        alert("Invalid input!\n\nName must be 3 to 10 characters in length.");
         nameEnter();
-    } else if (name.length > 0) {
+    } else if (name.length >= 3) {
         user.name = name;
     } else {}
 };
