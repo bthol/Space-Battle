@@ -445,14 +445,14 @@ function bossTest() {
         for (let i = 0; i < bossRound.length; i++) {
             if (enemiesDefeated === bossRound[i]) {
                 bool = false;
-                user.hull = 25;
-                user.shield = 4;
+                user.hull = 20;
+                user.shield = 5;
                 newBossEnemy();
                 gameplayPage();
             } else if (enemiesDefeated === bossRound[i] + 1) {
                 bool = false;
-                user.hull = 25;
-                user.shield = 4;
+                user.hull = 20;
+                user.shield = 5;
                 newEnemy();
                 gameplayPage();
             }

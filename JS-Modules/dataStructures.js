@@ -2,7 +2,7 @@ const user = {
     name: "User",
     score: 0,
     hull: 20,
-    shield: 4,
+    shield: 5,
     pulsebeam: {firepower: 2, accuracy: .6},
     lazercannon: {firepower: 5, accuracy: .8}
 };
