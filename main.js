@@ -18,7 +18,7 @@ if (navigator.userAgent.indexOf('MSIE') > - 1 || navigator.userAgent.indexOf('Tr
 
 let currentEnemyHealth;
 
-const scoreBoard = [
+let scoreBoard = [
     {name: "player", score: 100},
     {name: "player", score: 100},
     {name: "player", score: 100},
@@ -30,21 +30,59 @@ const scoreBoard = [
     {name: "player", score: 100},
     {name: "player", score: 100},
 ];
-
 function requestData() {
-    $.get(`https://space-battle-api.herokuapp.com/`, function(data, status) {
-        console.log(`${data}`);
-    });
+    for (let i = 0; i < 10; i++){
+        $.get(`https://space-battle-api.herokuapp.com/scoreboard/listindex/${i}`, function(data, status) {
+            scoreBoard[i].name = data.datum.userName;
+            scoreBoard[i].score = data.datum.userScore;
+        });
+    }
 };
 requestData();
+
+function rankScore(score) {
+    let rank;
+    for (let i = scoreBoard.length - 1; i >= 0; i--) {
+        if (score >= scoreBoard[i].score) {
+            rank = i;
+        } else {
+            i = -1;
+        }
+    }
+    return rank;
+}
+
+function saveScore(name = user.name, score = user.score, rank = rankScore(user.score)) {
+    if (rank != null) {
+        const promise = new Promise((resolve) => {
+            resolve(
+                $.ajax({
+                    type: 'PATCH',
+                    url: `https://space-battle-api.herokuapp.com/scoreboard/listindex/${rank}`,
+                    data: {"userName": `${name}`, "userScore": `${score}`}
+                })
+            )
+        })
+        promise.then(() => {
+            requestData();
+        });
+    }
+}
+
+// $.ajax({
+//     type: 'PATCH',
+//     url: `https://space-battle-api.herokuapp.com/scoreboard/listindex/${7}`,
+//     data: {"userName": `solor`}
+// });
 
 function init() {
     user.hull = 20;
     user.shield = 5;
     user.score = 0;
     page = 0;
-    cannonCharge = 0;
-    repairCharge = 0;
+    cannonCharge = 3;
+    shieldCharge = 5;
+    repairCharge = 10;
     enemiesDefeated = 0;
     bossCount = 0;
 };
@@ -53,13 +91,13 @@ pageHandler(0);
 
 /////////////////////////USER NAME ENTER////////////////////////////////////////
 function nameEnter() {
-    const name = prompt("Enter name");
-    if (name === "" || name.length < 3 || name.length > 10) {
-        alert("Invalid input!\n\nName must be 3 to 10 characters in length.");
+    const name = prompt("Enter Name (Must be 5 characters in length.)");
+    if (name.length !== 5) {
+        alert("Invalid: Character name must be 5 characters in length.");
         nameEnter();
-    } else if (name.length >= 3) {
+    } else if (name.length === 5) {
         user.name = name;
-    } else {}
+    }
 };
 
 /////////////////////////GAME PAGES///////////////////////////////////////
@@ -102,38 +140,55 @@ function gameplayPage() {
 
 function gameoverPage() {
     page = 2;
-
-    // MESSAGE
-    msgDisplay.text(`Defeat!`);
-    // SCORE
-    scoreDisplay.text(`${user.name} = ${user.score}`);
-    // CONTROLS
-    btnEl1.text(`New Game`);
-    btnEl2.text(`Main Menu`);
-    btnEl3.text(`Quit`);
-    btnEl4.text(``);
-    defaultDisplay();
+    const promise = new Promise((resolve) => {
+        resolve(saveScore())
+    })
+    promise.then(() => {
+        // MESSAGE
+        if (rankScore(user.score) != null) {
+            msgDisplay.text(`Defeat! New High Score!`)
+        } else {
+            msgDisplay.text(`Defeat!`);
+        }
+        // SCORE
+        scoreDisplay.text(`${user.name} = ${user.score}`);
+        // CONTROLS
+        btnEl1.text(`New Game`);
+        btnEl2.text(`Main Menu`);
+        btnEl3.text(`Quit`);
+        btnEl4.text(``);
+        defaultDisplay();
+    })
 };
 
 function gameWinPage() {
     page = 3;
-
-    // MESSAGE
-    msgDisplay.text(`You Win!`);
-    // SCORE
-    scoreDisplay.text(`${user.name} = ${user.score}`)
-    // CONTROLS
-    btnEl1.text(`New Game`);
-    btnEl2.text(`Main Menu`);
-    btnEl3.text(``);
-    btnEl4.text(`Quit`);
-    defaultDisplay();
+    const promise = new Promise((resolve) => {
+        resolve(saveScore())
+    })
+    promise.then(() => {
+        // MESSAGE
+        if (rankScore(user.score) != null) {
+            msgDisplay.text(`You Win! New High Score!`)
+        } else {
+            msgDisplay.text(`You Win!`);
+        }
+        // SCORE
+        scoreDisplay.text(`${user.name} = ${user.score}`)
+        // CONTROLS
+        btnEl1.text(`New Game`);
+        btnEl2.text(`Main Menu`);
+        btnEl3.text(``);
+        btnEl4.text(`Quit`);
+        defaultDisplay();
+    })
 };
 
 function scoreboardPage() {
     page = 4;
 
     // MESSAGE
+    requestData();
     msgDisplay.text(`SCOREBOARD`);
     for (let i = 0; i < scoreBoard.length; i++) {
         msgDisplay.append(`<p class="page-4-node">${i + 1}.) ${scoreBoard[i].name} : ${scoreBoard[i].score}</p>`)
@@ -148,12 +203,16 @@ function scoreboardPage() {
 
 //////////////////////////////////DISPLAY/////////////////////////////////
 function dynamicButton() {
-    if (cannonCharge >= 3) {
+    if (cannonCharge >= 6) {
+        btnEl2.css("color", "#ca141e");
+        btnEl2.css("border", "1px solid #ca141e");
+    } else if (cannonCharge >= 3) {
         btnEl2.css("color", "#dedede");
         btnEl2.css("fontSize", "5vmin");
     } else {
         btnEl2.css("color", "#00000080");
         btnEl2.css("fontSize", "4vmin");
+        btnEl2.css("border", "1px solid black");
     }
     if (repairCharge >= 10) {
         btnEl3.css("color", "#dedede");
@@ -213,6 +272,7 @@ function pageHandler(p) {
 btnEl1.on('click', buttonTester1);
 function buttonTester1() {
     if (page === 0) {
+        init();
         nameEnter();
         newEnemy();
         pageHandler(1);
@@ -336,7 +396,7 @@ function pulsebeamAttack() {
     shieldCharge += 1;
     if (Math.random() < user.pulsebeam.accuracy) {
         currentEnemyHealth -= user.pulsebeam.firepower;
-        alert(`Pulsebeam attack hit the ${currentEnemy.name}!`);
+        alert(`Pulsebeam attack hit the ${currentEnemy.name} for ${user.pulsebeam.firepower} damage!`);
         testDeath(1);
     } else {
         alert(`Pulsebeam attack missed the ${currentEnemy.name}!`);
@@ -345,13 +405,26 @@ function pulsebeamAttack() {
 };
 
 function lazercannonAttack() {
-    if (cannonCharge >= 3) {
+    if (cannonCharge >= 6) {
+        cannonCharge = 0;
+        repairCharge += 1;
+        shieldCharge += 1;
+        if (Math.random() < user.pulsebeam.accuracy) {
+            currentEnemyHealth -= user.lazercannon.firepower + user.lazercannon.overcharge;
+            alert(`Lazercannon attack hit ${currentEnemy.name} for ${user.lazercannon.firepower + user.lazercannon.overcharge} damage!`);
+            testDeath(1);
+        } else {
+            alert(`Lazercannon attack missed ${currentEnemy.name}!`);
+            enemyAttack();
+            pageHandler(1);
+        }
+    } else if (cannonCharge >= 3) {
         cannonCharge = 0;
         repairCharge += 1;
         shieldCharge += 1;
         if (Math.random() < user.pulsebeam.accuracy) {
             currentEnemyHealth -= user.lazercannon.firepower;
-            alert(`Lazercannon attack hit ${currentEnemy.name}!`);
+            alert(`Lazercannon attack hit ${currentEnemy.name} for ${user.lazercannon.firepower} damage!`);
             testDeath(1);
         } else {
             alert(`Lazercannon attack missed ${currentEnemy.name}!`);
@@ -385,7 +458,7 @@ function enemyAttack() {
             damage = currentEnemy.firepower;
         }
         user.hull -= damage;
-        alert(`${currentEnemy.name} hit ${user.name}!`);
+        alert(`${currentEnemy.name} hit ${user.name} for ${currentEnemy.firepower} damage!`);
         testDeath();
     } else {
         alert(`${currentEnemy.name} missed ${user.name}!`);

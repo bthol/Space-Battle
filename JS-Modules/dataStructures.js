@@ -4,7 +4,7 @@ const user = {
     hull: 20,
     shield: 5,
     pulsebeam: {firepower: 2, accuracy: .6},
-    lazercannon: {firepower: 5, accuracy: .8}
+    lazercannon: {firepower: 5, accuracy: .8, overcharge: 5}
 };
 
 const aliens = [
@@ -14,14 +14,15 @@ const aliens = [
 ];
 
 const bosses = [
-    {name: "Morphuos", hull: 11, score: 2000, firepower: 3, accuracy: .4},
+    {name: "Morphuos", hull: 11, score: 2000, firepower: 3, accuracy: .3},
     {name: "Grotek", hull: 13, score: 2000, firepower: 6, accuracy: .2},
     {name: "Mantlebrot", hull: 16, score: 2000, firepower: 4, accuracy: .4},
-    {name: "Harvester", hull: 19, score: 2000, firepower: 4, accuracy: .5},
-    {name: "Liminal", hull: 23, score: 5000, firepower: 5, accuracy: .5}
+    {name: "Harvester", hull: 19, score: 2000, firepower: 4, accuracy: .4},
+    {name: "Liminal", hull: 23, score: 5000, firepower: 5, accuracy: .4}
 ];
 
-const bossRound = [10, 20, 30, 40, 50];
+const bossRound = [10];
+// const bossRound = [10, 20, 30, 40, 50];
 
 export {
     user,
