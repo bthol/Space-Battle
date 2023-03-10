@@ -21,8 +21,7 @@ const bosses = [
     {name: "Liminal", health: 23, score: 5000, damage: 5, accuracy: .4}
 ];
 
-const bossRound = [10];
-// const bossRound = [10, 20, 30, 40, 50];
+const bossRound = [10, 20, 30, 40, 50];
 
 export {
     user,

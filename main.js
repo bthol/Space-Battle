@@ -206,9 +206,10 @@ function dynamicButton() {
     if (cannonCharge >= user.lazercannon.overCharge) {
         btnEl2.css("color", "#ca141e");
         btnEl2.css("border", "1px solid #ca141e");
+        btnEl2.css("fontSize", "5vmin");
     } else if (cannonCharge >= user.lazercannon.baseCharge) {
         btnEl2.css("color", "#dedede");
-        btnEl2.css("fontSize", "5vmin");
+        btnEl2.css("fontSize", "4.5vmin");
     } else {
         btnEl2.css("color", "#00000080");
         btnEl2.css("fontSize", "4vmin");
