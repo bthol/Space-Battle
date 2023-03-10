@@ -7,6 +7,7 @@ let { page, cannonCharge, shieldCharge, repairCharge, currentEnemy, enemiesDefea
 import { btnEl1, btnEl2, btnEl3, btnEl4, msgDisplay, scoreDisplay, playerDisplay, enemyDisplay } from './JS-Modules/DOM.js';
 
 /////////////////////////INITIALIZATION/////////////////////////////////
+
 // Set screen dimensions to usable screen
 if (navigator.userAgent.indexOf('MSIE') > - 1 || navigator.userAgent.indexOf('Trident') > - 1) {
     // Internet Explorer
@@ -17,6 +18,20 @@ if (navigator.userAgent.indexOf('MSIE') > - 1 || navigator.userAgent.indexOf('Tr
 }
 
 let currentEnemyHealth;
+
+function init() {
+    user.health = 200;
+    user.shield = 50;
+    user.score = 0;
+    page = 0;
+    cannonCharge = 3;
+    shieldCharge = 5;
+    repairCharge = 10;
+    enemiesDefeated = 0;
+    bossCount = 0;
+};
+init();
+pageHandler(0);
 
 let scoreBoard = [
     {name: "player", score: 100},
@@ -74,20 +89,6 @@ function saveScore(name = user.name, score = user.score, rank = rankScore(user.s
 //     url: `https://space-battle-api.herokuapp.com/scoreboard/listindex/${7}`,
 //     data: {"userName": `solor`}
 // });
-
-function init() {
-    user.health = 20;
-    user.shield = 5;
-    user.score = 0;
-    page = 0;
-    cannonCharge = 3;
-    shieldCharge = 5;
-    repairCharge = 10;
-    enemiesDefeated = 0;
-    bossCount = 0;
-};
-init();
-pageHandler(0);
 
 /////////////////////////USER NAME ENTER////////////////////////////////////////
 function nameEnter() {
