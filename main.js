@@ -203,10 +203,10 @@ function scoreboardPage() {
 
 //////////////////////////////////DISPLAY/////////////////////////////////
 function dynamicButton() {
-    if (cannonCharge >= 6) {
+    if (cannonCharge >= user.lazercannon.overCharge) {
         btnEl2.css("color", "#ca141e");
         btnEl2.css("border", "1px solid #ca141e");
-    } else if (cannonCharge >= 3) {
+    } else if (cannonCharge >= user.lazercannon.baseCharge) {
         btnEl2.css("color", "#dedede");
         btnEl2.css("fontSize", "5vmin");
     } else {
@@ -395,8 +395,8 @@ function pulsebeamAttack() {
     repairCharge += 1;
     shieldCharge += 1;
     if (Math.random() < user.pulsebeam.accuracy) {
-        currentEnemyHealth -= user.pulsebeam.firepower;
-        alert(`Pulsebeam attack hit the ${currentEnemy.name} for ${user.pulsebeam.firepower} damage!`);
+        currentEnemyHealth -= user.pulsebeam.damage;
+        alert(`Pulsebeam attack hit the ${currentEnemy.name} for ${user.pulsebeam.damage} damage!`);
         testDeath(1);
     } else {
         alert(`Pulsebeam attack missed the ${currentEnemy.name}!`);
@@ -405,26 +405,26 @@ function pulsebeamAttack() {
 };
 
 function lazercannonAttack() {
-    if (cannonCharge >= 6) {
+    if (cannonCharge >= user.lazercannon.overCharge) {
         cannonCharge = 0;
         repairCharge += 1;
         shieldCharge += 1;
         if (Math.random() < user.pulsebeam.accuracy) {
-            currentEnemyHealth -= user.lazercannon.firepower + user.lazercannon.overcharge;
-            alert(`Lazercannon attack hit ${currentEnemy.name} for ${user.lazercannon.firepower + user.lazercannon.overcharge} damage!`);
+            currentEnemyHealth -= user.lazercannon.overDamage;
+            alert(`Lazercannon attack hit ${currentEnemy.name} for ${user.lazercannon.overDamage} damage!`);
             testDeath(1);
         } else {
             alert(`Lazercannon attack missed ${currentEnemy.name}!`);
             enemyAttack();
             pageHandler(1);
         }
-    } else if (cannonCharge >= 3) {
+    } else if (cannonCharge >= user.lazercannon.baseCharge) {
         cannonCharge = 0;
         repairCharge += 1;
         shieldCharge += 1;
         if (Math.random() < user.pulsebeam.accuracy) {
-            currentEnemyHealth -= user.lazercannon.firepower;
-            alert(`Lazercannon attack hit ${currentEnemy.name} for ${user.lazercannon.firepower} damage!`);
+            currentEnemyHealth -= user.lazercannon.baseDamage;
+            alert(`Lazercannon attack hit ${currentEnemy.name} for ${user.lazercannon.baseDamage} damage!`);
             testDeath(1);
         } else {
             alert(`Lazercannon attack missed ${currentEnemy.name}!`);
@@ -433,7 +433,7 @@ function lazercannonAttack() {
         }
     } else {
         scoreDisplay.text(``);
-        msgDisplay.text(`${3 - cannonCharge} turns to charge lazercannon.`);
+        msgDisplay.text(`${user.lazercannon.baseCharge - cannonCharge} turns to charge lazercannon.`);
         setTimeout(() => {
             msgDisplay.text(``);
             scoreDisplay.text(`Score: ${user.score}`);
@@ -445,20 +445,20 @@ function enemyAttack() {
     if (Math.random() < currentEnemy.accuracy) {
         let damage;
         if (user.shield > 0) {
-            if (currentEnemy.firepower - user.shield > 0) {
-                damage = currentEnemy.firepower - user.shield;
+            if (currentEnemy.damage - user.shield > 0) {
+                damage = currentEnemy.damage - user.shield;
             } else {
                 damage = 0;
             }
-            user.shield -= currentEnemy.firepower;
+            user.shield -= currentEnemy.damage;
             if (user.shield < 0) {
                 user.shield = 0;
             }
         } else {
-            damage = currentEnemy.firepower;
+            damage = currentEnemy.damage;
         }
         user.hull -= damage;
-        alert(`${currentEnemy.name} hit ${user.name} for ${currentEnemy.firepower} damage!`);
+        alert(`${currentEnemy.name} hit ${user.name} for ${currentEnemy.damage} damage!`);
         testDeath();
     } else {
         alert(`${currentEnemy.name} missed ${user.name}!`);
