@@ -76,7 +76,7 @@ function saveScore(name = user.name, score = user.score, rank = rankScore(user.s
 // });
 
 function init() {
-    user.hull = 20;
+    user.health = 20;
     user.shield = 5;
     user.score = 0;
     page = 0;
@@ -231,8 +231,8 @@ function dynamicButton() {
 };
 
 function dynamicBar() {
-    $(`#enemy-health-bar`).css("width", `${(currentEnemyHealth / currentEnemy.hull) * 100}%`);
-    $(`#player-health-bar`).css("width", `${(user.hull / 20) * 100}%`);
+    $(`#enemy-health-bar`).css("width", `${(currentEnemyHealth / currentEnemy.health) * 100}%`);
+    $(`#player-health-bar`).css("width", `${(user.health / 20) * 100}%`);
     $(`#player-shield-bar`).css("width", `${(user.shield / 5) * 100}%`);
 };
 
@@ -338,12 +338,12 @@ function repair() {
         repairCharge = 0;
         cannonCharge += 1;
         shieldCharge += 1;
-        if (user.hull < 20) {
-            user.hull += 5;
+        if (user.health < 20) {
+            user.health += 5;
             alert('Ship repaired by 5!');
         } else {
-            alert(`Ship repaired by ${25 - user.hull}!`);
-            user.hull += 25 - user.hull;
+            alert(`Ship repaired by ${25 - user.health}!`);
+            user.health += 25 - user.health;
         }
         enemyAttack();
     } else {
@@ -457,7 +457,7 @@ function enemyAttack() {
         } else {
             damage = currentEnemy.damage;
         }
-        user.hull -= damage;
+        user.health -= damage;
         alert(`${currentEnemy.name} hit ${user.name} for ${currentEnemy.damage} damage!`);
         testDeath();
     } else {
@@ -469,13 +469,13 @@ function enemyAttack() {
 /////////////////////////ENEMY GENERATORS///////////////////////////////
 function newEnemy() {
     currentEnemy = aliens[Math.floor(Math.random() * aliens.length)];
-    currentEnemyHealth = currentEnemy.hull;
+    currentEnemyHealth = currentEnemy.health;
     enemyAlert(0);
 };
 
 function newBossEnemy() {
     currentEnemy = bosses[bossCount];
-    currentEnemyHealth = currentEnemy.hull;
+    currentEnemyHealth = currentEnemy.health;
     bossCount += 1;
     enemyAlert(1);
 };
@@ -501,7 +501,7 @@ function testDeath (x) {
             enemyAttack();
         }
     } else {
-        if (user.hull <= 0) {
+        if (user.health <= 0) {
             pageHandler(2);
         } else {
             gameplayPage();
@@ -518,13 +518,13 @@ function bossTest() {
         for (let i = 0; i < bossRound.length; i++) {
             if (enemiesDefeated === bossRound[i]) {
                 bool = false;
-                user.hull = 20;
+                user.health = 20;
                 user.shield = 5;
                 newBossEnemy();
                 gameplayPage();
             } else if (enemiesDefeated === bossRound[i] + 1) {
                 bool = false;
-                user.hull = 20;
+                user.health = 20;
                 user.shield = 5;
                 newEnemy();
                 gameplayPage();
