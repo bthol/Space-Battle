@@ -345,17 +345,29 @@ function buttonTester4() {
 ////////////////////////////DEFENSIVE MOVES////////////////////////////////////////
 function repair() {
     if (repairCharge >= user.repair.rechargeTime) {
-        repairCharge = 0;
-        cannonCharge += 1;
-        shieldCharge += 1;
-        if ((user.health.maxLevel - user.health.level) > user.repair.rechargeAmmount) {
-            user.health.level += user.repair.rechargeAmmount;
-            alert(`Ship repaired by ${user.repair.rechargeAmmount}!`);
+        if (user.health.level < user.health.maxLevel) {
+            repairCharge = 0;
+            cannonCharge += 1;
+            shieldCharge += 1;
+            if ((user.health.maxLevel - user.health.level) < user.repair.rechargeAmmount) {
+                alert(`Ship repaired by ${user.repair.rechargeAmmount - ((user.health.level + user.repair.rechargeAmmount) - user.health.maxLevel)}!`);
+                user.health.level += user.repair.rechargeAmmount - (user.health.maxLevel - user.health.level);
+            } else {
+                user.health.level += user.repair.rechargeAmmount;
+                alert(`Ship repaired by ${user.repair.rechargeAmmount}!`);
+            }
+            if (user.health.level > user.health.maxLevel) {
+                user.health.level = user.health.maxLevel;
+            }
+            enemyAttack();
         } else {
-            alert(`Ship repaired by ${user.repair.rechargeAmmount - (user.health.maxLevel - user.health.level)}!`);
-            user.health.level += user.repair.rechargeAmmount - (user.health.maxLevel - user.health.level);
+            scoreDisplay.text(``);
+            msgDisplay.text(`Health already full`);
+            setTimeout(() => {
+                msgDisplay.text(``);
+                scoreDisplay.text(`Score: ${user.score}`);
+            }, 1200);
         }
-        enemyAttack();
     } else {
         scoreDisplay.text(``);
         msgDisplay.text(`${user.repair.rechargeTime - repairCharge} turns to charge repair`);
