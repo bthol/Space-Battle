@@ -2,8 +2,8 @@ const user = {
     name: "User",
     score: 0,
     health: {level: 200, maxLevel: 200, minLevel: 0},
-    repair: {rechargeAmmount: 5, rechargeTime: 10},
-    shield: {level: 50, maxLevel: 50, minLevel: 0, rechargeAmmount: 5, rechargeTime: 5},
+    repair: {rechargeAmmount: 50, rechargeTime: 10},
+    shield: {level: 50, maxLevel: 50, minLevel: 0, rechargeAmmount: 50, rechargeTime: 5},
     pulsebeam: {damage: 20, accuracy: .6},
     lazercannon: {baseDamage: 40, baseCharge: 3, overDamage: 80, overCharge: 10, accuracy: .8}
 };
