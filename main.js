@@ -141,7 +141,6 @@ function gameplayPage() {
 
 function gameoverPage() {
     page = 2;
-    init();
     const promise = new Promise((resolve) => {
         resolve(saveScore())
     })
@@ -165,7 +164,6 @@ function gameoverPage() {
 
 function gameWinPage() {
     page = 3;
-    init();
     const promise = new Promise((resolve) => {
         resolve(saveScore())
     })
@@ -242,12 +240,20 @@ function dynamicBar() {
 
 function defaultDisplay() {
     btnEl1.css("color", "#dedede");
+    btnEl1.css("fontSize", "5vmin");
+    btnEl1.css("border", "1px solid black");
+
     btnEl2.css("color", "#dedede");
     btnEl2.css("fontSize", "5vmin");
+    btnEl2.css("border", "1px solid black");
+    
     btnEl3.css("color", "#dedede");
     btnEl3.css("fontSize", "5vmin");
+    btnEl3.css("border", "1px solid black");
+
     btnEl4.css("color", "#dedede");
     btnEl4.css("fontSize", "5vmin");
+    btnEl4.css("border", "1px solid black");
 }
 
 ////////////////////////////////CONTROLS//////////////////////////////////////////
