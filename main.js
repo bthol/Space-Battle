@@ -19,20 +19,6 @@ if (navigator.userAgent.indexOf('MSIE') > - 1 || navigator.userAgent.indexOf('Tr
 
 let currentEnemyHealth;
 
-function init() {
-    user.health.level = 200;
-    user.shield.level = 50;
-    user.score = 0;
-    page = 0;
-    cannonCharge = 3;
-    shieldCharge = 5;
-    repairCharge = 10;
-    enemiesDefeated = 0;
-    bossCount = 0;
-};
-init();
-pageHandler(0);
-
 let scoreBoard = [
     {name: "player", score: 100},
     {name: "player", score: 100},
@@ -45,6 +31,19 @@ let scoreBoard = [
     {name: "player", score: 100},
     {name: "player", score: 100},
 ];
+
+function init() {
+    user.health.level = 200;
+    user.shield.level = 50;
+    user.score = 0;
+    page = 0;
+    cannonCharge = 3;
+    shieldCharge = 5;
+    repairCharge = 10;
+    enemiesDefeated = 0;
+    bossCount = 0;
+};
+
 function requestData() {
     for (let i = 0; i < 10; i++){
         $.get(`https://space-battle-api.herokuapp.com/scoreboard/listindex/${i}`, function(data, status) {
@@ -53,7 +52,16 @@ function requestData() {
         });
     }
 };
-requestData();
+
+const dataRetrieved = new Promise((resolve) => {
+    requestData();
+    resolve();
+})
+dataRetrieved
+    .then(
+        init(),
+        pageHandler(0)
+    );
 
 function rankScore(score) {
     let rank;
@@ -65,7 +73,7 @@ function rankScore(score) {
         }
     }
     return rank;
-}
+};
 
 function saveScore(name = user.name, score = user.score, rank = rankScore(user.score)) {
     if (rank != null) {
@@ -82,7 +90,7 @@ function saveScore(name = user.name, score = user.score, rank = rankScore(user.s
             requestData();
         });
     }
-}
+};
 
 // $.ajax({
 //     type: 'PATCH',
