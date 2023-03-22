@@ -45,12 +45,12 @@ function init() {
 };
 
 function requestData() {
-    for (let i = 0; i < 10; i++){
-        $.get(`https://space-battle-api.herokuapp.com/scoreboard/listindex/${i}`, function(data, status) {
-            scoreBoard[i].name = data.datum.userName;
-            scoreBoard[i].score = data.datum.userScore;
-        });
-    }
+    $.get(`https://space-battle-api.herokuapp.com/`, function(data, status) {
+        for (let i = 0; i < 10; i++) {
+            scoreBoard[i].name = data.data[9 - i].userName;
+            scoreBoard[i].score = data.data[9 - i].userScore;
+        }
+    });
 };
 
 const dataRetrieved = new Promise((resolve) => {
