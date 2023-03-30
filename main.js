@@ -20,16 +20,16 @@ if (navigator.userAgent.indexOf('MSIE') > - 1 || navigator.userAgent.indexOf('Tr
 let currentEnemyHealth;
 
 let scoreBoard = [
-    {name: "player", score: 100},
-    {name: "player", score: 100},
-    {name: "player", score: 100},
-    {name: "player", score: 100},
-    {name: "player", score: 100},
-    {name: "player", score: 100},
-    {name: "player", score: 100},
-    {name: "player", score: 100},
-    {name: "player", score: 100},
-    {name: "player", score: 100},
+    {name: "name loading...", score: "score loading..."},
+    {name: "name loading...", score: "score loading..."},
+    {name: "name loading...", score: "score loading..."},
+    {name: "name loading...", score: "score loading..."},
+    {name: "name loading...", score: "score loading..."},
+    {name: "name loading...", score: "score loading..."},
+    {name: "name loading...", score: "score loading..."},
+    {name: "name loading...", score: "score loading..."},
+    {name: "name loading...", score: "score loading..."},
+    {name: "name loading...", score: "score loading..."},
 ];
 
 function init() {
