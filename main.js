@@ -232,16 +232,34 @@ function controlsPage() {
     msgDisplay.text(`Controls`);
 
     // DISPLAY CONTROLS
-    msgDisplay.append(`<p class="page-4-node">Button 1 : ${btn1key.key}</p>`)
-    msgDisplay.append(`<p class="page-4-node">Button 2 : ${btn2key.key}</p>`)
-    msgDisplay.append(`<p class="page-4-node">Button 3 : ${btn3key.key}</p>`)
-    msgDisplay.append(`<p class="page-4-node">Button 4 : ${btn4key.key}</p>`)
+    msgDisplay.append(`<p class="page-6-node">Button 1 : ${btn1key.key}</p>`)
+    msgDisplay.append(`<p class="page-6-node">Button 2 : ${btn2key.key}</p>`)
+    msgDisplay.append(`<p class="page-6-node">Button 3 : ${btn3key.key}</p>`)
+    msgDisplay.append(`<p class="page-6-node">Button 4 : ${btn4key.key}</p>`)
 
     // CONTROLS
     btnEl1.text(`Back`);
     btnEl2.text(`Customize`);
     btnEl3.text(`Reset`);
     btnEl4.text(``);
+
+    defaultDisplay();
+}
+
+function controlsPageCustomize() {
+    page = 7;
+
+    // MESSAGE
+    msgDisplay.text(`Controls`);
+
+    // DISPLAY CONTROLS
+    msgDisplay.append(`<p class="page-7-node">Click the button to which you'd like to assign a new keybinding, and press the key you like to bind to that button.</p>`)
+
+    // CONTROLS
+    btnEl1.text(`Button 1`);
+    btnEl2.text(`Button 2`);
+    btnEl3.text(`Button 3`);
+    btnEl4.text(`Button 4`);
 
     defaultDisplay();   
 }
@@ -313,16 +331,17 @@ function defaultDisplay() {
 // 55 : 7
 // 56 : 8
 // 57 : 9
-// w : 87
-// a : 65
-// s : 83
-// d : 68
+// 119 : w
+// 97 : a
+// 115 : s
+// 100 : d
 
 // KEYBINDING
 let btn1key = {keyCode: 49, key: "1"};
 let btn2key = {keyCode: 50, key: "2"};
 let btn3key = {keyCode: 51, key: "3"};
 let btn4key = {keyCode: 52, key: "4"};
+
 function resetKeyBinding() {
     btn1key.keyCode = 49;
     btn1key.key = "1";
@@ -336,6 +355,30 @@ function resetKeyBinding() {
     btn4key.keyCode = 52;
     btn4key.key = "4";
 };
+
+function keyBind(btn) {
+    document.body.addEventListener('keypress', (event) => {
+        const e = event || window.event;
+        if (e.keyCode !== btn1key.keyCode && e.keyCode !== btn2key.keyCode && e.keyCode !== btn3key.keyCode && e.keyCode !== btn4key.keyCode) {
+            if (btn === 1) {
+                btn1key.keyCode = e.keyCode;
+                btn1key.key = e.key;
+            } else if (btn === 2) {
+                btn2key.keyCode = e.keyCode;
+                btn2key.key = e.key;
+            } else if (btn === 3) {
+                btn3key.keyCode = e.keyCode;
+                btn3key.key = e.key;
+            } else if (btn === 4) {
+                btn4key.keyCode = e.keyCode;
+                btn4key.key = e.key;
+            }
+        } else {
+            alert("Double binding not permitted!");
+        }
+        pageHandler(6);
+    }, {once: true})
+}
 
 function pageHandler(p) {
     msgDisplay.text(``);
@@ -362,6 +405,9 @@ function pageHandler(p) {
     }
     if (p === 6) {
         controlsPage();
+    }
+    if (p === 7) {
+        controlsPageCustomize();
     }
 };
 
@@ -390,16 +436,10 @@ function buttonTester1() {
         pageHandler(0);
     } else if (page === 6) {
         pageHandler(5);
+    } else if (page === 7) {
+        keyBind(1);
     }
 };
-btnEl1.on('click', buttonTester1);
-$(`body`).on('keypress', (event) => {
-    const e = event || window.event;
-    if (e.keyCode === btn1key.keyCode) {
-        e.preventDefault();
-        buttonTester1();
-    }
-})
 
 // BUTTON 2
 function buttonTester2() {
@@ -415,16 +455,11 @@ function buttonTester2() {
     } else if (page === 5) {
         pageHandler(6);
     } else if (page == 6) {
+        pageHandler(7);
+    } else if (page === 7) {
+        keyBind(2);
     }
 };
-btnEl2.on('click', buttonTester2);
-$(`body`).on('keypress', (event) => {
-    const e = event || window.event;
-    if (e.keyCode === btn2key.keyCode) {
-        e.preventDefault();
-        buttonTester2();
-    }
-})
 
 // BUTTON 3
 function buttonTester3() {
@@ -440,16 +475,10 @@ function buttonTester3() {
     } else if (page === 6) {
         resetKeyBinding();
         pageHandler(6);
+    } else if (page === 7) {
+        keyBind(3);
     }
 };
-btnEl3.on('click', buttonTester3);
-$(`body`).on('keypress', (event) => {
-    const e = event || window.event;
-    if (e.keyCode === btn3key.keyCode) {
-        e.preventDefault();
-        buttonTester3();
-    }
-})
 
 // BUTTON 4
 function buttonTester4() {
@@ -463,11 +492,29 @@ function buttonTester4() {
     } else if (page === 4) {
     } else if (page === 5) {
     } else if (page === 6) {
+    } else if (page === 7) {
+        keyBind(4);
     }
 };
+
+btnEl1.on('click', buttonTester1);
+btnEl2.on('click', buttonTester2);
+btnEl3.on('click', buttonTester3);
 btnEl4.on('click', buttonTester4);
 $(`body`).on('keypress', (event) => {
     const e = event || window.event;
+    if (e.keyCode === btn1key.keyCode) {
+        e.preventDefault();
+        buttonTester1();
+    }
+    if (e.keyCode === btn2key.keyCode) {
+        e.preventDefault();
+        buttonTester2();
+    }
+    if (e.keyCode === btn3key.keyCode) {
+        e.preventDefault();
+        buttonTester3();
+    }
     if (e.keyCode === btn4key.keyCode) {
         e.preventDefault();
         buttonTester4();
