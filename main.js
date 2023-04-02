@@ -44,6 +44,8 @@ function init() {
     bossCount = 0;
 };
 
+/////////////////////////DATA////////////////////////////////////////
+
 function requestData() {
     $.get(`https://space-battle-api.herokuapp.com/`, function(data, status) {
         for (let i = 0; i < 10; i++) {
@@ -114,12 +116,12 @@ function mainPage() {
     page = 0;
 
     // MESSAGE
-    msgDisplay.text(`Welcome to the Space Battle main menu.`);
+    msgDisplay.text(`Space Battle Main Menu`);
     // CONTROLS
     btnEl1.text(`New Game`);
     btnEl2.text(`ScoreBoard`);
     btnEl3.text(`Quit`);
-    btnEl4.text(``);
+    btnEl4.text(`Settings`);
     defaultDisplay();
 };
 
@@ -210,6 +212,40 @@ function scoreboardPage() {
     defaultDisplay();
 };
 
+function settingsPage() {
+    page = 5;
+
+    // MESSAGE
+    msgDisplay.text(`Settings Menu`);
+    // CONTROLS
+    btnEl1.text(`Back`);
+    btnEl2.text(`Controls`);
+    btnEl3.text(``);
+    btnEl4.text(``);
+    defaultDisplay();   
+}
+
+function controlsPage() {
+    page = 6;
+
+    // MESSAGE
+    msgDisplay.text(`Controls`);
+
+    // DISPLAY CONTROLS
+    msgDisplay.append(`<p class="page-4-node">Button 1 : ${btn1key.key}</p>`)
+    msgDisplay.append(`<p class="page-4-node">Button 2 : ${btn2key.key}</p>`)
+    msgDisplay.append(`<p class="page-4-node">Button 3 : ${btn3key.key}</p>`)
+    msgDisplay.append(`<p class="page-4-node">Button 4 : ${btn4key.key}</p>`)
+
+    // CONTROLS
+    btnEl1.text(`Back`);
+    btnEl2.text(`Customize`);
+    btnEl3.text(`Reset`);
+    btnEl4.text(``);
+
+    defaultDisplay();   
+}
+
 //////////////////////////////////DISPLAY/////////////////////////////////
 function dynamicButton() {
     if (cannonCharge >= user.lazercannon.overCharge) {
@@ -265,6 +301,42 @@ function defaultDisplay() {
 }
 
 ////////////////////////////////CONTROLS//////////////////////////////////////////
+// keyCode : key
+// 13 : enter
+// 48 : 0
+// 49 : 1
+// 50 : 2
+// 51 : 3
+// 52 : 4
+// 53 : 5
+// 54 : 6
+// 55 : 7
+// 56 : 8
+// 57 : 9
+// w : 87
+// a : 65
+// s : 83
+// d : 68
+
+// KEYBINDING
+let btn1key = {keyCode: 49, key: "1"};
+let btn2key = {keyCode: 50, key: "2"};
+let btn3key = {keyCode: 51, key: "3"};
+let btn4key = {keyCode: 52, key: "4"};
+function resetKeyBinding() {
+    btn1key.keyCode = 49;
+    btn1key.key = "1";
+
+    btn2key.keyCode = 50;
+    btn2key.key = "2";
+    
+    btn3key.keyCode = 51;
+    btn3key.key = "3";
+    
+    btn4key.keyCode = 52;
+    btn4key.key = "4";
+};
+
 function pageHandler(p) {
     msgDisplay.text(``);
     scoreDisplay.text(``);
@@ -285,9 +357,15 @@ function pageHandler(p) {
     if (p === 4) {
         scoreboardPage();
     }
+    if (p === 5) {
+        settingsPage();
+    }
+    if (p === 6) {
+        controlsPage();
+    }
 };
 
-btnEl1.on('click', buttonTester1);
+// BUTTON 1
 function buttonTester1() {
     if (page === 0) {
         init();
@@ -308,10 +386,22 @@ function buttonTester1() {
         pageHandler(1);
     } else if (page === 4) {
         pageHandler(0);
+    } else if (page === 5) {
+        pageHandler(0);
+    } else if (page === 6) {
+        pageHandler(5);
     }
 };
+btnEl1.on('click', buttonTester1);
+$(`body`).on('keypress', (event) => {
+    const e = event || window.event;
+    if (e.keyCode === btn1key.keyCode) {
+        e.preventDefault();
+        buttonTester1();
+    }
+})
 
-btnEl2.on('click', buttonTester2);
+// BUTTON 2
 function buttonTester2() {
     if (page === 0) {
         pageHandler(4);
@@ -322,10 +412,21 @@ function buttonTester2() {
     } else if (page === 3) {
         pageHandler(0);
     } else if (page === 4) {
+    } else if (page === 5) {
+        pageHandler(6);
+    } else if (page == 6) {
     }
 };
+btnEl2.on('click', buttonTester2);
+$(`body`).on('keypress', (event) => {
+    const e = event || window.event;
+    if (e.keyCode === btn2key.keyCode) {
+        e.preventDefault();
+        buttonTester2();
+    }
+})
 
-btnEl3.on('click', buttonTester3);
+// BUTTON 3
 function buttonTester3() {
     if (page === 0) {
         window.close();
@@ -335,20 +436,43 @@ function buttonTester3() {
         window.close();
     } else if (page === 3) {
     } else if (page === 4) {
+    } else if (page === 5) {
+    } else if (page === 6) {
+        resetKeyBinding();
+        pageHandler(6);
     }
 };
+btnEl3.on('click', buttonTester3);
+$(`body`).on('keypress', (event) => {
+    const e = event || window.event;
+    if (e.keyCode === btn3key.keyCode) {
+        e.preventDefault();
+        buttonTester3();
+    }
+})
 
-btnEl4.on('click', buttonTester4);
+// BUTTON 4
 function buttonTester4() {
     if (page === 0) {
+        pageHandler(5)
     } else if (page === 1) {
         shield();
     } else if (page === 2) {
     } else if (page === 3) {
         window.close();
     } else if (page === 4) {
+    } else if (page === 5) {
+    } else if (page === 6) {
     }
 };
+btnEl4.on('click', buttonTester4);
+$(`body`).on('keypress', (event) => {
+    const e = event || window.event;
+    if (e.keyCode === btn4key.keyCode) {
+        e.preventDefault();
+        buttonTester4();
+    }
+})
 
 ////////////////////////////DEFENSIVE MOVES////////////////////////////////////////
 function repair() {
