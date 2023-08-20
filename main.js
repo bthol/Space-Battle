@@ -42,7 +42,6 @@ function init() {
     repairCharge = 10;
     enemiesDefeated = 0;
     bossCount = 0;
-    console.log(scoreBoard);
 };
 
 /////////////////////////DATA////////////////////////////////////////
@@ -319,55 +318,6 @@ function defaultDisplay() {
 }
 
 ////////////////////////////////CONTROLS//////////////////////////////////////////
-// keyCode : key
-// 13 : enter
-// 48 : 0
-// 49 : 1
-// 50 : 2
-// 51 : 3
-// 52 : 4
-// 53 : 5
-// 54 : 6
-// 55 : 7
-// 56 : 8
-// 57 : 9
-// 119 : w
-// 97 : a
-// 115 : s
-// 100 : d
-
-// KEYBINDING
-let btn1key = "1";
-let btn2key = "2";
-let btn3key = "3";
-let btn4key = "4";
-
-function resetKeyBinding() {
-    btn1key = "1";
-    btn2key = "2";
-    btn3key = "3";
-    btn4key = "4";
-};
-
-function keyBind(btn) {
-    document.body.addEventListener('keypress', (e) => {
-        if (e.key !== btn1key && e.key !== btn2key && e.key !== btn3key && e.key !== btn4key) {
-            if (btn === 1) {
-                btn1key = e.key;
-            } else if (btn === 2) {
-                btn2key = e.key;
-            } else if (btn === 3) {
-                btn3key = e.key;
-            } else if (btn === 4) {
-                btn4key = e.key;
-            }
-        } else {
-            alert("Double binding not permitted!");
-        }
-        pageHandler(6);
-    }, {once: true})
-}
-
 function pageHandler(p) {
     msgDisplay.text(``);
     scoreDisplay.text(``);
@@ -485,28 +435,72 @@ function buttonTester4() {
     }
 };
 
+// KEYBINDING
+let btn1key = "1";
+let btn2key = "2";
+let btn3key = "3";
+let btn4key = "4";
+
+function resetKeyBinding() {
+    btn1key = "1";
+    btn2key = "2";
+    btn3key = "3";
+    btn4key = "4";
+};
+
+function keyBind(btn) {
+    function bind(e) {
+        if (e.key == btn1key || e.key == btn2key || e.key == btn3key || e.key == btn4key) {
+            msgDisplay.text(`Double binding is not permitted!`);
+            setTimeout(() => {
+                pageHandler(6);
+            }, 1200);
+        } else {
+            if (btn === 1) {
+                btn1key = e.key;
+            } else if (btn === 2) {
+                btn2key = e.key;
+            } else if (btn === 3) {
+                btn3key = e.key;
+            } else if (btn === 4) {
+                btn4key = e.key;
+            }
+            pageHandler(6);
+        }
+    };
+    $(`body`).off('keypress');
+    document.body.addEventListener('keypress', (e) => {
+        bind(e);
+        controlListen();
+    }, {once: true});
+}
+
 btnEl1.on('click', buttonTester1);
 btnEl2.on('click', buttonTester2);
 btnEl3.on('click', buttonTester3);
 btnEl4.on('click', buttonTester4);
-$(`body`).on('keypress', (e) => {
-    if (e.key === btn1key) {
-        e.preventDefault();
-        buttonTester1();
-    }
-    if (e.key === btn2key) {
-        e.preventDefault();
-        buttonTester2();
-    }
-    if (e.key === btn3key) {
-        e.preventDefault();
-        buttonTester3();
-    }
-    if (e.key === btn4key) {
-        e.preventDefault();
-        buttonTester4();
-    }
-})
+function controlListen() {
+    console.log("ran");
+    $(`body`).on('keypress', (e) => {
+        if (e.key === btn1key) {
+            e.preventDefault();
+            buttonTester1();
+        }
+        if (e.key === btn2key) {
+            e.preventDefault();
+            buttonTester2();
+        }
+        if (e.key === btn3key) {
+            e.preventDefault();
+            buttonTester3();
+        }
+        if (e.key === btn4key) {
+            e.preventDefault();
+            buttonTester4();
+        }
+    })
+};
+controlListen();
 
 ////////////////////////////DEFENSIVE MOVES////////////////////////////////////////
 function repair() {
