@@ -701,7 +701,6 @@ function testDeath(x) {
             enemyAttack();
         }
     } else {
-        console.log(user.health.level);
         if (user.health.level <= 0) {
             pageHandler(2);
         } else {
