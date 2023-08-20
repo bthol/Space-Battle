@@ -8,14 +8,14 @@ import { btnEl1, btnEl2, btnEl3, btnEl4, msgDisplay, scoreDisplay, playerDisplay
 
 /////////////////////////INITIALIZATION/////////////////////////////////
 
-// Set screen dimensions to usable screen
-if (navigator.userAgent.indexOf('MSIE') > - 1 || navigator.userAgent.indexOf('Trident') > - 1) {
-    // Internet Explorer
-    $(`#layout-wrap`).css("height", "document.documentElement.clientHeight");
-} else {
-    // All other browsers
-    $(`#layout-wrap`).css("height", "window.innerHeight");
-}
+// // Set screen dimensions to usable screen
+// if (navigator.userAgent.indexOf('MSIE') > - 1 || navigator.userAgent.indexOf('Trident') > - 1) {
+//     // Internet Explorer
+//     $(`#layout-wrap`).css("height", "document.documentElement.clientHeight");
+// } else {
+//     // All other browsers
+//     $(`#layout-wrap`).css("height", "window.innerHeight");
+// }
 
 let currentEnemyHealth;
 
@@ -55,15 +55,13 @@ function requestData() {
     });
 };
 
-const dataRetrieved = new Promise((resolve) => {
+new Promise((resolve) => {
     requestData();
-    resolve();
-})
-dataRetrieved
-    .then(
-        init(),
-        pageHandler(0)
-    );
+    resolve("resolved");
+}).then(() => {
+    init();
+    pageHandler(0);
+});
 
 function rankScore(score) {
     let rank;
@@ -94,11 +92,12 @@ function saveScore(name = user.name, score = user.score, rank = rankScore(user.s
     }
 };
 
+// for direct scoreboard writing
 // $.ajax({
 //     type: 'PATCH',
-//     url: `https://space-battle-api.herokuapp.com/scoreboard/listindex/${7}`,
-//     data: {"userName": `solor`}
-// });
+//     url: `https://space-battle-api.herokuapp.com/scoreboard/listindex/${3}`,
+//     data: {"userName": `solar`, "userScore": `7000`}
+// }); 
 
 /////////////////////////USER NAME ENTER////////////////////////////////////////
 function nameEnter() {
@@ -691,7 +690,7 @@ function enemyAlert(x) {
 };
 
 //////////////////////////////////TESTS///////////////////////////////////////////
-function testDeath (x) {
+function testDeath(x) {
     if (x === 1) {
         if (currentEnemyHealth <= 0) {
             enemiesDefeated += 1;
@@ -702,7 +701,8 @@ function testDeath (x) {
             enemyAttack();
         }
     } else {
-        if (user.health <= 0) {
+        console.log(user.health.level);
+        if (user.health.level <= 0) {
             pageHandler(2);
         } else {
             gameplayPage();
