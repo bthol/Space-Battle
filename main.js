@@ -42,6 +42,7 @@ function init() {
     repairCharge = 10;
     enemiesDefeated = 0;
     bossCount = 0;
+    console.log(scoreBoard);
 };
 
 /////////////////////////DATA////////////////////////////////////////
@@ -231,10 +232,10 @@ function controlsPage() {
     msgDisplay.text(`Controls`);
 
     // DISPLAY CONTROLS
-    msgDisplay.append(`<p class="page-6-node">Button 1 : ${btn1key.key}</p>`)
-    msgDisplay.append(`<p class="page-6-node">Button 2 : ${btn2key.key}</p>`)
-    msgDisplay.append(`<p class="page-6-node">Button 3 : ${btn3key.key}</p>`)
-    msgDisplay.append(`<p class="page-6-node">Button 4 : ${btn4key.key}</p>`)
+    msgDisplay.append(`<p class="page-6-node">Button 1 : ${btn1key}</p>`)
+    msgDisplay.append(`<p class="page-6-node">Button 2 : ${btn2key}</p>`)
+    msgDisplay.append(`<p class="page-6-node">Button 3 : ${btn3key}</p>`)
+    msgDisplay.append(`<p class="page-6-node">Button 4 : ${btn4key}</p>`)
 
     // CONTROLS
     btnEl1.text(`Back`);
@@ -336,41 +337,29 @@ function defaultDisplay() {
 // 100 : d
 
 // KEYBINDING
-let btn1key = {keyCode: 49, key: "1"};
-let btn2key = {keyCode: 50, key: "2"};
-let btn3key = {keyCode: 51, key: "3"};
-let btn4key = {keyCode: 52, key: "4"};
+let btn1key = "1";
+let btn2key = "2";
+let btn3key = "3";
+let btn4key = "4";
 
 function resetKeyBinding() {
-    btn1key.keyCode = 49;
-    btn1key.key = "1";
-
-    btn2key.keyCode = 50;
-    btn2key.key = "2";
-    
-    btn3key.keyCode = 51;
-    btn3key.key = "3";
-    
-    btn4key.keyCode = 52;
-    btn4key.key = "4";
+    btn1key = "1";
+    btn2key = "2";
+    btn3key = "3";
+    btn4key = "4";
 };
 
 function keyBind(btn) {
-    document.body.addEventListener('keypress', (event) => {
-        const e = event || window.event;
-        if (e.keyCode !== btn1key.keyCode && e.keyCode !== btn2key.keyCode && e.keyCode !== btn3key.keyCode && e.keyCode !== btn4key.keyCode) {
+    document.body.addEventListener('keypress', (e) => {
+        if (e.key !== btn1key && e.key !== btn2key && e.key !== btn3key && e.key !== btn4key) {
             if (btn === 1) {
-                btn1key.keyCode = e.keyCode;
-                btn1key.key = e.key;
+                btn1key = e.key;
             } else if (btn === 2) {
-                btn2key.keyCode = e.keyCode;
-                btn2key.key = e.key;
+                btn2key = e.key;
             } else if (btn === 3) {
-                btn3key.keyCode = e.keyCode;
-                btn3key.key = e.key;
+                btn3key = e.key;
             } else if (btn === 4) {
-                btn4key.keyCode = e.keyCode;
-                btn4key.key = e.key;
+                btn4key = e.key;
             }
         } else {
             alert("Double binding not permitted!");
@@ -500,21 +489,20 @@ btnEl1.on('click', buttonTester1);
 btnEl2.on('click', buttonTester2);
 btnEl3.on('click', buttonTester3);
 btnEl4.on('click', buttonTester4);
-$(`body`).on('keypress', (event) => {
-    const e = event || window.event;
-    if (e.keyCode === btn1key.keyCode) {
+$(`body`).on('keypress', (e) => {
+    if (e.key === btn1key) {
         e.preventDefault();
         buttonTester1();
     }
-    if (e.keyCode === btn2key.keyCode) {
+    if (e.key === btn2key) {
         e.preventDefault();
         buttonTester2();
     }
-    if (e.keyCode === btn3key.keyCode) {
+    if (e.key === btn3key) {
         e.preventDefault();
         buttonTester3();
     }
-    if (e.keyCode === btn4key.keyCode) {
+    if (e.key === btn4key) {
         e.preventDefault();
         buttonTester4();
     }
