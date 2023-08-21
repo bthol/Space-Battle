@@ -302,7 +302,6 @@ function scoreboardPage() {
     controlSpace.append(btn1);
 
     defaultDisplay();
-    console.log($('.btn1'));
 };
 
 function settingsPage() {
@@ -463,6 +462,9 @@ function pageHandler(p) {
     if (p === 8) {
         getName();
     }
+    
+    // restart listeners
+    controlListen();
 };
 
 //////////////////////////////////DISPLAY/////////////////////////////////
@@ -652,6 +654,13 @@ function keyBind(btn) {
 };
 
 function controlListen() {
+    // off with the old
+    $('.btn1').off('click', buttonTester1);
+    $('.btn2').off('click', buttonTester2);
+    $('.btn3').off('click', buttonTester3);
+    $('.btn4').off('click', buttonTester4);
+
+    // on with the new
     $('.btn1').on('click', buttonTester1);
     $('.btn2').on('click', buttonTester2);
     $('.btn3').on('click', buttonTester3);
