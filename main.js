@@ -4,7 +4,7 @@ import { user, aliens, bosses, bossRound } from './JS-Modules/dataStructures.js'
 import { stateVars } from './JS-Modules/stateVariables.js';
 let { page, cannonCharge, shieldCharge, repairCharge, currentEnemy, enemiesDefeated, bossCount } = stateVars;
 
-import { btnEl1, btnEl2, btnEl3, btnEl4, msgDisplay, scoreDisplay, playerDisplay, enemyDisplay } from './JS-Modules/DOM.js';
+import { controlSpace, btnEl1, btnEl2, btnEl3, btnEl4, msgDisplay, scoreDisplay, playerDisplay, enemyDisplay } from './JS-Modules/DOM.js';
 
 /////////////////////////INITIALIZATION/////////////////////////////////
 
@@ -59,8 +59,8 @@ new Promise((resolve) => {
     requestData();
     resolve("resolved");
 }).then(() => {
-    init();
-    pageHandler(0);
+    pageHandler(page);
+    controlListen();
 });
 
 function rankScore(score) {
@@ -116,12 +116,38 @@ function mainPage() {
 
     // MESSAGE
     msgDisplay.text(`Space Battle Main Menu`);
+
     // CONTROLS
-    btnEl1.text(`New Game`);
-    btnEl2.text(`ScoreBoard`);
-    btnEl3.text(`Quit`);
-    btnEl4.text(`Settings`);
+    const btn1 = $('<button></button>');
+    btn1.attr("id", "btn1");
+    btn1.addClass("button");
+    btn1.addClass("page-0-node");
+    btn1.text(`New Game`);
+    controlSpace.append(btn1);
+    
+    const btn2 = $('<button></button>');
+    btn2.attr("id", "btn2");
+    btn2.addClass("button");
+    btn2.addClass("page-0-node");
+    btn2.text(`Scoreboard`);
+    controlSpace.append(btn2);
+    
+    const btn3 = $('<button></button>');
+    btn3.attr("id", "btn3");
+    btn3.addClass("button");
+    btn3.addClass("page-0-node");
+    btn3.text(`Quit`);
+    controlSpace.append(btn3);
+    
+    const btn4 = $('<button></button>');
+    btn4.attr("id", "btn4");
+    btn4.addClass("button");
+    btn4.addClass("page-0-node");
+    btn4.text(`Settings`);
+    controlSpace.append(btn4);
+
     defaultDisplay();
+    console.log($('.page-0-node'));
 };
 
 function gameplayPage() {
@@ -140,10 +166,34 @@ function gameplayPage() {
     enemyDisplay.append(`<div class="page-1-node">${currentEnemy.name}</div>`);
     enemyDisplay.append(`<div class="page-1-node"><div class="bar-back"><div id="enemy-health-bar"></div></div></div>`);
     // CONTROLS
-    btnEl1.text(`Pulsebeam`);
-    btnEl2.text(`Lazercannon`);
-    btnEl3.text(`Repair`);
-    btnEl4.text(`Shield`);
+    const btn1 = $('<button></button>');
+    btn1.attr("id", "btn1");
+    btn1.addClass("button");
+    btn1.addClass("page-1-node");
+    btn1.text(`Pulsebeam`);
+    controlSpace.append(btn1);
+    
+    const btn2 = $('<button></button>');
+    btn2.attr("id", "btn2");
+    btn2.addClass("button");
+    btn2.addClass("page-1-node");
+    btn2.text(`Lazercannon`);
+    controlSpace.append(btn2);
+    
+    const btn3 = $('<button></button>');
+    btn3.attr("id", "btn3");
+    btn3.addClass("button");
+    btn3.addClass("page-1-node");
+    btn3.text(`Repair`);
+    controlSpace.append(btn3);
+    
+    const btn4 = $('<button></button>');
+    btn4.attr("id", "btn4");
+    btn4.addClass("button");
+    btn4.addClass("page-1-node");
+    btn4.text(`Shield`);
+    controlSpace.append(btn4);
+
     dynamicBar();
     dynamicButton();
 };
@@ -163,10 +213,29 @@ function gameoverPage() {
         // SCORE
         scoreDisplay.text(`${user.name} = ${user.score}`);
         // CONTROLS
-        btnEl1.text(`New Game`);
-        btnEl2.text(`Main Menu`);
-        btnEl3.text(`Quit`);
-        btnEl4.text(``);
+        const btn1 = $('<button></button>');
+        btn1.attr("id", "btn1");
+        btn1.addClass("button");
+        btn1.addClass("page-2-node");
+        btn1.text(`New Game`);
+        controlSpace.append(btn1);
+        
+        const btn2 = $('<button></button>');
+        btn2.attr("id", "btn2");
+        btn2.addClass("button");
+        btn2.addClass("page-2-node");
+        btn2.text(`Main Menu`);
+        controlSpace.append(btn2);
+        
+        const btn3 = $('<button></button>');
+        btn3.attr("id", "btn3");
+        btn3.attr("id", "fillspace");
+        btn3.css("color", "#dedede");
+        btn3.addClass("button");
+        btn3.addClass("page-2-node");
+        btn3.text(`Quit`);
+        controlSpace.append(btn3);
+
         defaultDisplay();
     })
 };
@@ -186,10 +255,29 @@ function gameWinPage() {
         // SCORE
         scoreDisplay.text(`${user.name} = ${user.score}`)
         // CONTROLS
-        btnEl1.text(`New Game`);
-        btnEl2.text(`Main Menu`);
-        btnEl3.text(``);
-        btnEl4.text(`Quit`);
+        const btn1 = $('<button></button>');
+        btn1.attr("id", "btn1");
+        btn1.addClass("button");
+        btn1.addClass("page-3-node");
+        btn1.text(`New Game`);
+        controlSpace.append(btn1);
+        
+        const btn2 = $('<button></button>');
+        btn2.attr("id", "btn2");
+        btn2.addClass("button");
+        btn2.addClass("page-3-node");
+        btn2.text(`Main Menu`);
+        controlSpace.append(btn2);
+        
+        const btn3 = $('<button></button>');
+        btn3.attr("id", "btn3");
+        btn3.attr("id", "fillspace");
+        btn3.css("color", "#dedede");
+        btn3.addClass("button");
+        btn3.addClass("page-3-node");
+        btn3.text(`Quit`);
+        controlSpace.append(btn3);
+
         defaultDisplay();
     })
 };
@@ -204,10 +292,15 @@ function scoreboardPage() {
         msgDisplay.append(`<p class="page-4-node">${i + 1}.) ${scoreBoard[i].name} : ${scoreBoard[i].score}</p>`)
     }
     // CONTROLS
-    btnEl1.text(`Back`);
-    btnEl2.text(``);
-    btnEl3.text(``);
-    btnEl4.text(``);
+    const btn1 = $('<button></button>');
+    btn1.attr("id", "btn1");
+    btn1.addClass("button");
+    btn1.attr("id", "fillspace");
+    btn1.css("color", "#dedede");
+    btn1.addClass("page-4-node");
+    btn1.text(`Back`);
+    controlSpace.append(btn1);
+
     defaultDisplay();
 };
 
@@ -217,12 +310,22 @@ function settingsPage() {
     // MESSAGE
     msgDisplay.text(`Settings Menu`);
     // CONTROLS
-    btnEl1.text(`Back`);
-    btnEl2.text(`Controls`);
-    btnEl3.text(``);
-    btnEl4.text(``);
+    const btn1 = $('<button></button>');
+    btn1.attr("id", "btn1");
+    btn1.addClass("button");
+    btn1.addClass("page-5-node");
+    btn1.text(`Back`);
+    controlSpace.append(btn1);
+    
+    const btn2 = $('<button></button>');
+    btn2.attr("id", "btn2");
+    btn2.addClass("button");
+    btn2.addClass("page-5-node");
+    btn2.text(`Scoreboard`);
+    controlSpace.append(btn2);
+
     defaultDisplay();   
-}
+};
 
 function controlsPage() {
     page = 6;
@@ -237,13 +340,31 @@ function controlsPage() {
     msgDisplay.append(`<p class="page-6-node">Button 4 : ${btn4key}</p>`)
 
     // CONTROLS
-    btnEl1.text(`Back`);
-    btnEl2.text(`Customize`);
-    btnEl3.text(`Reset`);
-    btnEl4.text(``);
+    const btn1 = $('<button></button>');
+    btn1.attr("id", "btn1");
+    btn1.addClass("button");
+    btn1.addClass("page-6-node");
+    btn1.text(`Back`);
+    controlSpace.append(btn1);
+    
+    const btn2 = $('<button></button>');
+    btn2.attr("id", "btn2");
+    btn2.addClass("button");
+    btn2.addClass("page-6-node");
+    btn2.text(`Customize`);
+    controlSpace.append(btn2);
+    
+    const btn3 = $('<button></button>');
+    btn3.attr("id", "btn3");
+    btn3.attr("id", "fillspace");
+    btn3.css("color", "#dedede");
+    btn3.addClass("button");
+    btn3.addClass("page-6-node");
+    btn3.text(`Reset`);
+    controlSpace.append(btn3);
 
     defaultDisplay();
-}
+};
 
 function controlsPageCustomize() {
     page = 7;
@@ -255,79 +376,70 @@ function controlsPageCustomize() {
     msgDisplay.append(`<p class="page-7-node">Click the button to which you'd like to assign a new keybinding, and press the key you like to bind to that button.</p>`)
 
     // CONTROLS
-    btnEl1.text(`Button 1`);
-    btnEl2.text(`Button 2`);
-    btnEl3.text(`Button 3`);
-    btnEl4.text(`Button 4`);
+    const btn1 = $('<button></button>');
+    btn1.attr("id", "btn1");
+    btn1.addClass("button");
+    btn1.addClass("page-7-node");
+    btn1.text(`Button 1`);
+    controlSpace.append(btn1);
+    
+    const btn2 = $('<button></button>');
+    btn2.attr("id", "btn2");
+    btn2.addClass("button");
+    btn2.addClass("page-7-node");
+    btn2.text(`Button 2`);
+    controlSpace.append(btn2);
+    
+    const btn3 = $('<button></button>');
+    btn3.attr("id", "btn3");
+    btn3.addClass("button");
+    btn3.addClass("page-7-node");
+    btn3.text(`Button 3`);
+    controlSpace.append(btn3);
+    
+    const btn4 = $('<button></button>');
+    btn4.attr("id", "btn4");
+    btn4.addClass("button");
+    btn4.addClass("page-7-node");
+    btn4.text(`Button 4`);
+    controlSpace.append(btn4);
 
     defaultDisplay();   
-}
-
-//////////////////////////////////DISPLAY/////////////////////////////////
-function dynamicButton() {
-    if (cannonCharge >= user.lazercannon.overCharge) {
-        btnEl2.css("color", "#ca141e");
-        btnEl2.css("border", "1px solid #ca141e");
-        btnEl2.css("fontSize", "5vmin");
-    } else if (cannonCharge >= user.lazercannon.baseCharge) {
-        btnEl2.css("color", "#dedede");
-        btnEl2.css("fontSize", "4.5vmin");
-    } else {
-        btnEl2.css("color", "#00000080");
-        btnEl2.css("fontSize", "4vmin");
-        btnEl2.css("border", "1px solid black");
-    }
-    if (repairCharge >= 10) {
-        btnEl3.css("color", "#dedede");
-        btnEl3.css("fontSize", "5vmin");
-    } else {
-        btnEl3.css("color", "#00000080");
-        btnEl3.css("fontSize", "4vmin");
-    }
-    if (shieldCharge >= user.shield.rechargeTime) {
-        btnEl4.css("color", "#dedede");
-        btnEl4.css("fontSize", "5vmin");
-    } else {
-        btnEl4.css("color", "#00000080");
-        btnEl4.css("fontSize", "4vmin");
-    }
 };
 
-function dynamicBar() {
-    $(`#enemy-health-bar`).css("width", `${(currentEnemyHealth / currentEnemy.maxHealth) * 100}%`);
-    $(`#player-health-bar`).css("width", `${(user.health.level / user.health.maxLevel) * 100}%`);
-    $(`#player-shield-bar`).css("width", `${(user.shield.level / user.shield.maxLevel) * 100}%`);
-};
-
-function defaultDisplay() {
-    btnEl1.css("color", "#dedede");
-    btnEl1.css("fontSize", "5vmin");
-    btnEl1.css("border", "1px solid black");
-
-    btnEl2.css("color", "#dedede");
-    btnEl2.css("fontSize", "5vmin");
-    btnEl2.css("border", "1px solid black");
+function getName() {
+    page = 8;
     
-    btnEl3.css("color", "#dedede");
-    btnEl3.css("fontSize", "5vmin");
-    btnEl3.css("border", "1px solid black");
+    // MESSAGE
+    msgDisplay.text(`Enter Name (Must be 5 characters in length.)`);
+    
+    // DISPLAY CONTROLS
+    controlSpace.append(`<form class="page-8-node inform">
+    <input name="data" type="text" class="data-input" required/>
+    <button type="submit" class="enter-button" >Enter</button>
+    </form>`)
+    
+    $(`body`).off('keypress');
+    document.body.addEventListener('keypress', (e) => {
+        bind(e);
+        controlListen();
+    }, {once: true});
+};
 
-    btnEl4.css("color", "#dedede");
-    btnEl4.css("fontSize", "5vmin");
-    btnEl4.css("border", "1px solid black");
-}
-
-////////////////////////////////CONTROLS//////////////////////////////////////////
 function pageHandler(p) {
+    // remove nodes from current page
+    $(`.page-${page}-node`).remove();
+
+    // clear text content
     msgDisplay.text(``);
     scoreDisplay.text(``);
+
+    // render new page
     if (p === 0) {
         mainPage();
     }
     if (p === 1) {
         gameplayPage();
-    } else {
-        $(`.page-1-node`).remove();
     }
     if (p === 2) {
         gameoverPage();
@@ -347,7 +459,66 @@ function pageHandler(p) {
     if (p === 7) {
         controlsPageCustomize();
     }
+    if (p === 8) {
+        getName();
+    }
 };
+
+//////////////////////////////////DISPLAY/////////////////////////////////
+function dynamicButton() {
+    if (cannonCharge >= user.lazercannon.overCharge) {
+        $('#btn2').css("color", "#ca141e");
+        $('#btn2').css("border", "1px solid #ca141e");
+        $('#btn2').css("fontSize", "5vmin");
+    } else if (cannonCharge >= user.lazercannon.baseCharge) {
+        $('#btn2').css("color", "#dedede");
+        $('#btn2').css("fontSize", "4.5vmin");
+    } else {
+        $('#btn2').css("color", "#00000080");
+        $('#btn2').css("fontSize", "4vmin");
+        $('#btn2').css("border", "1px solid black");
+    }
+    if (repairCharge >= 10) {
+        $('#btn3').css("color", "#dedede");
+        $('#btn3').css("fontSize", "5vmin");
+    } else {
+        $('#btn3').css("color", "#00000080");
+        $('#btn3').css("fontSize", "4vmin");
+    }
+    if (shieldCharge >= user.shield.rechargeTime) {
+        $('#btn4').css("color", "#dedede");
+        $('#btn4').css("fontSize", "5vmin");
+    } else {
+        $('#btn4').css("color", "#00000080");
+        $('#btn4').css("fontSize", "4vmin");
+    }
+};
+
+function dynamicBar() {
+    $(`#enemy-health-bar`).css("width", `${(currentEnemyHealth / currentEnemy.maxHealth) * 100}%`);
+    $(`#player-health-bar`).css("width", `${(user.health.level / user.health.maxLevel) * 100}%`);
+    $(`#player-shield-bar`).css("width", `${(user.shield.level / user.shield.maxLevel) * 100}%`);
+};
+
+function defaultDisplay() {
+    $('#btn1').css("color", "#dedede");
+    $('#btn1').css("fontSize", "5vmin");
+    $('#btn1').css("border", "1px solid black");
+
+    $('#btn2').css("color", "#dedede");
+    $('#btn2').css("fontSize", "5vmin");
+    $('#btn2').css("border", "1px solid black");
+    
+    $('#btn3').css("color", "#dedede");
+    $('#btn3').css("fontSize", "5vmin");
+    $('#btn3').css("border", "1px solid black");
+
+    $('#btn4').css("color", "#dedede");
+    $('#btn4').css("fontSize", "5vmin");
+    $('#btn4').css("border", "1px solid black");
+}
+
+////////////////////////////////CONTROLS//////////////////////////////////////////
 
 // BUTTON 1
 function buttonTester1() {
@@ -468,19 +639,22 @@ function keyBind(btn) {
             pageHandler(6);
         }
     };
+    $('#btn1').off('click');
+    $('#btn2').off('click');
+    $('#btn3').off('click');
+    $('#btn4').off('click');
     $(`body`).off('keypress');
     document.body.addEventListener('keypress', (e) => {
         bind(e);
         controlListen();
     }, {once: true});
-}
+};
 
-btnEl1.on('click', buttonTester1);
-btnEl2.on('click', buttonTester2);
-btnEl3.on('click', buttonTester3);
-btnEl4.on('click', buttonTester4);
 function controlListen() {
-    console.log("ran");
+    $('#btn1').on('click', buttonTester1);
+    $('#btn2').on('click', buttonTester2);
+    $('#btn3').on('click', buttonTester3);
+    $('#btn4').on('click', buttonTester4);
     $(`body`).on('keypress', (e) => {
         if (e.key === btn1key) {
             e.preventDefault();
@@ -500,7 +674,6 @@ function controlListen() {
         }
     })
 };
-controlListen();
 
 ////////////////////////////DEFENSIVE MOVES////////////////////////////////////////
 function repair() {
