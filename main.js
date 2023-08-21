@@ -119,35 +119,35 @@ function mainPage() {
 
     // CONTROLS
     const btn1 = $('<button></button>');
-    btn1.attr("id", "btn1");
+    btn1.addClass("btn1");
     btn1.addClass("button");
     btn1.addClass("page-0-node");
     btn1.text(`New Game`);
     controlSpace.append(btn1);
     
     const btn2 = $('<button></button>');
-    btn2.attr("id", "btn2");
+    btn2.addClass("btn2");
     btn2.addClass("button");
     btn2.addClass("page-0-node");
     btn2.text(`Scoreboard`);
     controlSpace.append(btn2);
     
     const btn3 = $('<button></button>');
-    btn3.attr("id", "btn3");
+    btn3.addClass("btn3");
     btn3.addClass("button");
     btn3.addClass("page-0-node");
     btn3.text(`Quit`);
     controlSpace.append(btn3);
     
     const btn4 = $('<button></button>');
-    btn4.attr("id", "btn4");
+    btn4.addClass("btn4");
     btn4.addClass("button");
     btn4.addClass("page-0-node");
     btn4.text(`Settings`);
     controlSpace.append(btn4);
 
     defaultDisplay();
-    console.log($('.page-0-node'));
+    controlListen();
 };
 
 function gameplayPage() {
@@ -167,28 +167,28 @@ function gameplayPage() {
     enemyDisplay.append(`<div class="page-1-node"><div class="bar-back"><div id="enemy-health-bar"></div></div></div>`);
     // CONTROLS
     const btn1 = $('<button></button>');
-    btn1.attr("id", "btn1");
+    btn1.addClass("btn1");
     btn1.addClass("button");
     btn1.addClass("page-1-node");
     btn1.text(`Pulsebeam`);
     controlSpace.append(btn1);
     
     const btn2 = $('<button></button>');
-    btn2.attr("id", "btn2");
+    btn2.addClass("btn2");
     btn2.addClass("button");
     btn2.addClass("page-1-node");
     btn2.text(`Lazercannon`);
     controlSpace.append(btn2);
     
     const btn3 = $('<button></button>');
-    btn3.attr("id", "btn3");
+    btn3.addClass("btn3");
     btn3.addClass("button");
     btn3.addClass("page-1-node");
     btn3.text(`Repair`);
     controlSpace.append(btn3);
     
     const btn4 = $('<button></button>');
-    btn4.attr("id", "btn4");
+    btn4.addClass("btn4");
     btn4.addClass("button");
     btn4.addClass("page-1-node");
     btn4.text(`Shield`);
@@ -214,25 +214,25 @@ function gameoverPage() {
         scoreDisplay.text(`${user.name} = ${user.score}`);
         // CONTROLS
         const btn1 = $('<button></button>');
-        btn1.attr("id", "btn1");
+        btn1.addClass("btn1");
         btn1.addClass("button");
         btn1.addClass("page-2-node");
         btn1.text(`New Game`);
         controlSpace.append(btn1);
         
         const btn2 = $('<button></button>');
-        btn2.attr("id", "btn2");
+        btn2.addClass("btn2");
         btn2.addClass("button");
         btn2.addClass("page-2-node");
         btn2.text(`Main Menu`);
         controlSpace.append(btn2);
         
         const btn3 = $('<button></button>');
-        btn3.attr("id", "btn3");
         btn3.attr("id", "fillspace");
-        btn3.css("color", "#dedede");
+        btn3.addClass("btn3");
         btn3.addClass("button");
         btn3.addClass("page-2-node");
+        btn3.css("color", "#dedede");
         btn3.text(`Quit`);
         controlSpace.append(btn3);
 
@@ -256,21 +256,21 @@ function gameWinPage() {
         scoreDisplay.text(`${user.name} = ${user.score}`)
         // CONTROLS
         const btn1 = $('<button></button>');
-        btn1.attr("id", "btn1");
+        btn1.addClass("btn1");
         btn1.addClass("button");
         btn1.addClass("page-3-node");
         btn1.text(`New Game`);
         controlSpace.append(btn1);
         
         const btn2 = $('<button></button>');
-        btn2.attr("id", "btn2");
+        btn2.addClass("btn2");
         btn2.addClass("button");
         btn2.addClass("page-3-node");
         btn2.text(`Main Menu`);
         controlSpace.append(btn2);
         
         const btn3 = $('<button></button>');
-        btn3.attr("id", "btn3");
+        btn3.addClass("btn3");
         btn3.attr("id", "fillspace");
         btn3.css("color", "#dedede");
         btn3.addClass("button");
@@ -293,15 +293,16 @@ function scoreboardPage() {
     }
     // CONTROLS
     const btn1 = $('<button></button>');
-    btn1.attr("id", "btn1");
+    btn1.addClass("fillspace");
+    btn1.addClass("btn1");
     btn1.addClass("button");
-    btn1.attr("id", "fillspace");
     btn1.css("color", "#dedede");
     btn1.addClass("page-4-node");
     btn1.text(`Back`);
     controlSpace.append(btn1);
 
     defaultDisplay();
+    console.log($('.btn1'));
 };
 
 function settingsPage() {
@@ -311,14 +312,14 @@ function settingsPage() {
     msgDisplay.text(`Settings Menu`);
     // CONTROLS
     const btn1 = $('<button></button>');
-    btn1.attr("id", "btn1");
+    btn1.addClass("btn1");
     btn1.addClass("button");
     btn1.addClass("page-5-node");
     btn1.text(`Back`);
     controlSpace.append(btn1);
     
     const btn2 = $('<button></button>');
-    btn2.attr("id", "btn2");
+    btn2.addClass("btn2");
     btn2.addClass("button");
     btn2.addClass("page-5-node");
     btn2.text(`Scoreboard`);
@@ -341,25 +342,25 @@ function controlsPage() {
 
     // CONTROLS
     const btn1 = $('<button></button>');
-    btn1.attr("id", "btn1");
+    btn1.addClass("btn1");
     btn1.addClass("button");
     btn1.addClass("page-6-node");
     btn1.text(`Back`);
     controlSpace.append(btn1);
     
     const btn2 = $('<button></button>');
-    btn2.attr("id", "btn2");
+    btn2.addClass("btn2");
     btn2.addClass("button");
     btn2.addClass("page-6-node");
     btn2.text(`Customize`);
     controlSpace.append(btn2);
     
     const btn3 = $('<button></button>');
-    btn3.attr("id", "btn3");
     btn3.attr("id", "fillspace");
-    btn3.css("color", "#dedede");
+    btn3.addClass("btn3");
     btn3.addClass("button");
     btn3.addClass("page-6-node");
+    btn3.css("color", "#dedede");
     btn3.text(`Reset`);
     controlSpace.append(btn3);
 
@@ -377,28 +378,28 @@ function controlsPageCustomize() {
 
     // CONTROLS
     const btn1 = $('<button></button>');
-    btn1.attr("id", "btn1");
+    btn1.addClass("btn1");
     btn1.addClass("button");
     btn1.addClass("page-7-node");
     btn1.text(`Button 1`);
     controlSpace.append(btn1);
     
     const btn2 = $('<button></button>');
-    btn2.attr("id", "btn2");
+    btn2.addClass("btn2");
     btn2.addClass("button");
     btn2.addClass("page-7-node");
     btn2.text(`Button 2`);
     controlSpace.append(btn2);
     
     const btn3 = $('<button></button>');
-    btn3.attr("id", "btn3");
+    btn3.addClass("btn3");
     btn3.addClass("button");
     btn3.addClass("page-7-node");
     btn3.text(`Button 3`);
     controlSpace.append(btn3);
     
     const btn4 = $('<button></button>');
-    btn4.attr("id", "btn4");
+    btn4.addClass("btn4");
     btn4.addClass("button");
     btn4.addClass("page-7-node");
     btn4.text(`Button 4`);
@@ -467,30 +468,30 @@ function pageHandler(p) {
 //////////////////////////////////DISPLAY/////////////////////////////////
 function dynamicButton() {
     if (cannonCharge >= user.lazercannon.overCharge) {
-        $('#btn2').css("color", "#ca141e");
-        $('#btn2').css("border", "1px solid #ca141e");
-        $('#btn2').css("fontSize", "5vmin");
+        $('.btn2').css("color", "#ca141e");
+        $('.btn2').css("border", "1px solid #ca141e");
+        $('.btn2').css("fontSize", "5vmin");
     } else if (cannonCharge >= user.lazercannon.baseCharge) {
-        $('#btn2').css("color", "#dedede");
-        $('#btn2').css("fontSize", "4.5vmin");
+        $('.btn2').css("color", "#dedede");
+        $('.btn2').css("fontSize", "4.5vmin");
     } else {
-        $('#btn2').css("color", "#00000080");
-        $('#btn2').css("fontSize", "4vmin");
-        $('#btn2').css("border", "1px solid black");
+        $('.btn2').css("color", "#00000080");
+        $('.btn2').css("fontSize", "4vmin");
+        $('.btn2').css("border", "1px solid black");
     }
     if (repairCharge >= 10) {
-        $('#btn3').css("color", "#dedede");
-        $('#btn3').css("fontSize", "5vmin");
+        $('.btn3').css("color", "#dedede");
+        $('.btn3').css("fontSize", "5vmin");
     } else {
-        $('#btn3').css("color", "#00000080");
-        $('#btn3').css("fontSize", "4vmin");
+        $('.btn3').css("color", "#00000080");
+        $('.btn3').css("fontSize", "4vmin");
     }
     if (shieldCharge >= user.shield.rechargeTime) {
-        $('#btn4').css("color", "#dedede");
-        $('#btn4').css("fontSize", "5vmin");
+        $('.btn4').css("color", "#dedede");
+        $('.btn4').css("fontSize", "5vmin");
     } else {
-        $('#btn4').css("color", "#00000080");
-        $('#btn4').css("fontSize", "4vmin");
+        $('.btn4').css("color", "#00000080");
+        $('.btn4').css("fontSize", "4vmin");
     }
 };
 
@@ -501,21 +502,21 @@ function dynamicBar() {
 };
 
 function defaultDisplay() {
-    $('#btn1').css("color", "#dedede");
-    $('#btn1').css("fontSize", "5vmin");
-    $('#btn1').css("border", "1px solid black");
+    $('.btn1').css("color", "#dedede");
+    $('.btn1').css("fontSize", "5vmin");
+    $('.btn1').css("border", "1px solid black");
 
-    $('#btn2').css("color", "#dedede");
-    $('#btn2').css("fontSize", "5vmin");
-    $('#btn2').css("border", "1px solid black");
+    $('.btn2').css("color", "#dedede");
+    $('.btn2').css("fontSize", "5vmin");
+    $('.btn2').css("border", "1px solid black");
     
-    $('#btn3').css("color", "#dedede");
-    $('#btn3').css("fontSize", "5vmin");
-    $('#btn3').css("border", "1px solid black");
+    $('.btn3').css("color", "#dedede");
+    $('.btn3').css("fontSize", "5vmin");
+    $('.btn3').css("border", "1px solid black");
 
-    $('#btn4').css("color", "#dedede");
-    $('#btn4').css("fontSize", "5vmin");
-    $('#btn4').css("border", "1px solid black");
+    $('.btn4').css("color", "#dedede");
+    $('.btn4').css("fontSize", "5vmin");
+    $('.btn4').css("border", "1px solid black");
 }
 
 ////////////////////////////////CONTROLS//////////////////////////////////////////
@@ -651,10 +652,10 @@ function keyBind(btn) {
 };
 
 function controlListen() {
-    $('#btn1').on('click', buttonTester1);
-    $('#btn2').on('click', buttonTester2);
-    $('#btn3').on('click', buttonTester3);
-    $('#btn4').on('click', buttonTester4);
+    $('.btn1').on('click', buttonTester1);
+    $('.btn2').on('click', buttonTester2);
+    $('.btn3').on('click', buttonTester3);
+    $('.btn4').on('click', buttonTester4);
     $(`body`).on('keypress', (e) => {
         if (e.key === btn1key) {
             e.preventDefault();
