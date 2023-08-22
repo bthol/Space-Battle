@@ -152,10 +152,10 @@ function gameplayPage() {
     // SCORE
     scoreDisplay.text(`Score: ${user.score}`);
     // PLAYER
-    playerDisplay.append(`<div class="page-1-node">${user.name}</div>`);
+    playerDisplay.append(`<div class="page-1-node user-name">${user.name}</div>`);
     playerDisplay.append(`<div class="page-1-node"><div class="bar-back"><div id="player-health-bar"></div><div id="player-shield-bar"></div></div></div>`);
     // ENEMY
-    enemyDisplay.append(`<div class="page-1-node">${currentEnemy.name}</div>`);
+    enemyDisplay.append(`<div class="page-1-node enemy-name">${currentEnemy.name}</div>`);
     enemyDisplay.append(`<div class="page-1-node"><div class="bar-back"><div id="enemy-health-bar"></div></div></div>`);
     // CONTROLS
     const btn1 = $('<button></button>');
@@ -414,15 +414,13 @@ function getName() {
         <input name="data" type="text" pattern=".{5,5}" class="data-input" placeholder="names" required/>
         <button type="submit" class="enter-button" >Enter</button>
     </form>`);
-
     const form = $('#inform');
-    let cache;
+    form[0].data.focus();
     form.on('submit', (e) => {
         e.preventDefault();
         user.name = form[0].data.value;
-        clearTimeout(cache);
-        newEnemy();
         pageHandler(1);
+        newEnemy();
     });
 };
 
@@ -827,7 +825,7 @@ function enemyAttack() {
         testDeath();
     } else {
         alert(`${currentEnemy.name} missed ${user.name}!`);
-        gameplayPage();
+        pageHandler(1);
     }
 };
 
@@ -847,11 +845,22 @@ function newBossEnemy() {
 
 function enemyAlert(x) {
     if (x === 0) {
-        alert(`A ${currentEnemy.name} approaches...`);
+        scoreDisplay.text(`A ${currentEnemy.name} approaches...`);
+        $('.enemy-name').text(`${currentEnemy.name}`);
+        clearTimeout(scoreDisplayCache);
+        scoreDisplayCache = setTimeout(() => {
+            scoreDisplay.text(`Score: ${user.score}`);
+        }, 1200)
     }
     if (x === 1) {
-        alert(`BOSS FIGHT!\n\nThe ${currentEnemy.name} approaches...`);
+        scoreDisplay.text(`BOSS FIGHT!\n\nThe ${currentEnemy.name} approaches...`);
+        $('.enemy-name').text(`${currentEnemy.name}`);
+        clearTimeout(scoreDisplayCache);
+        scoreDisplayCache = setTimeout(() => {
+            scoreDisplay.text(`Score: ${user.score}`);
+        }, 1200)
     }
+    dynamicBar();
 };
 
 //////////////////////////////////TESTS///////////////////////////////////////////
@@ -869,7 +878,7 @@ function testDeath(x) {
         if (user.health.level <= 0) {
             pageHandler(2);
         } else {
-            gameplayPage();
+            pageHandler(1);
         }
     }
 };
@@ -897,7 +906,7 @@ function bossTest() {
         }
     }
     if (bool === true) {
+        pageHandler(1);
         newEnemy();
-        gameplayPage();
     }
 };

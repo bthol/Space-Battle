@@ -3,7 +3,7 @@ let stateVars = {
     cannonCharge: 0,
     shieldCharge: 0,
     repairCharge: 0,
-    currentEnemy: {name: "Subort", hull: 2, score: 100, firepower: 1, accuracy: .4},
+    currentEnemy: {name: "enemy"},
     enemiesDefeated: 0,
     bossCount: 0,
 }
