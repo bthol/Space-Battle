@@ -418,7 +418,9 @@ function getName() {
     form[0].data.focus();
     form.on('submit', (e) => {
         e.preventDefault();
-        user.name = form[0].data.value;
+        const nameText = form[0].data.value.toLowerCase();
+        const name = nameText.slice(0, 1).toUpperCase() + nameText.slice(1, nameText.length);
+        user.name = name;
         pageHandler(1);
         newEnemy();
     });
