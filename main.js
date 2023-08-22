@@ -42,10 +42,6 @@ function init() {
     repairCharge = 10;
     enemiesDefeated = 0;
     bossCount = 0;
-    $('.btn1').off('click', buttonTester1);
-    $('.btn2').off('click', buttonTester2);
-    $('.btn3').off('click', buttonTester3);
-    $('.btn4').off('click', buttonTester4);
 };
 
 /////////////////////////DATA////////////////////////////////////////
@@ -64,8 +60,8 @@ new Promise((resolve) => {
     resolve("resolved");
 }).then(() => {
     // serve default page
-    pageHandler(page);
-    // turn on listeners
+    pageHandler(0);
+    // turn on listeners for controls
     controlListenOn();
 });
 
@@ -101,20 +97,9 @@ function saveScore(name = user.name, score = user.score, rank = rankScore(user.s
 // for direct scoreboard writing
 // $.ajax({
 //     type: 'PATCH',
-//     url: `https://space-battle-api.herokuapp.com/scoreboard/listindex/${3}`,
-//     data: {"userName": `solar`, "userScore": `7000`}
-// }); 
-
-/////////////////////////USER NAME ENTER////////////////////////////////////////
-function nameEnter() {
-    const name = prompt("Enter Name (Must be 5 characters in length.)");
-    if (name.length !== 5) {
-        alert("Invalid: Character name must be 5 characters in length.");
-        nameEnter();
-    } else if (name.length === 5) {
-        user.name = name;
-    }
-};
+//     url: `https://space-battle-api.herokuapp.com/scoreboard/listindex/${9}`,
+//     data: {"userName": `athen`, "userScore": `4800`}
+// });
 
 /////////////////////////GAME PAGES///////////////////////////////////////
 function mainPage() {
@@ -293,7 +278,7 @@ function scoreboardPage() {
 
     // MESSAGE
     requestData();
-    msgDisplay.text(`SCOREBOARD`);
+    msgDisplay.text(`Scoreboard`);
     for (let i = 0; i < scoreBoard.length; i++) {
         msgDisplay.append(`<p class="page-4-node">${i + 1}.) ${scoreBoard[i].name} : ${scoreBoard[i].score}</p>`)
     }
@@ -416,21 +401,34 @@ function controlsPageCustomize() {
 function getName() {
     page = 8;
     
-    // MESSAGE
-    msgDisplay.text(`Enter Name (Must be 5 characters in length.)`);
+    // TITLE
+    msgDisplay.text(`Player Name`);
+    // DESCRIPTION
+    msgDisplay.append('<p>Format: must be 5 characters in length and contain only letters.</p>');
     
     // DISPLAY CONTROLS
-    controlSpace.append(`<form class="page-8-node inform">
-    <input name="data" type="text" class="data-input" required/>
-    <button type="submit" class="enter-button" >Enter</button>
-    </form>`)
+    controlSpace.append(`
+    <form id="inform" class="page-8-node">
+        <input name="data" type="text" pattern=".{5,5}" class="data-input" placeholder="names" required/>
+        <button type="submit" class="enter-button" >Enter</button>
+    </form>`);
+
+    const form = $('#inform');
+    let cache;
+    form.on('submit', (e) => {
+        e.preventDefault();
+        user.name = form[0].data.value;
+        clearTimeout(cache);
+        newEnemy();
+        pageHandler(1);
+    });
 };
 
 function pageHandler(p) {
     // turn off listeners for old page
     controlListenOff();
     // remove nodes from last page
-    $(`.page-${page}-node`).remove();
+    removePageNodes();
 
     // clear text content
     msgDisplay.text(``);
@@ -470,6 +468,10 @@ function pageHandler(p) {
 };
 
 //////////////////////////////////DISPLAY/////////////////////////////////
+function removePageNodes() {
+    $(`.page-${page}-node`).remove();
+};
+
 function dynamicButton() {
     if (cannonCharge >= user.lazercannon.overCharge) {
         $('.btn2').css("color", "#ca141e");
@@ -515,29 +517,26 @@ function defaultDisplay() {
     $('.btn4').css("color", "#dedede");
     $('.btn4').css("fontSize", "5vmin");
     $('.btn4').css("border", "1px solid black");
-}
+};
 
-////////////////////////////////CONTROLS//////////////////////////////////////////
+////////////////////////////////SYSTEM-CONTROLS//////////////////////////////////////////
+function newGame() {
+    init();
+    pageHandler(8);
+};
+
+////////////////////////////////PLAYER-CONTROLS//////////////////////////////////////////
 
 // BUTTON 1
 function buttonTester1() {
     if (page === 0) {
-        init();
-        nameEnter();
-        newEnemy();
-        pageHandler(1);
+        newGame();
     } else if (page === 1) {
         pulsebeamAttack();
     } else if (page === 2) {
-        init();
-        nameEnter();
-        newEnemy();
-        pageHandler(1);
+        newGame();
     } else if (page === 3) {
-        init();
-        nameEnter();
-        newEnemy();
-        pageHandler(1);
+        newGame();
     } else if (page === 4) {
         pageHandler(0);
     } else if (page === 5) {

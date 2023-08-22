@@ -154,7 +154,8 @@ body {
 }
 
 /* FORM */
-.inform {
+#inform {
+    background: var(--color-background);
     grid-column: 1/3;
 }
 .data-input {
