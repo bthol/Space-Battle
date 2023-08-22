@@ -3,19 +3,22 @@
     font-family: 'Coda', cursive;
     
     --color-background: #1e3548;
-    --color-background-2: hsl(15, 6%, 16%);
+    --color-background-2: hsl(24, 6%, 16%);
     --color-crimson: #442822;
     
-    --color-detailing: hsl(10, 33%, 70%);
+    --color-detailing: #c8c4ac;
+    --color-detailing-2: #cca299;
     
     --color-font-1: #dedede;
-    --color-font-2: hsl(40, 87%, 50%);
-    --color-font-title: hsl(199, 100%, 60%);
+    --color-font-2: #eea411;
+    --color-font-title: hsl(199, 100%, 50%);
+
+    --color-hot-pink: #ff0080;
     
     --color-button-background: #296ca3;
     --color-button-shadow: #00000080;
     
-    background-color: black;
+    background-color: #07000f;
 }
 
 /* ----------------------------LAYOUT---------------------------- */
@@ -131,24 +134,21 @@ body {
     display: grid;
     grid-template-columns: 5fr 1fr;
     width: 30vmin;
-    background-color: gray;
+    background-color: #666666;
 }
 #enemy-health-bar {
     height: 1vmin;
     grid-column: 1 / span 2;
-    border: .1vmin solid white;
     border-left: none;
     background-color: green;
 }
 #player-health-bar {
     height: 1vmin;
-    border: .1vmin solid white;
     border-left: none;
     background-color: green;
 }
 #player-shield-bar {
     height: 1vmin;
-    border: .1vmin solid white;
     border-left: none;
     background-color: blue;
 }

@@ -4,7 +4,7 @@ import { user, aliens, bosses, bossRound } from './JS-Modules/dataStructures.js'
 import { stateVars } from './JS-Modules/stateVariables.js';
 let { page, cannonCharge, shieldCharge, repairCharge, currentEnemy, enemiesDefeated, bossCount } = stateVars;
 
-import { controlSpace, btnEl1, btnEl2, btnEl3, btnEl4, msgDisplay, scoreDisplay, playerDisplay, enemyDisplay } from './JS-Modules/DOM.js';
+import { controlSpace, msgDisplay, scoreDisplay, playerDisplay, enemyDisplay } from './JS-Modules/DOM.js';
 
 /////////////////////////INITIALIZATION/////////////////////////////////
 
@@ -42,6 +42,10 @@ function init() {
     repairCharge = 10;
     enemiesDefeated = 0;
     bossCount = 0;
+    $('.btn1').off('click', buttonTester1);
+    $('.btn2').off('click', buttonTester2);
+    $('.btn3').off('click', buttonTester3);
+    $('.btn4').off('click', buttonTester4);
 };
 
 /////////////////////////DATA////////////////////////////////////////
@@ -59,8 +63,10 @@ new Promise((resolve) => {
     requestData();
     resolve("resolved");
 }).then(() => {
+    // serve default page
     pageHandler(page);
-    controlListen();
+    // turn on listeners
+    controlListenOn();
 });
 
 function rankScore(score) {
@@ -115,44 +121,43 @@ function mainPage() {
     page = 0;
 
     // MESSAGE
-    msgDisplay.text(`Space Battle Main Menu`);
+    msgDisplay.text(`Main Menu`);
 
     // CONTROLS
     const btn1 = $('<button></button>');
+    btn1.addClass("page-0-node");
     btn1.addClass("btn1");
     btn1.addClass("button");
-    btn1.addClass("page-0-node");
     btn1.text(`New Game`);
     controlSpace.append(btn1);
     
     const btn2 = $('<button></button>');
+    btn2.addClass("page-0-node");
     btn2.addClass("btn2");
     btn2.addClass("button");
-    btn2.addClass("page-0-node");
     btn2.text(`Scoreboard`);
     controlSpace.append(btn2);
     
     const btn3 = $('<button></button>');
+    btn3.addClass("page-0-node");
     btn3.addClass("btn3");
     btn3.addClass("button");
-    btn3.addClass("page-0-node");
     btn3.text(`Quit`);
     controlSpace.append(btn3);
     
     const btn4 = $('<button></button>');
+    btn4.addClass("page-0-node");
     btn4.addClass("btn4");
     btn4.addClass("button");
-    btn4.addClass("page-0-node");
     btn4.text(`Settings`);
     controlSpace.append(btn4);
 
     defaultDisplay();
-    controlListen();
 };
 
 function gameplayPage() {
     page = 1;
-
+    
     //NODE RESET
     $(`.page-1-node`).remove();
     // MESSAGE
@@ -167,33 +172,34 @@ function gameplayPage() {
     enemyDisplay.append(`<div class="page-1-node"><div class="bar-back"><div id="enemy-health-bar"></div></div></div>`);
     // CONTROLS
     const btn1 = $('<button></button>');
+    btn1.addClass("page-1-node");
     btn1.addClass("btn1");
     btn1.addClass("button");
-    btn1.addClass("page-1-node");
     btn1.text(`Pulsebeam`);
     controlSpace.append(btn1);
     
     const btn2 = $('<button></button>');
+    btn2.addClass("page-1-node");
     btn2.addClass("btn2");
     btn2.addClass("button");
-    btn2.addClass("page-1-node");
     btn2.text(`Lazercannon`);
     controlSpace.append(btn2);
     
     const btn3 = $('<button></button>');
+    btn3.addClass("page-1-node");
     btn3.addClass("btn3");
     btn3.addClass("button");
-    btn3.addClass("page-1-node");
     btn3.text(`Repair`);
     controlSpace.append(btn3);
     
     const btn4 = $('<button></button>');
+    btn4.addClass("page-1-node");
     btn4.addClass("btn4");
     btn4.addClass("button");
-    btn4.addClass("page-1-node");
     btn4.text(`Shield`);
     controlSpace.append(btn4);
-
+    
+    defaultDisplay();
     dynamicBar();
     dynamicButton();
 };
@@ -214,24 +220,24 @@ function gameoverPage() {
         scoreDisplay.text(`${user.name} = ${user.score}`);
         // CONTROLS
         const btn1 = $('<button></button>');
+        btn1.addClass("page-2-node");
         btn1.addClass("btn1");
         btn1.addClass("button");
-        btn1.addClass("page-2-node");
         btn1.text(`New Game`);
         controlSpace.append(btn1);
         
         const btn2 = $('<button></button>');
+        btn2.addClass("page-2-node");
         btn2.addClass("btn2");
         btn2.addClass("button");
-        btn2.addClass("page-2-node");
         btn2.text(`Main Menu`);
         controlSpace.append(btn2);
         
         const btn3 = $('<button></button>');
         btn3.attr("id", "fillspace");
+        btn3.addClass("page-2-node");
         btn3.addClass("btn3");
         btn3.addClass("button");
-        btn3.addClass("page-2-node");
         btn3.css("color", "#dedede");
         btn3.text(`Quit`);
         controlSpace.append(btn3);
@@ -256,25 +262,25 @@ function gameWinPage() {
         scoreDisplay.text(`${user.name} = ${user.score}`)
         // CONTROLS
         const btn1 = $('<button></button>');
+        btn1.addClass("page-3-node");
         btn1.addClass("btn1");
         btn1.addClass("button");
-        btn1.addClass("page-3-node");
         btn1.text(`New Game`);
         controlSpace.append(btn1);
         
         const btn2 = $('<button></button>');
+        btn2.addClass("page-3-node");
         btn2.addClass("btn2");
         btn2.addClass("button");
-        btn2.addClass("page-3-node");
         btn2.text(`Main Menu`);
         controlSpace.append(btn2);
         
         const btn3 = $('<button></button>');
-        btn3.addClass("btn3");
         btn3.attr("id", "fillspace");
-        btn3.css("color", "#dedede");
-        btn3.addClass("button");
         btn3.addClass("page-3-node");
+        btn3.addClass("btn3");
+        btn3.addClass("button");
+        btn3.css("color", "#dedede");
         btn3.text(`Quit`);
         controlSpace.append(btn3);
 
@@ -293,11 +299,11 @@ function scoreboardPage() {
     }
     // CONTROLS
     const btn1 = $('<button></button>');
-    btn1.addClass("fillspace");
+    btn1.addClass("page-4-node");
+    btn1.attr("id", "fillspace");
     btn1.addClass("btn1");
     btn1.addClass("button");
     btn1.css("color", "#dedede");
-    btn1.addClass("page-4-node");
     btn1.text(`Back`);
     controlSpace.append(btn1);
 
@@ -311,17 +317,17 @@ function settingsPage() {
     msgDisplay.text(`Settings Menu`);
     // CONTROLS
     const btn1 = $('<button></button>');
+    btn1.addClass("page-5-node");
     btn1.addClass("btn1");
     btn1.addClass("button");
-    btn1.addClass("page-5-node");
     btn1.text(`Back`);
     controlSpace.append(btn1);
     
     const btn2 = $('<button></button>');
+    btn2.addClass("page-5-node");
     btn2.addClass("btn2");
     btn2.addClass("button");
-    btn2.addClass("page-5-node");
-    btn2.text(`Scoreboard`);
+    btn2.text(`Controls`);
     controlSpace.append(btn2);
 
     defaultDisplay();   
@@ -341,24 +347,24 @@ function controlsPage() {
 
     // CONTROLS
     const btn1 = $('<button></button>');
+    btn1.addClass("page-6-node");
     btn1.addClass("btn1");
     btn1.addClass("button");
-    btn1.addClass("page-6-node");
     btn1.text(`Back`);
     controlSpace.append(btn1);
     
     const btn2 = $('<button></button>');
+    btn2.addClass("page-6-node");
     btn2.addClass("btn2");
     btn2.addClass("button");
-    btn2.addClass("page-6-node");
     btn2.text(`Customize`);
     controlSpace.append(btn2);
     
     const btn3 = $('<button></button>');
     btn3.attr("id", "fillspace");
+    btn3.addClass("page-6-node");
     btn3.addClass("btn3");
     btn3.addClass("button");
-    btn3.addClass("page-6-node");
     btn3.css("color", "#dedede");
     btn3.text(`Reset`);
     controlSpace.append(btn3);
@@ -377,30 +383,30 @@ function controlsPageCustomize() {
 
     // CONTROLS
     const btn1 = $('<button></button>');
+    btn1.addClass("page-7-node");
     btn1.addClass("btn1");
     btn1.addClass("button");
-    btn1.addClass("page-7-node");
     btn1.text(`Button 1`);
     controlSpace.append(btn1);
     
     const btn2 = $('<button></button>');
+    btn2.addClass("page-7-node");
     btn2.addClass("btn2");
     btn2.addClass("button");
-    btn2.addClass("page-7-node");
     btn2.text(`Button 2`);
     controlSpace.append(btn2);
     
     const btn3 = $('<button></button>');
+    btn3.addClass("page-7-node");
     btn3.addClass("btn3");
     btn3.addClass("button");
-    btn3.addClass("page-7-node");
     btn3.text(`Button 3`);
     controlSpace.append(btn3);
     
     const btn4 = $('<button></button>');
+    btn4.addClass("page-7-node");
     btn4.addClass("btn4");
     btn4.addClass("button");
-    btn4.addClass("page-7-node");
     btn4.text(`Button 4`);
     controlSpace.append(btn4);
 
@@ -418,16 +424,12 @@ function getName() {
     <input name="data" type="text" class="data-input" required/>
     <button type="submit" class="enter-button" >Enter</button>
     </form>`)
-    
-    $(`body`).off('keypress');
-    document.body.addEventListener('keypress', (e) => {
-        bind(e);
-        controlListen();
-    }, {once: true});
 };
 
 function pageHandler(p) {
-    // remove nodes from current page
+    // turn off listeners for old page
+    controlListenOff();
+    // remove nodes from last page
     $(`.page-${page}-node`).remove();
 
     // clear text content
@@ -462,38 +464,32 @@ function pageHandler(p) {
     if (p === 8) {
         getName();
     }
-    
-    // restart listeners
-    controlListen();
+
+    // turn on listeners for new page
+    controlListenOn();
 };
 
 //////////////////////////////////DISPLAY/////////////////////////////////
 function dynamicButton() {
     if (cannonCharge >= user.lazercannon.overCharge) {
         $('.btn2').css("color", "#ca141e");
+        $('.btn2').css("backgroundColor", "#101014");
         $('.btn2').css("border", "1px solid #ca141e");
-        $('.btn2').css("fontSize", "5vmin");
     } else if (cannonCharge >= user.lazercannon.baseCharge) {
         $('.btn2').css("color", "#dedede");
-        $('.btn2').css("fontSize", "4.5vmin");
     } else {
         $('.btn2').css("color", "#00000080");
-        $('.btn2').css("fontSize", "4vmin");
         $('.btn2').css("border", "1px solid black");
     }
     if (repairCharge >= 10) {
         $('.btn3').css("color", "#dedede");
-        $('.btn3').css("fontSize", "5vmin");
     } else {
         $('.btn3').css("color", "#00000080");
-        $('.btn3').css("fontSize", "4vmin");
     }
     if (shieldCharge >= user.shield.rechargeTime) {
         $('.btn4').css("color", "#dedede");
-        $('.btn4').css("fontSize", "5vmin");
     } else {
         $('.btn4').css("color", "#00000080");
-        $('.btn4').css("fontSize", "4vmin");
     }
 };
 
@@ -642,25 +638,23 @@ function keyBind(btn) {
             pageHandler(6);
         }
     };
-    $('#btn1').off('click');
-    $('#btn2').off('click');
-    $('#btn3').off('click');
-    $('#btn4').off('click');
-    $(`body`).off('keypress');
+    controlListenOff();
     document.body.addEventListener('keypress', (e) => {
         bind(e);
-        controlListen();
+        controlListenOn();
     }, {once: true});
 };
 
-function controlListen() {
-    // off with the old
+function controlListenOff() {
     $('.btn1').off('click', buttonTester1);
     $('.btn2').off('click', buttonTester2);
     $('.btn3').off('click', buttonTester3);
     $('.btn4').off('click', buttonTester4);
+    $(`body`).off('keypress');
+};
 
-    // on with the new
+function controlListenOn() {
+    controlListenOff();
     $('.btn1').on('click', buttonTester1);
     $('.btn2').on('click', buttonTester2);
     $('.btn3').on('click', buttonTester3);
