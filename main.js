@@ -51,16 +51,55 @@ function init() {
 function requestData() {
     $.get(`https://space-battle-api.herokuapp.com/`, function(data, status) {
         for (let i = 0; i < 10; i++) {
-            scoreBoard[i].name = data.data[9 - i].userName;
-            scoreBoard[i].score = data.data[9 - i].userScore;
+            scoreBoard[i].name = data.data[i].userName;
+            scoreBoard[i].score = data.data[i].userScore;
         }
     });
 };
 
+let test = [
+    {name: "name1", score: 1},
+    {name: "name2", score: 2},
+    {name: "name3", score: 3},
+    {name: "name4", score: 4},
+    {name: "name5", score: 5},
+    {name: "name6", score: 6},
+    {name: "name7", score: 7},
+    {name: "name8", score: 8},
+    {name: "name9", score: 9},
+    {name: "name10", score: 10},
+];
+
+function sortScoreboard(board) {
+    let x = [];
+    let sb = board;
+    while (sb.length !== 0) {
+        let id = 0;
+        let score = 0;
+        for (let i = 0; i < sb.length; i++) {
+            const val = Number(sb[i].score);
+            if (val > score) {
+                score = val;
+                id = i;
+            }
+        }
+        x.push(sb[id]);
+        const before = sb.slice(0, id);
+        const after = sb.slice(id + 1, sb.length);
+        sb = before.concat(after);
+    }
+    console.log(x);
+};
+sortScoreboard(test);
+
 new Promise((resolve) => {
+    // get scores for scoreBoard
     requestData();
-    resolve("resolved");
+    resolve(true);
 }).then(() => {
+    // sort scoreBoard
+    // sortScoreboard(test);
+
     // serve default page
     pageHandler(0);
     // turn on listeners for controls
@@ -99,8 +138,8 @@ function saveScore(name = user.name, score = user.score, rank = rankScore(user.s
 // for direct scoreboard writing
 // $.ajax({
 //     type: 'PATCH',
-//     url: `https://space-battle-api.herokuapp.com/scoreboard/listindex/${9}`,
-//     data: {"userName": `athen`, "userScore": `4800`}
+//     url: `https://space-battle-api.herokuapp.com/scoreboard/listindex/${1}`,
+//     data: {"userName": `Athen`, "userScore": `61250`}
 // });
 
 /////////////////////////GAME PAGES///////////////////////////////////////
