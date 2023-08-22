@@ -19,6 +19,8 @@ import { controlSpace, msgDisplay, scoreDisplay, playerDisplay, enemyDisplay } f
 
 let currentEnemyHealth;
 
+let scoreDisplayCache;
+
 let scoreBoard = [
     {name: "name loading...", score: "score loading..."},
     {name: "name loading...", score: "score loading..."},
@@ -699,7 +701,8 @@ function repair() {
         } else {
             scoreDisplay.text(``);
             msgDisplay.text(`Health already full`);
-            setTimeout(() => {
+            clearTimeout(scoreDisplayCache);
+            scoreDisplayCache = setTimeout(() => {
                 msgDisplay.text(``);
                 scoreDisplay.text(`Score: ${user.score}`);
             }, 1200);
@@ -707,7 +710,8 @@ function repair() {
     } else {
         scoreDisplay.text(``);
         msgDisplay.text(`${user.repair.rechargeTime - repairCharge} turns to charge repair`);
-        setTimeout(() => {
+        clearTimeout(scoreDisplayCache);
+        scoreDisplayCache = setTimeout(() => {
             msgDisplay.text(``);
             scoreDisplay.text(`Score: ${user.score}`);
         }, 1200);
@@ -732,7 +736,8 @@ function shield() {
         } else {
             scoreDisplay.text(``);
             msgDisplay.text(`shield fully regenerated`);
-            setTimeout(() => {
+            clearTimeout(scoreDisplayCache);
+            scoreDisplayCache = setTimeout(() => {
                 msgDisplay.text(``);
                 scoreDisplay.text(`Score: ${user.score}`);
             }, 1200);
@@ -740,7 +745,8 @@ function shield() {
     } else {
         scoreDisplay.text(``);
         msgDisplay.text(`${5 - shieldCharge} turns to charge shield`);
-        setTimeout(() => {
+        clearTimeout(scoreDisplayCache);
+        scoreDisplayCache = setTimeout(() => {
             msgDisplay.text(``);
             scoreDisplay.text(`Score: ${user.score}`);
         }, 1200);
@@ -791,8 +797,9 @@ function lazercannonAttack() {
         }
     } else {
         scoreDisplay.text(``);
-        msgDisplay.text(`${user.lazercannon.baseCharge - cannonCharge} turns to charge lazercannon.`);
-        setTimeout(() => {
+        msgDisplay.text(`${user.lazercannon.baseCharge - cannonCharge} turns to base charge.`);
+        clearTimeout(scoreDisplayCache);
+        scoreDisplayCache = setTimeout(() => {
             msgDisplay.text(``);
             scoreDisplay.text(`Score: ${user.score}`);
         }, 1200);
