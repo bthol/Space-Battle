@@ -163,7 +163,7 @@ body {
     background: var(--color-button-background);
     color: var(--color-font-1);
 }
-.enter-button {
+.form-button {
     font-size: 5vmin;
     background: var(--color-button-background);
     color: var(--color-font-1);

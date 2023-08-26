@@ -78,7 +78,6 @@ function sortScoreBoard(board) {
         });
     }
     scoreBoard = x;
-    console.log(scoreBoard);
 };
 
 
@@ -458,8 +457,10 @@ function getName() {
     controlSpace.append(`
     <form id="inform" class="page-8-node">
         <input name="data" type="text" pattern=".{5,5}" class="data-input" placeholder="names" required/>
-        <button type="submit" class="enter-button" >Enter</button>
+        <button type="submit" class="form-button" >Enter</button>
+        <button type="button" id="name-page-back-btn" class="form-button" >Back</button>
     </form>`);
+    $(`#name-page-back-btn`).on("click", () => {pageHandler(0)});
     const form = $('#inform');
     form[0].data.focus();
     form.on('submit', (e) => {
