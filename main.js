@@ -323,8 +323,8 @@ function scoreboardPage() {
         // MESSAGE
         msgDisplay.text(`Scoreboard`);
         for (let i = 0; i < scoreBoard.length; i++) {
-            const name = scoreBoard[scoreBoard.length - i - 1].name;
-            const score = scoreBoard[scoreBoard.length - i - 1].score;
+            const name = scoreBoard[i].name;
+            const score = scoreBoard[i].score;
             msgDisplay.append(`<p class="page-4-node">${i + 1}.) ${name} : ${score}</p>`);
         }
         // CONTROLS
