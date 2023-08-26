@@ -42,9 +42,7 @@ function init() {
     cannonCharge = 5;
     shieldCharge = 5;
     repairCharge = 10;
-
     enemiesDefeated = 0;
-    
     bossCount = 0;
 };
 
