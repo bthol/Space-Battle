@@ -22,16 +22,16 @@ let currentEnemyHealth;
 let scoreDisplayCache;
 
 let scoreBoard = [
-    {name: "name loading...", score: "score loading...", rank: 0},
-    {name: "name loading...", score: "score loading...", rank: 1},
-    {name: "name loading...", score: "score loading...", rank: 2},
-    {name: "name loading...", score: "score loading...", rank: 3},
-    {name: "name loading...", score: "score loading...", rank: 4},
-    {name: "name loading...", score: "score loading...", rank: 5},
-    {name: "name loading...", score: "score loading...", rank: 6},
-    {name: "name loading...", score: "score loading...", rank: 7},
-    {name: "name loading...", score: "score loading...", rank: 8},
-    {name: "name loading...", score: "score loading...", rank: 9},
+    {name: "name loading...", score: "score loading...", rank: "rank loading..."},
+    {name: "name loading...", score: "score loading...", rank: "rank loading..."},
+    {name: "name loading...", score: "score loading...", rank: "rank loading..."},
+    {name: "name loading...", score: "score loading...", rank: "rank loading..."},
+    {name: "name loading...", score: "score loading...", rank: "rank loading..."},
+    {name: "name loading...", score: "score loading...", rank: "rank loading..."},
+    {name: "name loading...", score: "score loading...", rank: "rank loading..."},
+    {name: "name loading...", score: "score loading...", rank: "rank loading..."},
+    {name: "name loading...", score: "score loading...", rank: "rank loading..."},
+    {name: "name loading...", score: "score loading...", rank: "rank loading..."},
 ];
 
 function init() {
@@ -48,59 +48,63 @@ function init() {
 
 /////////////////////////DATA////////////////////////////////////////
 
-function requestData() {
-    // get data collection
-    $.get(`https://space-battle-api.herokuapp.com/`, function(obj) {
-        // iterate over collection to assign to structure
-        for (let i = 0; i < 10; i++) {
-            scoreBoard[i].name = obj.data[i].userName;
-            scoreBoard[i].score = obj.data[i].userScore;
-            scoreBoard[i].rank = obj.data[i].userRank;
-        }
-    }).then(() => {
-        // sort structure by score
-        sortScoreBoard(scoreBoard);
-    })
-};
+// let test = [
+//     {name: "sdfsd", score: 0, rank: 9},
+//     {name: "nasda", score: 1, rank: 8},
+//     {name: "gfhjga", score: 2, rank: 7},
+//     {name: "sdfa", score: 3, rank: 6},
+//     {name: "trrtna", score: 4, rank: 5},
+//     {name: "evvbna", score: 5, rank: 4},
+//     {name: "zxdcvna", score: 6, rank: 3},
+//     {name: "asfna", score: 7, rank: 2},
+//     {name: "asna", score: 8, rank: 1},
+//     {name: "ndfg", score: 9, rank: 0},
+// ];
 
 function sortScoreBoard(board) {
     let x = [];
-    let sb = board;
-    while (sb.length !== 0) {
-        let id = 0;
-        let score = 0;
-        for (let i = 0; i < sb.length; i++) {
-            const val = sb[i].score;
-            if (val > score) {
-                score = val;
-                id = i;
+    let b = board;
+    while (b.length !== 0) {
+        let scoreArr = [];
+        b.forEach((item) => {
+            scoreArr.push(item.score);
+        });
+        const max = Math.max(...scoreArr);
+        scoreArr.forEach((item, index) => {
+            if (item === max) {
+                x.push(b[index]);
+                b = b.slice(0, index).concat(b.slice(index + 1, b.length));
             }
-        }
-        // console.log(sb[id]);
-        x.push(sb[id]);
-        x[x.length - 1].rank = x.length - 1;
-        const before = sb.slice(0, id);
-        const after = sb.slice(id + 1, sb.length);
-        sb = before.concat(after);
+        });
     }
+    scoreBoard = x;
+    console.log(scoreBoard);
 };
-function start() {
-    // Get data from remote
-    requestData();
-    // Serve start page
-    pageHandler(0);
-    // Turn on controls
-    controlListenOn();
+
+
+async function requestData() {
+    // get data collection
+    await $.get(`https://space-battle-api.herokuapp.com/`, function(obj) {
+        // iterate over collection to assign to structure
+        for (let i = 0; i < 10; i++) {
+            const x = scoreBoard[i];
+            const o = obj.data[i];
+            x.name = o.userName;
+            x.score = o.userScore;
+            x.rank = o.userRank;
+        }
+    });
+    sortScoreBoard(scoreBoard);
+    return true;
 };
-start();
 
 function rankScore(score) {
-    let rank;
-    for (let i = scoreBoard.length - 1; i >= 0; i--) {
+    console.log(score);
+    let rank = null;
+    for (let i = 0; i <= 9; i++) {
+        console.log(scoreBoard[i].score);
         if (score >= scoreBoard[i].score) {
             rank = i;
-        } else {
-            i = -1;
         }
     }
     return rank;
@@ -311,23 +315,32 @@ function gameWinPage() {
 function scoreboardPage() {
     page = 4;
 
-    // MESSAGE
-    requestData();
-    msgDisplay.text(`Scoreboard`);
-    for (let i = 0; i < scoreBoard.length; i++) {
-        msgDisplay.append(`<p class="page-4-node">${i + 1}.) ${scoreBoard[scoreBoard.length - i - 1].name} : ${scoreBoard[scoreBoard.length - i - 1].score}</p>`)
-    }
-    // CONTROLS
-    const btn1 = $('<button></button>');
-    btn1.addClass("page-4-node");
-    btn1.attr("id", "fillspace");
-    btn1.addClass("btn1");
-    btn1.addClass("button");
-    btn1.css("color", "#dedede");
-    btn1.text(`Back`);
-    controlSpace.append(btn1);
-
-    defaultDisplay();
+    const gotData = new Promise((resolve) => {
+        resolve(requestData())
+    });
+    gotData.then((loaded) => {
+        // console.log(scoreBoard);
+        // MESSAGE
+        msgDisplay.text(`Scoreboard`);
+        for (let i = 0; i < scoreBoard.length; i++) {
+            const name = scoreBoard[scoreBoard.length - i - 1].name;
+            const score = scoreBoard[scoreBoard.length - i - 1].score;
+            msgDisplay.append(`<p class="page-4-node">${i + 1}.) ${name} : ${score}</p>`);
+        }
+        // CONTROLS
+        const btn1 = $('<button></button>');
+        btn1.addClass("page-4-node");
+        btn1.attr("id", "fillspace");
+        btn1.addClass("btn1");
+        btn1.addClass("button");
+        btn1.css("color", "#dedede");
+        btn1.text(`Back`);
+        controlSpace.append(btn1);
+    
+        defaultDisplay();
+        controlListenOff();
+        controlListenOn();
+    })
 };
 
 function settingsPage() {
@@ -945,3 +958,13 @@ function bossTest() {
         newEnemy();
     }
 };
+
+function start() {
+    // Get data from remote
+    requestData();
+    // Serve start page
+    pageHandler(0);
+    // Turn on controls
+    controlListenOn();
+};
+start();
