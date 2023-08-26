@@ -22,16 +22,16 @@ let currentEnemyHealth;
 let scoreDisplayCache;
 
 let scoreBoard = [
-    {name: "name loading...", score: "score loading..."},
-    {name: "name loading...", score: "score loading..."},
-    {name: "name loading...", score: "score loading..."},
-    {name: "name loading...", score: "score loading..."},
-    {name: "name loading...", score: "score loading..."},
-    {name: "name loading...", score: "score loading..."},
-    {name: "name loading...", score: "score loading..."},
-    {name: "name loading...", score: "score loading..."},
-    {name: "name loading...", score: "score loading..."},
-    {name: "name loading...", score: "score loading..."},
+    {name: "name loading...", score: "score loading...", rank: 0},
+    {name: "name loading...", score: "score loading...", rank: 1},
+    {name: "name loading...", score: "score loading...", rank: 2},
+    {name: "name loading...", score: "score loading...", rank: 3},
+    {name: "name loading...", score: "score loading...", rank: 4},
+    {name: "name loading...", score: "score loading...", rank: 5},
+    {name: "name loading...", score: "score loading...", rank: 6},
+    {name: "name loading...", score: "score loading...", rank: 7},
+    {name: "name loading...", score: "score loading...", rank: 8},
+    {name: "name loading...", score: "score loading...", rank: 9},
 ];
 
 function init() {
@@ -49,62 +49,50 @@ function init() {
 /////////////////////////DATA////////////////////////////////////////
 
 function requestData() {
-    $.get(`https://space-battle-api.herokuapp.com/`, function(data, status) {
+    // get data collection
+    $.get(`https://space-battle-api.herokuapp.com/`, function(obj) {
+        // iterate over collection to assign to structure
         for (let i = 0; i < 10; i++) {
-            scoreBoard[i].name = data.data[i].userName;
-            scoreBoard[i].score = data.data[i].userScore;
+            scoreBoard[i].name = obj.data[i].userName;
+            scoreBoard[i].score = obj.data[i].userScore;
+            scoreBoard[i].rank = obj.data[i].userRank;
         }
-    });
+    }).then(() => {
+        // sort structure by score
+        sortScoreBoard(scoreBoard);
+    })
 };
 
-let test = [
-    {name: "name1", score: 1},
-    {name: "name2", score: 2},
-    {name: "name3", score: 3},
-    {name: "name4", score: 4},
-    {name: "name5", score: 5},
-    {name: "name6", score: 6},
-    {name: "name7", score: 7},
-    {name: "name8", score: 8},
-    {name: "name9", score: 9},
-    {name: "name10", score: 10},
-];
-
-function sortScoreboard(board) {
+function sortScoreBoard(board) {
     let x = [];
     let sb = board;
     while (sb.length !== 0) {
         let id = 0;
         let score = 0;
         for (let i = 0; i < sb.length; i++) {
-            const val = Number(sb[i].score);
+            const val = sb[i].score;
             if (val > score) {
                 score = val;
                 id = i;
             }
         }
+        // console.log(sb[id]);
         x.push(sb[id]);
+        x[x.length - 1].rank = x.length - 1;
         const before = sb.slice(0, id);
         const after = sb.slice(id + 1, sb.length);
         sb = before.concat(after);
     }
-    console.log(x);
 };
-sortScoreboard(test);
-
-new Promise((resolve) => {
-    // get scores for scoreBoard
+function start() {
+    // Get data from remote
     requestData();
-    resolve(true);
-}).then(() => {
-    // sort scoreBoard
-    // sortScoreboard(test);
-
-    // serve default page
+    // Serve start page
     pageHandler(0);
-    // turn on listeners for controls
+    // Turn on controls
     controlListenOn();
-});
+};
+start();
 
 function rankScore(score) {
     let rank;
@@ -124,7 +112,7 @@ function saveScore(name = user.name, score = user.score, rank = rankScore(user.s
             resolve(
                 $.ajax({
                     type: 'PATCH',
-                    url: `https://space-battle-api.herokuapp.com/scoreboard/listindex/${rank}`,
+                    url: `https://space-battle-api.herokuapp.com/scoreboard/rank:${rank}`,
                     data: {"userName": `${name}`, "userScore": `${score}`}
                 })
             )
@@ -138,8 +126,14 @@ function saveScore(name = user.name, score = user.score, rank = rankScore(user.s
 // for direct scoreboard writing
 // $.ajax({
 //     type: 'PATCH',
-//     url: `https://space-battle-api.herokuapp.com/scoreboard/listindex/${1}`,
+//     url: `https://space-battle-api.herokuapp.com/scoreboard/rank:${1}`,
 //     data: {"userName": `Athen`, "userScore": `61250`}
+// });
+// for direct scoreboard reading
+// const idForGet = 0;
+// $.get(`https://space-battle-api.herokuapp.com/scoreboard/rank:${idForGet}`, function(data) {
+//     console.log(data.data[idForGet].userName);
+//     console.log(data.data[idForGet].userScore);
 // });
 
 /////////////////////////GAME PAGES///////////////////////////////////////
@@ -321,7 +315,7 @@ function scoreboardPage() {
     requestData();
     msgDisplay.text(`Scoreboard`);
     for (let i = 0; i < scoreBoard.length; i++) {
-        msgDisplay.append(`<p class="page-4-node">${i + 1}.) ${scoreBoard[i].name} : ${scoreBoard[i].score}</p>`)
+        msgDisplay.append(`<p class="page-4-node">${i + 1}.) ${scoreBoard[scoreBoard.length - i - 1].name} : ${scoreBoard[scoreBoard.length - i - 1].score}</p>`)
     }
     // CONTROLS
     const btn1 = $('<button></button>');
