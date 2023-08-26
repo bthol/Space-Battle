@@ -39,10 +39,12 @@ function init() {
     user.shield.level = 50;
     user.score = 0;
     page = 0;
-    cannonCharge = 3;
+    cannonCharge = 5;
     shieldCharge = 5;
     repairCharge = 10;
+
     enemiesDefeated = 0;
+    
     bossCount = 0;
 };
 
@@ -266,6 +268,8 @@ function gameoverPage() {
         controlSpace.append(btn3);
 
         defaultDisplay();
+        controlListenOff();
+        controlListenOn();
     })
 };
 
@@ -276,7 +280,7 @@ function gameWinPage() {
     })
     promise.then(() => {
         // MESSAGE
-        if (rankScore(user.score) != null) {
+        if (rankScore(user.score) !== null) {
             msgDisplay.text(`You Win! New High Score!`)
         } else {
             msgDisplay.text(`You Win!`);
@@ -308,6 +312,8 @@ function gameWinPage() {
         controlSpace.append(btn3);
 
         defaultDisplay();
+        controlListenOff();
+        controlListenOn();
     })
 };
 
@@ -445,7 +451,7 @@ function controlsPageCustomize() {
     defaultDisplay();   
 };
 
-function getName() {
+function userNamePage() {
     page = 8;
     
     // TITLE
@@ -509,7 +515,7 @@ function pageHandler(p) {
         controlsPageCustomize();
     }
     if (p === 8) {
-        getName();
+        userNamePage();
     }
 
     // turn on listeners for new page
