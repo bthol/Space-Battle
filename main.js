@@ -8,15 +8,6 @@ import { controlSpace, msgDisplay, scoreDisplay, playerDisplay, enemyDisplay } f
 
 /////////////////////////INITIALIZATION/////////////////////////////////
 
-// // Set screen dimensions to usable screen
-// if (navigator.userAgent.indexOf('MSIE') > - 1 || navigator.userAgent.indexOf('Trident') > - 1) {
-//     // Internet Explorer
-//     $(`#layout-wrap`).css("height", "document.documentElement.clientHeight");
-// } else {
-//     // All other browsers
-//     $(`#layout-wrap`).css("height", "window.innerHeight");
-// }
-
 let currentEnemyHealth;
 
 let scoreDisplayCache;
@@ -47,19 +38,6 @@ function init() {
 };
 
 /////////////////////////DATA////////////////////////////////////////
-
-// let test = [
-//     {name: "sdfsd", score: 0, rank: 9},
-//     {name: "nasda", score: 1, rank: 8},
-//     {name: "gfhjga", score: 2, rank: 7},
-//     {name: "sdfa", score: 3, rank: 6},
-//     {name: "trrtna", score: 4, rank: 5},
-//     {name: "evvbna", score: 5, rank: 4},
-//     {name: "zxdcvna", score: 6, rank: 3},
-//     {name: "asfna", score: 7, rank: 2},
-//     {name: "asna", score: 8, rank: 1},
-//     {name: "ndfg", score: 9, rank: 0},
-// ];
 
 function sortScoreBoard(board) {
     let x = [];
@@ -460,7 +438,7 @@ function userNamePage() {
     // DISPLAY CONTROLS
     controlSpace.append(`
     <form id="inform" class="page-8-node">
-        <input name="data" type="text" pattern=".{5,5}" class="data-input" placeholder="names" required/>
+        <input name="data" type="text" pattern="[0-0]{5}" maxLength="5" class="data-input" placeholder="name" required/>
         <button type="submit" class="form-button" >Enter</button>
         <button type="button" id="name-page-back-btn" class="form-button" >Back</button>
     </form>`);
