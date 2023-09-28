@@ -438,7 +438,7 @@ function userNamePage() {
     // DISPLAY CONTROLS
     controlSpace.append(`
     <form id="inform" class="page-8-node">
-        <input name="data" type="text" pattern="[a-z]{0,0}" maxLength="5" class="data-input" placeholder="name" title="must be 5 characters in length and contain only letters" required/>
+        <input name="data" type="text" pattern="[a-z]{5,5}" maxLength="5" class="data-input" placeholder="name" title="must be 5 characters in length and contain only letters" required/>
         <button type="submit" class="form-button" >Enter</button>
         <button type="button" id="name-page-back-btn" class="form-button" >Back</button>
     </form>`);
