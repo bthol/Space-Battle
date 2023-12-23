@@ -438,7 +438,7 @@ function userNamePage() {
     // DISPLAY CONTROLS
     controlSpace.append(`
     <form id="inform" class="page-8-node">
-        <input name="data" type="text" pattern="[a-z]{5,5}" maxLength="5" class="data-input" placeholder="name" title="must be 5 characters in length and contain only letters" required/>
+        <input name="data" type="text" pattern="[a-z]{5,6}" maxLength="5" class="data-input" placeholder="name" title="must be 5 characters in length and contain only letters" required/>
         <button type="submit" class="form-button" >Enter</button>
         <button type="button" id="name-page-back-btn" class="form-button" >Back</button>
     </form>`);
@@ -864,33 +864,27 @@ function enemyAttack() {
 function newEnemy() {
     currentEnemy = aliens[Math.floor(Math.random() * aliens.length)];
     currentEnemyHealth = currentEnemy.maxHealth;
-    enemyAlert(0);
+    scoreDisplay.text(`A ${currentEnemy.name} approaches...`);
+    $('.enemy-name').text(`${currentEnemy.name}`);
+    clearTimeout(scoreDisplayCache);
+    scoreDisplayCache = setTimeout(() => {
+        scoreDisplay.text(`Score: ${user.score}`);
+        pageHandler(1);
+    }, 1200)
+    dynamicBar();
 };
 
 function newBossEnemy() {
     currentEnemy = bosses[bossCount];
     currentEnemyHealth = currentEnemy.maxHealth;
     bossCount += 1;
-    enemyAlert(1);
-};
-
-function enemyAlert(x) {
-    if (x === 0) {
-        scoreDisplay.text(`A ${currentEnemy.name} approaches...`);
-        $('.enemy-name').text(`${currentEnemy.name}`);
-        clearTimeout(scoreDisplayCache);
-        scoreDisplayCache = setTimeout(() => {
-            scoreDisplay.text(`Score: ${user.score}`);
-        }, 1200)
-    }
-    if (x === 1) {
-        scoreDisplay.text(`BOSS FIGHT!\n\nThe ${currentEnemy.name} approaches...`);
-        $('.enemy-name').text(`${currentEnemy.name}`);
-        clearTimeout(scoreDisplayCache);
-        scoreDisplayCache = setTimeout(() => {
-            scoreDisplay.text(`Score: ${user.score}`);
-        }, 1200)
-    }
+    scoreDisplay.text(`BOSS FIGHT!\n\nEnter the ${currentEnemy.name}`);
+    $('.enemy-name').text(`${currentEnemy.name}`);
+    clearTimeout(scoreDisplayCache);
+    scoreDisplayCache = setTimeout(() => {
+        scoreDisplay.text(`Score: ${user.score}`);
+        pageHandler(1);
+    }, 2400)
     dynamicBar();
 };
 
@@ -917,27 +911,28 @@ function testDeath(x) {
 function bossTest() {
     let bool = true;
     if (enemiesDefeated === bossRound[bossRound.length - 1] + 1) {
+        // game win
         bool = false;
         pageHandler(3);
     } else {
         for (let i = 0; i < bossRound.length; i++) {
             if (enemiesDefeated === bossRound[i]) {
+                // boss round before
                 bool = false;
                 user.health.level = user.health.maxLevel;
                 user.shield.level = user.shield.maxLevel;
                 newBossEnemy();
-                gameplayPage();
             } else if (enemiesDefeated === bossRound[i] + 1) {
+                // boss round after
                 bool = false;
                 user.health.level = user.health.maxLevel;
                 user.shield.level = user.shield.maxLevel;
                 newEnemy();
-                gameplayPage();
             }
         }
     }
     if (bool === true) {
-        pageHandler(1);
+        // next regular enemy
         newEnemy();
     }
 };
