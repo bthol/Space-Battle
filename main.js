@@ -508,6 +508,13 @@ function dynamicButton() {
         $('.btn2').css("color", "#ca141e");
         $('.btn2').css("backgroundColor", "#101014");
         $('.btn2').css("border", "1px solid #ca141e");
+        $('.btn2').css("outline", "none");
+    } else if (cannonCharge === user.lazercannon.overCharge - 1) {
+        $('.btn2').css("outline", "3px solid #ca141e");
+    } else if (cannonCharge === user.lazercannon.overCharge - 2) {
+        $('.btn2').css("outline", "2px solid #ca141e");
+    } else if (cannonCharge === user.lazercannon.overCharge - 3) {
+        $('.btn2').css("outline", "1px solid #ca141e");
     } else if (cannonCharge >= user.lazercannon.baseCharge) {
         $('.btn2').css("color", "#dedede");
     } else {
@@ -802,20 +809,14 @@ function lazercannonAttack() {
         cannonCharge = 0;
         repairCharge += 1;
         shieldCharge += 1;
-        if (Math.random() < user.pulsebeam.accuracy) {
-            currentEnemyHealth -= user.lazercannon.overDamage;
-            alert(`Lazercannon attack hit ${currentEnemy.name} for ${user.lazercannon.overDamage} damage!`);
-            testDeath(1);
-        } else {
-            alert(`Lazercannon attack missed ${currentEnemy.name}!`);
-            enemyAttack();
-            pageHandler(1);
-        }
+        currentEnemyHealth -= user.lazercannon.overDamage;
+        alert(`Lazercannon attack hit ${currentEnemy.name} for ${user.lazercannon.overDamage} damage!`);
+        testDeath(1);
     } else if (cannonCharge >= user.lazercannon.baseCharge) {
         cannonCharge = 0;
         repairCharge += 1;
         shieldCharge += 1;
-        if (Math.random() < user.pulsebeam.accuracy) {
+        if (Math.random() < user.lazercannon.accuracy) {
             currentEnemyHealth -= user.lazercannon.baseDamage;
             alert(`Lazercannon attack hit ${currentEnemy.name} for ${user.lazercannon.baseDamage} damage!`);
             testDeath(1);

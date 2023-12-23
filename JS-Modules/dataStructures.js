@@ -5,7 +5,7 @@ const user = {
     repair: {rechargeAmmount: 50, rechargeTime: 10},
     shield: {level: 50, maxLevel: 50, minLevel: 0, rechargeAmmount: 50, rechargeTime: 5},
     pulsebeam: {damage: 20, accuracy: .6},
-    lazercannon: {baseDamage: 30, baseCharge: 5, overDamage: 50, overCharge: 3, accuracy: 1}
+    lazercannon: {baseDamage: 30, baseCharge: 5, overDamage: 50, overCharge: 9, accuracy: .9}
 };
 
 const aliens = [
