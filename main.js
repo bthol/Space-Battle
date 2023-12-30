@@ -438,7 +438,7 @@ function userNamePage() {
     // DISPLAY CONTROLS
     controlSpace.append(`
     <form id="inform" class="page-8-node">
-        <input name="data" type="text" pattern="[a-z]{5,5}" maxLength="5" class="data-input" placeholder="name" title="must be 5 characters in length and contain only letters" style="width:2.5em" required/>
+        <input name="data" type="text" pattern="[a-z]{5,6}" maxLength="5" class="data-input" placeholder="name" title="must be 5 characters in length and contain only letters" required/>
         <button type="submit" class="form-button" >Enter</button>
         <button type="button" id="name-page-back-btn" class="form-button" >Back</button>
     </form>`);
@@ -508,6 +508,13 @@ function dynamicButton() {
         $('.btn2').css("color", "#ca141e");
         $('.btn2').css("backgroundColor", "#101014");
         $('.btn2').css("border", "1px solid #ca141e");
+        $('.btn2').css("outline", "none");
+    } else if (cannonCharge === user.lazercannon.overCharge - 1) {
+        $('.btn2').css("outline", "3px solid #ca141e");
+    } else if (cannonCharge === user.lazercannon.overCharge - 2) {
+        $('.btn2').css("outline", "2px solid #ca141e");
+    } else if (cannonCharge === user.lazercannon.overCharge - 3) {
+        $('.btn2').css("outline", "1px solid #ca141e");
     } else if (cannonCharge >= user.lazercannon.baseCharge) {
         $('.btn2').css("color", "#dedede");
     } else {
@@ -802,20 +809,14 @@ function lazercannonAttack() {
         cannonCharge = 0;
         repairCharge += 1;
         shieldCharge += 1;
-        if (Math.random() < user.pulsebeam.accuracy) {
-            currentEnemyHealth -= user.lazercannon.overDamage;
-            alert(`Lazercannon attack hit ${currentEnemy.name} for ${user.lazercannon.overDamage} damage!`);
-            testDeath(1);
-        } else {
-            alert(`Lazercannon attack missed ${currentEnemy.name}!`);
-            enemyAttack();
-            pageHandler(1);
-        }
+        currentEnemyHealth -= user.lazercannon.overDamage;
+        alert(`Lazercannon attack hit ${currentEnemy.name} for ${user.lazercannon.overDamage} damage!`);
+        testDeath(1);
     } else if (cannonCharge >= user.lazercannon.baseCharge) {
         cannonCharge = 0;
         repairCharge += 1;
         shieldCharge += 1;
-        if (Math.random() < user.pulsebeam.accuracy) {
+        if (Math.random() < user.lazercannon.accuracy) {
             currentEnemyHealth -= user.lazercannon.baseDamage;
             alert(`Lazercannon attack hit ${currentEnemy.name} for ${user.lazercannon.baseDamage} damage!`);
             testDeath(1);
@@ -864,33 +865,27 @@ function enemyAttack() {
 function newEnemy() {
     currentEnemy = aliens[Math.floor(Math.random() * aliens.length)];
     currentEnemyHealth = currentEnemy.maxHealth;
-    enemyAlert(0);
+    scoreDisplay.text(`A ${currentEnemy.name} approaches...`);
+    $('.enemy-name').text(`${currentEnemy.name}`);
+    clearTimeout(scoreDisplayCache);
+    scoreDisplayCache = setTimeout(() => {
+        scoreDisplay.text(`Score: ${user.score}`);
+        pageHandler(1);
+    }, 1200)
+    dynamicBar();
 };
 
 function newBossEnemy() {
     currentEnemy = bosses[bossCount];
     currentEnemyHealth = currentEnemy.maxHealth;
     bossCount += 1;
-    enemyAlert(1);
-};
-
-function enemyAlert(x) {
-    if (x === 0) {
-        scoreDisplay.text(`A ${currentEnemy.name} approaches...`);
-        $('.enemy-name').text(`${currentEnemy.name}`);
-        clearTimeout(scoreDisplayCache);
-        scoreDisplayCache = setTimeout(() => {
-            scoreDisplay.text(`Score: ${user.score}`);
-        }, 1200)
-    }
-    if (x === 1) {
-        scoreDisplay.text(`BOSS FIGHT!\n\nThe ${currentEnemy.name} approaches...`);
-        $('.enemy-name').text(`${currentEnemy.name}`);
-        clearTimeout(scoreDisplayCache);
-        scoreDisplayCache = setTimeout(() => {
-            scoreDisplay.text(`Score: ${user.score}`);
-        }, 1200)
-    }
+    scoreDisplay.text(`BOSS FIGHT!\n\nEnter the ${currentEnemy.name}`);
+    $('.enemy-name').text(`${currentEnemy.name}`);
+    clearTimeout(scoreDisplayCache);
+    scoreDisplayCache = setTimeout(() => {
+        scoreDisplay.text(`Score: ${user.score}`);
+        pageHandler(1);
+    }, 2400)
     dynamicBar();
 };
 
@@ -917,27 +912,28 @@ function testDeath(x) {
 function bossTest() {
     let bool = true;
     if (enemiesDefeated === bossRound[bossRound.length - 1] + 1) {
+        // game win
         bool = false;
         pageHandler(3);
     } else {
         for (let i = 0; i < bossRound.length; i++) {
             if (enemiesDefeated === bossRound[i]) {
+                // boss round before
                 bool = false;
                 user.health.level = user.health.maxLevel;
                 user.shield.level = user.shield.maxLevel;
                 newBossEnemy();
-                gameplayPage();
             } else if (enemiesDefeated === bossRound[i] + 1) {
+                // boss round after
                 bool = false;
                 user.health.level = user.health.maxLevel;
                 user.shield.level = user.shield.maxLevel;
                 newEnemy();
-                gameplayPage();
             }
         }
     }
     if (bool === true) {
-        pageHandler(1);
+        // next regular enemy
         newEnemy();
     }
 };
