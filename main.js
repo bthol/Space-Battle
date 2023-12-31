@@ -158,7 +158,10 @@ function mainPage() {
 
 function gameplayPage() {
     page = 1;
-    
+    // CHANGE COLOR THEME
+    document.body.classList.remove("style-default");
+    document.body.classList.add("style-game");
+
     //NODE RESET
     $(`.page-1-node`).remove();
     // MESSAGE
@@ -200,7 +203,7 @@ function gameplayPage() {
     btn4.text(`Shield`);
     controlSpace.append(btn4);
     
-    defaultDisplay();
+    gameDisplay();
     dynamicBar();
     dynamicButton();
 };
@@ -437,7 +440,7 @@ function userNamePage() {
     controlSpace.append(`
     <form id="inform" class="page-8-node">
         <input name="data" type="text" pattern="[a-zA-Z]{5,6}" maxLength="5" class="data-input" placeholder="name" title="must be 5 characters in length and contain only letters" style="width:4.5em;" required/>
-        <button type="submit" class="form-button btn2" >Enter</button>
+        <button type="submit" class="form-button btn2" >Begin</button>
         <button type="button" class="form-button btn3" >Back</button>
     </form>`);
     const form = $('#inform');
@@ -495,38 +498,46 @@ function pageHandler(p) {
     controlListenOn();
 };
 
-//////////////////////////////////DISPLAY/////////////////////////////////
 function removePageNodes() {
     $(`.page-${page}-node`).remove();
 };
 
+//////////////////////////////////DISPLAY/////////////////////////////////
+
+const colors = {
+    uncharged: "#00000040",
+    btnText:"#515151",
+    btnTextGame:"#e5e5e5",
+    btnBorder: "1.5px solid #c8c4ac",
+    lazerColor: "#ca141e",
+    lazerBackground: "#101014",
+};
+
 function dynamicButton() {
     if (cannonCharge >= user.lazercannon.overCharge) {
-        $('.btn2').css("color", "#ca141e");
+        $('.btn2').css("color", `${colors.lazerColor}`);
         $('.btn2').css("backgroundColor", "#101014");
-        $('.btn2').css("border", "1px solid #ca141e");
+        $('.btn2').css("border", `4px solid ${colors.lazerColor}`);
         $('.btn2').css("outline", "none");
     } else if (cannonCharge === user.lazercannon.overCharge - 1) {
-        $('.btn2').css("outline", "3px solid #ca141e");
+        $('.btn2').css("outline", `4px solid ${colors.lazerColor}`);
     } else if (cannonCharge === user.lazercannon.overCharge - 2) {
-        $('.btn2').css("outline", "2px solid #ca141e");
-    } else if (cannonCharge === user.lazercannon.overCharge - 3) {
-        $('.btn2').css("outline", "1px solid #ca141e");
+        $('.btn2').css("outline", `2px solid ${colors.lazerColor}`);
     } else if (cannonCharge >= user.lazercannon.baseCharge) {
-        $('.btn2').css("color", "#dedede");
+        $('.btn2').css("color", `${colors.btnTextGame}`);
     } else {
-        $('.btn2').css("color", "#00000080");
-        $('.btn2').css("border", "1px solid black");
+        $('.btn2').css("color", `${colors.uncharged}`);
+        $('.btn2').css("border", `${colors.btnBorder}`);
     }
     if (repairCharge >= 10) {
-        $('.btn3').css("color", "#dedede");
+        $('.btn3').css("color", `${colors.btnTextGame}`);
     } else {
-        $('.btn3').css("color", "#00000080");
+        $('.btn3').css("color", `${colors.uncharged}`);
     }
     if (shieldCharge >= user.shield.rechargeTime) {
-        $('.btn4').css("color", "#dedede");
+        $('.btn4').css("color", `${colors.btnTextGame}`);
     } else {
-        $('.btn4').css("color", "#00000080");
+        $('.btn4').css("color", `${colors.uncharged}`);
     }
 };
 
@@ -537,21 +548,39 @@ function dynamicBar() {
 };
 
 function defaultDisplay() {
-    $('.btn1').css("color", "#dedede");
+    $('.btn1').css("color", `${colors.btnText}`);
     $('.btn1').css("fontSize", "5vmin");
-    $('.btn1').css("border", "1px solid black");
+    $('.btn1').css("border", `${colors.btnBorder}`);
 
-    $('.btn2').css("color", "#dedede");
+    $('.btn2').css("color", `${colors.btnText}`);
     $('.btn2').css("fontSize", "5vmin");
-    $('.btn2').css("border", "1px solid black");
-    
-    $('.btn3').css("color", "#dedede");
-    $('.btn3').css("fontSize", "5vmin");
-    $('.btn3').css("border", "1px solid black");
+    $('.btn2').css("border", `${colors.btnBorder}`);
 
-    $('.btn4').css("color", "#dedede");
+    $('.btn3').css("color", `${colors.btnText}`);
+    $('.btn3').css("fontSize", "5vmin");
+    $('.btn3').css("border", `${colors.btnBorder}`);
+
+    $('.btn4').css("color", `${colors.btnText}`);
     $('.btn4').css("fontSize", "5vmin");
-    $('.btn4').css("border", "1px solid black");
+    $('.btn4').css("border", `${colors.btnBorder}`);
+};
+
+function gameDisplay() {
+    $('.btn1').css("color", `${colors.btnTextGame}`);
+    $('.btn1').css("fontSize", "5vmin");
+    $('.btn1').css("border", `${colors.btnBorder}`);
+
+    $('.btn2').css("color", `${colors.btnTextGame}`);
+    $('.btn2').css("fontSize", "5vmin");
+    $('.btn2').css("border", `${colors.btnBorder}`);
+
+    $('.btn3').css("color", `${colors.btnTextGame}`);
+    $('.btn3').css("fontSize", "5vmin");
+    $('.btn3').css("border", `${colors.btnBorder}`);
+
+    $('.btn4').css("color", `${colors.btnTextGame}`);
+    $('.btn4').css("fontSize", "5vmin");
+    $('.btn4').css("border", `${colors.btnBorder}`);
 };
 
 ////////////////////////////////SYSTEM-CONTROLS//////////////////////////////////////////
