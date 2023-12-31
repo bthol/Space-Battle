@@ -432,27 +432,24 @@ function userNamePage() {
     
     // TITLE
     msgDisplay.text(`Player Name`);
-    // DESCRIPTION
-    msgDisplay.append('<p>Format: must be 5 characters in length and contain only letters.</p>');
     
     // DISPLAY CONTROLS
     controlSpace.append(`
     <form id="inform" class="page-8-node">
-        <input name="data" type="text" pattern="[a-z]{5,6}" maxLength="5" class="data-input" placeholder="name" title="must be 5 characters in length and contain only letters" style="width:4.5em;" required/>
-        <button type="submit" class="form-button" >Enter</button>
-        <button type="button" id="name-page-back-btn" class="form-button" >Back</button>
+        <input name="data" type="text" pattern="[a-zA-Z]{5,6}" maxLength="5" class="data-input" placeholder="name" title="must be 5 characters in length and contain only letters" style="width:4.5em;" required/>
+        <button type="submit" class="form-button btn2" >Enter</button>
+        <button type="button" class="form-button btn3" >Back</button>
     </form>`);
-    $(`#name-page-back-btn`).on("click", () => {pageHandler(0)});
     const form = $('#inform');
     form[0].data.focus();
-    form.on('submit', (e) => {
+    form.on("submit", (e) => {
         e.preventDefault();
         const nameText = form[0].data.value.toLowerCase();
         const name = nameText.slice(0, 1).toUpperCase() + nameText.slice(1, nameText.length);
         user.name = name;
         pageHandler(1);
         newEnemy();
-    });
+    })
 };
 
 function pageHandler(p) {
@@ -566,7 +563,7 @@ function newGame() {
 ////////////////////////////////PLAYER-CONTROLS//////////////////////////////////////////
 
 // BUTTON 1
-function buttonTester1() {
+function buttonTester1(e) {
     if (page === 0) {
         newGame();
     } else if (page === 1) {
@@ -583,11 +580,14 @@ function buttonTester1() {
         pageHandler(5);
     } else if (page === 7) {
         keyBind(1);
+    } else if (page === 8) {
+        const form = $('#inform');
+        form[0].data.focus();
     }
 };
 
 // BUTTON 2
-function buttonTester2() {
+function buttonTester2(e) {
     if (page === 0) {
         pageHandler(4);
     } else if (page === 1) {
@@ -603,11 +603,40 @@ function buttonTester2() {
         pageHandler(7);
     } else if (page === 7) {
         keyBind(2);
+    } else if (page === 8) {
+        const form = $('#inform');
+        const name = form[0].data.value;
+        console.log(name);
+        if (name.length === 5) {
+            const digits = /\d/;
+            // const alphabet = /[a-zA-Z]/g;
+            if (!digits.test(name)) {
+                const nameText = form[0].data.value.toLowerCase();
+                const name = nameText.slice(0, 1).toUpperCase() + nameText.slice(1, nameText.length);
+                user.name = name;
+                pageHandler(1);
+                newEnemy();
+            } else {
+                console.log("Name must not contain numbers.");
+                scoreDisplay.text(`Name Must not contain numbers.`);
+                clearTimeout(scoreDisplayCache);
+                scoreDisplayCache = setTimeout(() => {
+                    scoreDisplay.text(``);
+                }, 2400);
+            }
+        } else {
+            console.log("Name must be 5 characters long.");
+            scoreDisplay.text(`Name Must have 5 characters.`);
+            clearTimeout(scoreDisplayCache);
+            scoreDisplayCache = setTimeout(() => {
+                scoreDisplay.text(``);
+            }, 2400);
+        }
     }
 };
 
 // BUTTON 3
-function buttonTester3() {
+function buttonTester3(e) {
     if (page === 0) {
         window.close();
     } else if (page === 1) {
@@ -622,11 +651,13 @@ function buttonTester3() {
         pageHandler(6);
     } else if (page === 7) {
         keyBind(3);
+    } else if (page === 8) {
+        pageHandler(0);
     }
 };
 
 // BUTTON 4
-function buttonTester4() {
+function buttonTester4(e) {
     if (page === 0) {
         pageHandler(5)
     } else if (page === 1) {
@@ -698,20 +729,16 @@ function controlListenOn() {
     $('.btn4').on('click', buttonTester4);
     $(`body`).on('keypress', (e) => {
         if (e.key === btn1key) {
-            e.preventDefault();
-            buttonTester1();
+            buttonTester1(e);
         }
         if (e.key === btn2key) {
-            e.preventDefault();
-            buttonTester2();
+            buttonTester2(e);
         }
         if (e.key === btn3key) {
-            e.preventDefault();
-            buttonTester3();
+            buttonTester3(e);
         }
         if (e.key === btn4key) {
-            e.preventDefault();
-            buttonTester4();
+            buttonTester4(e);
         }
     })
 };

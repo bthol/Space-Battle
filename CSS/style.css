@@ -29,29 +29,37 @@ body {
 
     /* layout variables */
     --top-height: 8vw;
-    --bottom-height: 29vmin;
+    --bottom-height: 25vmin;
     --middle-height: calc( 100vh - ( var(--top-height) + var(--bottom-height) ) )
 }
 
 #layout-wrap {
     display: grid;
-    grid-template-rows: var(--top-height) var(--middle-height) var(--bottom-height);
+    grid-template-rows: var(--top-height) var(--middle-height);
     background-color: var(--color-back);
+    overflow-y: scroll;
+}
+
+.top-screen-section {
+    height: var(--top-height);
 }
 
 .game-screen {
+    margin-bottom: var(--bottom-height);
     display: grid;
     align-items: start;
     grid-template-rows: min-content min-content;
 }
 
 #bottom-screen-section {
-    position: sticky;
+    position: absolute;
+    bottom: 0%;
+    height: var(--bottom-height);
+    width: 100vw;
+    padding: 1.5vmin 0vmin;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    /* bottom: 0%; */
-    width: 100vw;
     background-color: var(--color-background);
     border-top: 1px solid var(--color-detailing);
 }
