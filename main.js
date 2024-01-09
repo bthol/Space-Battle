@@ -26,10 +26,10 @@ let scoreBoard = [
 ];
 
 function init() {
-    user.name = "Boing";
+    user.name = "";
     user.health.level = 200;
     user.shield.level = 50;
-    user.score = 5400;
+    user.score = 0;
     page = 0;
     cannonCharge = 5;
     shieldCharge = 5;
