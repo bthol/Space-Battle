@@ -127,10 +127,12 @@ body {
     border: 1.5px solid var(--color-detailing);
 }
 .button:active {
+    position: relative;
+    transform: translatey(3px);
+    outline: 1.5px outset var(--color-detailing);
     -webkit-box-shadow: none;
     -moz-box-shadow: none;
     box-shadow: none;
-    border: 5px solid #ffff00;
 }
 
 .button-container {
@@ -191,6 +193,11 @@ body {
     height: 1vmin;
     border-left: none;
     background-color: blue;
+}
+
+/* NAMES */
+.names {
+    font-size: 3vmin;
 }
 
 /* FORM */

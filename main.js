@@ -13,22 +13,23 @@ let currentEnemyHealth;
 let scoreDisplayCache;
 
 let scoreBoard = [
-    {name: "name loading...", score: "score loading...", rank: "rank loading..."},
-    {name: "name loading...", score: "score loading...", rank: "rank loading..."},
-    {name: "name loading...", score: "score loading...", rank: "rank loading..."},
-    {name: "name loading...", score: "score loading...", rank: "rank loading..."},
-    {name: "name loading...", score: "score loading...", rank: "rank loading..."},
-    {name: "name loading...", score: "score loading...", rank: "rank loading..."},
-    {name: "name loading...", score: "score loading...", rank: "rank loading..."},
-    {name: "name loading...", score: "score loading...", rank: "rank loading..."},
-    {name: "name loading...", score: "score loading...", rank: "rank loading..."},
-    {name: "name loading...", score: "score loading...", rank: "rank loading..."},
+    {name: "name loading...", score: "score loading...", databaseAddress: ""},
+    {name: "name loading...", score: "score loading...", databaseAddress: ""},
+    {name: "name loading...", score: "score loading...", databaseAddress: ""},
+    {name: "name loading...", score: "score loading...", databaseAddress: ""},
+    {name: "name loading...", score: "score loading...", databaseAddress: ""},
+    {name: "name loading...", score: "score loading...", databaseAddress: ""},
+    {name: "name loading...", score: "score loading...", databaseAddress: ""},
+    {name: "name loading...", score: "score loading...", databaseAddress: ""},
+    {name: "name loading...", score: "score loading...", databaseAddress: ""},
+    {name: "name loading...", score: "score loading...", databaseAddress: ""},
 ];
 
 function init() {
+    user.name = "Boing";
     user.health.level = 200;
     user.shield.level = 50;
-    user.score = 0;
+    user.score = 5400;
     page = 0;
     cannonCharge = 5;
     shieldCharge = 5;
@@ -38,11 +39,12 @@ function init() {
 };
 
 /////////////////////////DATA////////////////////////////////////////
-
 function sortScoreBoard(board) {
     let x = [];
     let b = board;
-    while (b.length !== 0) {
+    let itr = 0;
+    while (itr < 12 && b.length !== 0) {
+        itr += 1;
         let scoreArr = [];
         b.forEach((item) => {
             scoreArr.push(item.score);
@@ -56,19 +58,19 @@ function sortScoreBoard(board) {
         });
     }
     scoreBoard = x;
+    console.log(scoreBoard);
 };
-
 
 async function requestData() {
     // get data collection
-    await $.get(`https://space-battle-api.herokuapp.com/`, function(obj) {
+    await $.get(`https://space-battle-api.herokuapp.com/scoreboard`, function(obj) {
         // iterate over collection to assign to structure
-        for (let i = 0; i < 10; i++) {
+        for (let i = 0; i < obj.data.length; i++) {
             const x = scoreBoard[i];
             const o = obj.data[i];
             x.name = o.userName;
             x.score = o.userScore;
-            x.rank = o.userRank;
+            x.databaseAddress = o.userRank;
         }
     });
     sortScoreBoard(scoreBoard);
@@ -76,10 +78,8 @@ async function requestData() {
 };
 
 function rankScore(score) {
-    console.log(score);
     let rank = null;
-    for (let i = 0; i <= 9; i++) {
-        console.log(scoreBoard[i].score);
+    for (let i = 9; i >= 0; i--) {
         if (score >= scoreBoard[i].score) {
             rank = i;
         }
@@ -87,18 +87,22 @@ function rankScore(score) {
     return rank;
 };
 
-function saveScore(name = user.name, score = user.score, rank = rankScore(user.score)) {
-    if (rank != null) {
-        const promise = new Promise((resolve) => {
+function saveScore() {
+    const rank = rankScore(user.score);
+    console.log(user.score);
+    console.log(rank);
+    if (rank !== null) {
+        new Promise((resolve) => {
+            // update database with new high score
             resolve(
                 $.ajax({
                     type: 'PATCH',
-                    url: `https://space-battle-api.herokuapp.com/scoreboard/rank:${rank}`,
-                    data: {"userName": `${name}`, "userScore": `${score}`}
+                    url: `https://space-battle-api.herokuapp.com/scoreboard/rank:${scoreBoard[rank].databaseAddress}`,
+                    data: {"userName": `${user.name}`, "userScore": `${user.score}`}
                 })
             )
-        })
-        promise.then(() => {
+        }).then(() => {
+            // update scoreboard for display
             requestData();
         });
     }
@@ -107,14 +111,15 @@ function saveScore(name = user.name, score = user.score, rank = rankScore(user.s
 // for direct scoreboard writing
 // $.ajax({
 //     type: 'PATCH',
-//     url: `https://space-battle-api.herokuapp.com/scoreboard/rank:${1}`,
-//     data: {"userName": `Athen`, "userScore": `61250`}
+//     url: `https://space-battle-api.herokuapp.com/scoreboard/rank:${9}`,
+//     data: {"userName": `Grand`, "userScore": `5500`}
 // });
 // for direct scoreboard reading
-// const idForGet = 0;
+// const idForGet = 9;
 // $.get(`https://space-battle-api.herokuapp.com/scoreboard/rank:${idForGet}`, function(data) {
-//     console.log(data.data[idForGet].userName);
-//     console.log(data.data[idForGet].userScore);
+//     console.log(data.datum);
+//     console.log(data.datum.userName);
+//     console.log(data.datum.userScore);
 // });
 
 /////////////////////////GAME PAGES///////////////////////////////////////
@@ -154,6 +159,11 @@ function mainPage() {
     controlSpace.append(btn4);
 
     defaultDisplay();
+    
+    // setTimeout(() => {
+    //     console.log("ran");
+    //     // saveScore();
+    // }, 5000)
 };
 
 function gameplayPage() {
@@ -161,18 +171,15 @@ function gameplayPage() {
     // CHANGE COLOR THEME
     document.body.classList.remove("style-default");
     document.body.classList.add("style-game");
-
-    //NODE RESET
-    $(`.page-1-node`).remove();
     // MESSAGE
     msgDisplay.text(``);
     // SCORE
     scoreDisplay.text(`Score: ${user.score}`);
     // PLAYER
-    playerDisplay.append(`<div class="page-1-node user-name">${user.name}</div>`);
+    playerDisplay.append(`<div class="page-1-node user-name names">${user.name}</div>`);
     playerDisplay.append(`<div class="page-1-node"><div class="bar-back"><div id="player-health-bar"></div><div id="player-shield-bar"></div></div></div>`);
     // ENEMY
-    enemyDisplay.append(`<div class="page-1-node enemy-name">${currentEnemy.name}</div>`);
+    enemyDisplay.append(`<div class="page-1-node enemy-name names">${currentEnemy.name}</div>`);
     enemyDisplay.append(`<div class="page-1-node"><div class="bar-back"><div id="enemy-health-bar"></div></div></div>`);
     // CONTROLS
     const btn1 = $('<button></button>');
@@ -210,6 +217,9 @@ function gameplayPage() {
 
 function gameoverPage() {
     page = 2;
+    // CHANGE COLOR THEME
+    document.body.classList.remove("style-game");
+    document.body.classList.add("style-default");
     const promise = new Promise((resolve) => {
         resolve(saveScore())
     })
@@ -254,6 +264,10 @@ function gameoverPage() {
 
 function gameWinPage() {
     page = 3;
+    // CHANGE COLOR THEME
+    document.body.classList.remove("style-game");
+    document.body.classList.add("style-default");
+
     const promise = new Promise((resolve) => {
         resolve(saveScore())
     })
@@ -299,31 +313,38 @@ function gameWinPage() {
 function scoreboardPage() {
     page = 4;
 
+    msgDisplay.text(`Scoreboard`);
+    // CONTROLS
+    const btn1 = $('<button></button>');
+    btn1.addClass("page-4-node");
+    btn1.attr("id", "fillspace");
+    btn1.addClass("btn1");
+    btn1.addClass("button");
+    btn1.css("color", "#dedede");
+    btn1.text(`Back`);
+    controlSpace.append(btn1);
+    // show placeholder until data returns
+    for (let i = 0; i < scoreBoard.length; i++) {
+        const name = scoreBoard[i].name;
+        const score = scoreBoard[i].score;
+        msgDisplay.append(`<p class="page-4-node scoreboard">${i + 1}.) ${name} : ${score}</p>`);
+    }
+    defaultDisplay();
+
     const gotData = new Promise((resolve) => {
         resolve(requestData())
     });
-    gotData.then((loaded) => {
-        // console.log(scoreBoard);
-        // MESSAGE
-        msgDisplay.text(`Scoreboard`);
-        for (let i = 0; i < scoreBoard.length; i++) {
-            const name = scoreBoard[i].name;
-            const score = scoreBoard[i].score;
-            msgDisplay.append(`<p class="page-4-node">${i + 1}.) ${name} : ${score}</p>`);
+    gotData.then(() => {
+        if (page === 4) {
+            // remove placeholder
+            $(`.scoreboard`).remove();
+            // display returned data
+            for (let i = 0; i < scoreBoard.length; i++) {
+                const name = scoreBoard[i].name;
+                const score = scoreBoard[i].score;
+                msgDisplay.append(`<p class="page-4-node">${i + 1}.) ${name} : ${score}</p>`);
+            }
         }
-        // CONTROLS
-        const btn1 = $('<button></button>');
-        btn1.addClass("page-4-node");
-        btn1.attr("id", "fillspace");
-        btn1.addClass("btn1");
-        btn1.addClass("button");
-        btn1.css("color", "#dedede");
-        btn1.text(`Back`);
-        controlSpace.append(btn1);
-    
-        defaultDisplay();
-        controlListenOff();
-        controlListenOn();
     })
 };
 
@@ -517,8 +538,8 @@ function dynamicButton() {
     if (cannonCharge >= user.lazercannon.overCharge) {
         $('.btn2').css("color", `${colors.lazerColor}`);
         $('.btn2').css("backgroundColor", "#101014");
-        $('.btn2').css("border", `4px solid ${colors.lazerColor}`);
-        $('.btn2').css("outline", "none");
+        $('.btn2').css("border", "none");
+        $('.btn2').css("outline", `4px solid ${colors.lazerColor}`);
     } else if (cannonCharge === user.lazercannon.overCharge - 1) {
         $('.btn2').css("outline", `4px solid ${colors.lazerColor}`);
     } else if (cannonCharge === user.lazercannon.overCharge - 2) {
@@ -635,7 +656,6 @@ function buttonTester2(e) {
     } else if (page === 8) {
         const form = $('#inform');
         const name = form[0].data.value;
-        console.log(name);
         if (name.length === 5) {
             const digits = /\d/;
             // const alphabet = /[a-zA-Z]/g;
@@ -997,9 +1017,11 @@ function bossTest() {
 function start() {
     // Get data from remote
     requestData();
+
+    // Initalize State
+    init();
+    
     // Serve start page
     pageHandler(0);
-    // Turn on controls
-    controlListenOn();
 };
 start();
