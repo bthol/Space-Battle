@@ -13,16 +13,16 @@ let currentEnemyHealth;
 let scoreDisplayCache;
 
 let scoreBoard = [
-    {name: "name loading...", score: "score loading...", databaseAddress: ""},
-    {name: "name loading...", score: "score loading...", databaseAddress: ""},
-    {name: "name loading...", score: "score loading...", databaseAddress: ""},
-    {name: "name loading...", score: "score loading...", databaseAddress: ""},
-    {name: "name loading...", score: "score loading...", databaseAddress: ""},
-    {name: "name loading...", score: "score loading...", databaseAddress: ""},
-    {name: "name loading...", score: "score loading...", databaseAddress: ""},
-    {name: "name loading...", score: "score loading...", databaseAddress: ""},
-    {name: "name loading...", score: "score loading...", databaseAddress: ""},
-    {name: "name loading...", score: "score loading...", databaseAddress: ""},
+    {name: "name loading...", score: "score loading...", dataAddress: ""},
+    {name: "name loading...", score: "score loading...", dataAddress: ""},
+    {name: "name loading...", score: "score loading...", dataAddress: ""},
+    {name: "name loading...", score: "score loading...", dataAddress: ""},
+    {name: "name loading...", score: "score loading...", dataAddress: ""},
+    {name: "name loading...", score: "score loading...", dataAddress: ""},
+    {name: "name loading...", score: "score loading...", dataAddress: ""},
+    {name: "name loading...", score: "score loading...", dataAddress: ""},
+    {name: "name loading...", score: "score loading...", dataAddress: ""},
+    {name: "name loading...", score: "score loading...", dataAddress: ""},
 ];
 
 function init() {
@@ -58,7 +58,7 @@ function sortScoreBoard(board) {
         });
     }
     scoreBoard = x;
-    console.log(scoreBoard);
+    // console.log(`sorted scoreboard: ${JSON.stringify(scoreBoard)}`);
 };
 
 async function requestData() {
@@ -70,11 +70,10 @@ async function requestData() {
             const o = obj.data[i];
             x.name = o.userName;
             x.score = o.userScore;
-            x.databaseAddress = o.userRank;
+            x.dataAddress = o.userRank;
         }
     });
     sortScoreBoard(scoreBoard);
-    return true;
 };
 
 function rankScore(score) {
@@ -88,24 +87,37 @@ function rankScore(score) {
 };
 
 function saveScore() {
-    const rank = rankScore(user.score);
-    console.log(user.score);
-    console.log(rank);
-    if (rank !== null) {
-        new Promise((resolve) => {
-            // update database with new high score
-            resolve(
-                $.ajax({
-                    type: 'PATCH',
-                    url: `https://space-battle-api.herokuapp.com/scoreboard/rank:${scoreBoard[rank].databaseAddress}`,
-                    data: {"userName": `${user.name}`, "userScore": `${user.score}`}
-                })
-            )
-        }).then(() => {
-            // update scoreboard for display
-            requestData();
-        });
-    }
+    new Promise((resolve) => {
+        // first update scoreboard from database
+        resolve(requestData());
+    }).then(() => {
+        // determine rank using scoreboard
+        const rank = rankScore(user.score);
+        console.log(`rank: ${rank}`);
+        console.log(`user score: ${user.score}`);
+        // if new high score, then update database
+        if (rank !== null) {
+
+            new Promise((resolve) => {
+                // update database with new high score
+                resolve(
+                    $.ajax({
+                        type: 'PATCH',
+                        url: `https://space-battle-api.herokuapp.com/scoreboard/rank:${scoreBoard[rank].dataAddress}`,
+                        data: {"userName": `${user.name}`, "userScore": `${user.score}`},
+                    })
+                )
+            }).then(() => {
+                // update scoreboard with new high score for display
+                scoreBoard[rank].name = user.name;
+                scoreBoard[rank].score = user.score;
+            })
+            return true;
+
+        } else {
+            return false;
+        }
+    })
 };
 
 // for direct scoreboard writing
@@ -114,6 +126,7 @@ function saveScore() {
 //     url: `https://space-battle-api.herokuapp.com/scoreboard/rank:${9}`,
 //     data: {"userName": `Grand`, "userScore": `5500`}
 // });
+
 // for direct scoreboard reading
 // const idForGet = 9;
 // $.get(`https://space-battle-api.herokuapp.com/scoreboard/rank:${idForGet}`, function(data) {
@@ -220,13 +233,12 @@ function gameoverPage() {
     // CHANGE COLOR THEME
     document.body.classList.remove("style-game");
     document.body.classList.add("style-default");
-    const promise = new Promise((resolve) => {
-        resolve(saveScore())
-    })
-    promise.then(() => {
+    new Promise((resolve) => {
+        resolve(saveScore());
+    }).then(() => {
         // MESSAGE
-        if (rankScore(user.score) != null) {
-            msgDisplay.text(`Defeat! New High Score!`)
+        if (rankScore(user.score) !== null) {
+            msgDisplay.text(`Defeat! New High Score!`);
         } else {
             msgDisplay.text(`Defeat!`);
         }
@@ -268,10 +280,9 @@ function gameWinPage() {
     document.body.classList.remove("style-game");
     document.body.classList.add("style-default");
 
-    const promise = new Promise((resolve) => {
+    new Promise((resolve) => {
         resolve(saveScore())
-    })
-    promise.then(() => {
+    }).then(() => {
         // MESSAGE
         if (rankScore(user.score) !== null) {
             msgDisplay.text(`You Win! New High Score!`)
@@ -323,26 +334,23 @@ function scoreboardPage() {
     btn1.css("color", "#dedede");
     btn1.text(`Back`);
     controlSpace.append(btn1);
-    // show placeholder until data returns
+
+    // display placeholder until data returns
     for (let i = 0; i < scoreBoard.length; i++) {
-        const name = scoreBoard[i].name;
-        const score = scoreBoard[i].score;
-        msgDisplay.append(`<p class="page-4-node scoreboard">${i + 1}.) ${name} : ${score}</p>`);
+        msgDisplay.append(`<p class="page-4-node scoreboard">${i + 1}.) ${scoreBoard[i].name} : ${scoreBoard[i].score}</p>`);
     }
+    
     defaultDisplay();
 
-    const gotData = new Promise((resolve) => {
-        resolve(requestData())
-    });
-    gotData.then(() => {
+    new Promise((resolve) => {
+        resolve(requestData());
+    }).then(() => {
         if (page === 4) {
             // remove placeholder
             $(`.scoreboard`).remove();
             // display returned data
             for (let i = 0; i < scoreBoard.length; i++) {
-                const name = scoreBoard[i].name;
-                const score = scoreBoard[i].score;
-                msgDisplay.append(`<p class="page-4-node">${i + 1}.) ${name} : ${score}</p>`);
+                msgDisplay.append(`<p class="page-4-node scoreboard">${i + 1}.) ${scoreBoard[i].name} : ${scoreBoard[i].score}</p>`);
             }
         }
     })
@@ -452,6 +460,7 @@ function controlsPageCustomize() {
 };
 
 function userNamePage() {
+    removePageNodes();
     page = 8;
     
     // TITLE
@@ -474,6 +483,10 @@ function userNamePage() {
         pageHandler(1);
         newEnemy();
     })
+};
+
+function removePageNodes() {
+    $(`.page-${page}-node`).remove();
 };
 
 function pageHandler(p) {
@@ -517,10 +530,7 @@ function pageHandler(p) {
 
     // turn on listeners for new page
     controlListenOn();
-};
-
-function removePageNodes() {
-    $(`.page-${page}-node`).remove();
+    scrollTo(0,0);
 };
 
 //////////////////////////////////DISPLAY/////////////////////////////////
@@ -1015,9 +1025,6 @@ function bossTest() {
 };
 
 function start() {
-    // Get data from remote
-    requestData();
-
     // Initalize State
     init();
     
