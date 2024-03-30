@@ -80,7 +80,10 @@ async function requestData() {
 function rankScore(score) {
     let rank = null;
     for (let i = 9; i >= 0; i--) {
-        if (score >= scoreBoard[i].score) {
+        if (score > scoreBoard[i].score) {
+            rank = i;
+        } else if (score === scoreBoard[i].score) {
+            score += 1;
             rank = i;
         }
     }
@@ -92,8 +95,8 @@ async function saveScore() {
     await requestData();
     // determine rank using scoreboard
     const rank = rankScore(user.score);
-    console.log(`rank: ${rank}`);
-    console.log(`user score: ${user.score}`);
+    // console.log(`address: ${rank}`);
+    // console.log(`user score: ${user.score}`);
     // if new high score, then update database
     if (rank !== null) {
         new Promise((resolve) => {
@@ -236,6 +239,34 @@ function gameoverPage() {
     msgDisplay.text(`Defeat!`);
     // SCORE
     scoreDisplay.text(`${user.name} = ${user.score}`);
+    // CONTROLS
+    const btn1 = $('<button></button>');
+    btn1.addClass("page-2-node");
+    btn1.addClass("btn1");
+    btn1.addClass("button");
+    btn1.text(`New Game`);
+    controlSpace.append(btn1);
+    
+    const btn2 = $('<button></button>');
+    btn2.addClass("page-2-node");
+    btn2.addClass("btn2");
+    btn2.addClass("button");
+    btn2.text(`Main Menu`);
+    controlSpace.append(btn2);
+    
+    const btn3 = $('<button></button>');
+    btn3.attr("id", "fillspace");
+    btn3.addClass("page-2-node");
+    btn3.addClass("btn3");
+    btn3.addClass("button");
+    btn3.css("color", "#dedede");
+    btn3.text(`Quit`);
+    controlSpace.append(btn3);
+
+    defaultDisplay();
+    controlListenOff();
+    controlListenOn();
+
     const result = new Promise((resolve) => {
         resolve(saveScore());
     })
@@ -243,32 +274,6 @@ function gameoverPage() {
         if (x === true) {
             msgDisplay.text(`Defeat! New High Score!`);
         }
-        // CONTROLS
-        const btn1 = $('<button></button>');
-        btn1.addClass("page-2-node");
-        btn1.addClass("btn1");
-        btn1.addClass("button");
-        btn1.text(`New Game`);
-        
-        const btn2 = $('<button></button>');
-        btn2.addClass("page-2-node");
-        btn2.addClass("btn2");
-        btn2.addClass("button");
-        btn2.text(`Main Menu`);
-        controlSpace.append(btn1);
-        
-        const btn3 = $('<button></button>');
-        btn3.attr("id", "fillspace");
-        btn3.addClass("page-2-node");
-        btn3.addClass("btn3");
-        btn3.addClass("button");
-        btn3.css("color", "#dedede");
-        btn3.text(`Quit`);
-        controlSpace.append(btn2);
-
-        defaultDisplay();
-        controlListenOff();
-        controlListenOn();
     })
 };
 
@@ -281,6 +286,33 @@ function gameWinPage() {
     msgDisplay.text(`You Win!`);
     // SCORE
     scoreDisplay.text(`${user.name} = ${user.score}`);
+    // CONTROLS
+    const btn1 = $('<button></button>');
+    btn1.addClass("page-3-node");
+    btn1.addClass("btn1");
+    btn1.addClass("button");
+    btn1.text(`New Game`);
+    controlSpace.append(btn1);
+    
+    const btn2 = $('<button></button>');
+    btn2.addClass("page-3-node");
+    btn2.addClass("btn2");
+    btn2.addClass("button");
+    btn2.text(`Main Menu`);
+    controlSpace.append(btn2);
+    
+    const btn3 = $('<button></button>');
+    btn3.attr("id", "fillspace");
+    btn3.addClass("page-3-node");
+    btn3.addClass("btn3");
+    btn3.addClass("button");
+    btn3.css("color", "#dedede");
+    btn3.text(`Quit`);
+    controlSpace.append(btn3);
+
+    defaultDisplay();
+    controlListenOff();
+    controlListenOn();
 
     const result = new Promise((resolve) => {
         resolve(saveScore());
@@ -289,32 +321,6 @@ function gameWinPage() {
         if (x === true) {
             msgDisplay.text(`You Win! New High Score!`);
         }
-        // CONTROLS
-        const btn1 = $('<button></button>');
-        btn1.addClass("page-3-node");
-        btn1.addClass("btn1");
-        btn1.addClass("button");
-        btn1.text(`New Game`);
-        
-        const btn2 = $('<button></button>');
-        btn2.addClass("page-3-node");
-        btn2.addClass("btn2");
-        btn2.addClass("button");
-        btn2.text(`Main Menu`);
-        controlSpace.append(btn1);
-        
-        const btn3 = $('<button></button>');
-        btn3.attr("id", "fillspace");
-        btn3.addClass("page-3-node");
-        btn3.addClass("btn3");
-        btn3.addClass("button");
-        btn3.css("color", "#dedede");
-        btn3.text(`Quit`);
-        controlSpace.append(btn2);
-
-        defaultDisplay();
-        controlListenOff();
-        controlListenOn();
     }, (error) => {console.log(error)});
 };
 
@@ -616,6 +622,7 @@ function gameDisplay() {
 
 ////////////////////////////////SYSTEM-CONTROLS//////////////////////////////////////////
 function newGame() {
+    removePageNodes();
     init();
     pageHandler(8);
 };
@@ -701,6 +708,7 @@ function buttonTester3(e) {
     } else if (page === 2) {
         window.close();
     } else if (page === 3) {
+        window.close();
     } else if (page === 4) {
     } else if (page === 5) {
     } else if (page === 6) {
@@ -955,10 +963,11 @@ function newEnemy() {
     pageHandler(1);
     scoreDisplay.text(`${currentEnemy.name} approaches...`);
     $('.enemy-name').text(`${currentEnemy.name}`);
-
+    
     // display score after delay
     clearTimeout(scoreDisplayCache);
     scoreDisplayCache = setTimeout(() => {
+        pageHandler(1);
         scoreDisplay.text(`Score: ${user.score}`);
     }, 1250)
 };
