@@ -32,7 +32,7 @@ function init() {
     user.score = 0;
     page = 0;
     cannonCharge = 5;
-    shieldCharge = 5;
+    shieldCharge = 10;
     repairCharge = 10;
     enemiesDefeated = 0;
     bossCount = 0;
@@ -74,6 +74,7 @@ async function requestData() {
         }
     });
     sortScoreBoard(scoreBoard);
+    return true;
 };
 
 function rankScore(score) {
@@ -86,45 +87,43 @@ function rankScore(score) {
     return rank;
 };
 
-function saveScore() {
-    new Promise((resolve) => {
-        // first update scoreboard from database
-        resolve(requestData());
-    }).then(() => {
-        // determine rank using scoreboard
-        const rank = rankScore(user.score);
-        console.log(`rank: ${rank}`);
-        console.log(`user score: ${user.score}`);
-        // if new high score, then update database
-        if (rank !== null) {
+async function saveScore() {
+    // first update scoreboard from database
+    await requestData();
+    // determine rank using scoreboard
+    const rank = rankScore(user.score);
+    console.log(`rank: ${rank}`);
+    console.log(`user score: ${user.score}`);
+    // if new high score, then update database
+    if (rank !== null) {
+        new Promise((resolve) => {
+            // update database with new high score
+            resolve(
+                $.ajax({
+                    type: 'PATCH',
+                    url: `https://space-battle-api.herokuapp.com/scoreboard/rank:${scoreBoard[rank].dataAddress}`,
+                    data: {"userName": `${user.name}`, "userScore": `${user.score}`},
+                })
+            )
+        }).then(() => {
+            // update scoreboard with new high score for display
+            scoreBoard[rank].name = user.name;
+            scoreBoard[rank].score = user.score;
+        }, (error) => {console.log(error)});
 
-            new Promise((resolve) => {
-                // update database with new high score
-                resolve(
-                    $.ajax({
-                        type: 'PATCH',
-                        url: `https://space-battle-api.herokuapp.com/scoreboard/rank:${scoreBoard[rank].dataAddress}`,
-                        data: {"userName": `${user.name}`, "userScore": `${user.score}`},
-                    })
-                )
-            }).then(() => {
-                // update scoreboard with new high score for display
-                scoreBoard[rank].name = user.name;
-                scoreBoard[rank].score = user.score;
-            })
-            return true;
+        return true;
 
-        } else {
-            return false;
-        }
-    })
+    } else {
+
+        return false;
+    }
 };
 
 // for direct scoreboard writing
 // $.ajax({
 //     type: 'PATCH',
 //     url: `https://space-battle-api.herokuapp.com/scoreboard/rank:${9}`,
-//     data: {"userName": `Grand`, "userScore": `5500`}
+//     data: {"userName": `Grand`, "userScore": `800`}
 // });
 
 // for direct scoreboard reading
@@ -233,31 +232,30 @@ function gameoverPage() {
     // CHANGE COLOR THEME
     document.body.classList.remove("style-game");
     document.body.classList.add("style-default");
-    new Promise((resolve) => {
+    // MESSAGE
+    msgDisplay.text(`Defeat!`);
+    // SCORE
+    scoreDisplay.text(`${user.name} = ${user.score}`);
+    const result = new Promise((resolve) => {
         resolve(saveScore());
-    }).then(() => {
-        // MESSAGE
-        if (rankScore(user.score) !== null) {
+    })
+    result.then((x) => {
+        if (x === true) {
             msgDisplay.text(`Defeat! New High Score!`);
-        } else {
-            msgDisplay.text(`Defeat!`);
         }
-        // SCORE
-        scoreDisplay.text(`${user.name} = ${user.score}`);
         // CONTROLS
         const btn1 = $('<button></button>');
         btn1.addClass("page-2-node");
         btn1.addClass("btn1");
         btn1.addClass("button");
         btn1.text(`New Game`);
-        controlSpace.append(btn1);
         
         const btn2 = $('<button></button>');
         btn2.addClass("page-2-node");
         btn2.addClass("btn2");
         btn2.addClass("button");
         btn2.text(`Main Menu`);
-        controlSpace.append(btn2);
+        controlSpace.append(btn1);
         
         const btn3 = $('<button></button>');
         btn3.attr("id", "fillspace");
@@ -266,7 +264,7 @@ function gameoverPage() {
         btn3.addClass("button");
         btn3.css("color", "#dedede");
         btn3.text(`Quit`);
-        controlSpace.append(btn3);
+        controlSpace.append(btn2);
 
         defaultDisplay();
         controlListenOff();
@@ -279,32 +277,31 @@ function gameWinPage() {
     // CHANGE COLOR THEME
     document.body.classList.remove("style-game");
     document.body.classList.add("style-default");
+    // MESSAGE
+    msgDisplay.text(`You Win!`);
+    // SCORE
+    scoreDisplay.text(`${user.name} = ${user.score}`);
 
-    new Promise((resolve) => {
-        resolve(saveScore())
-    }).then(() => {
-        // MESSAGE
-        if (rankScore(user.score) !== null) {
-            msgDisplay.text(`You Win! New High Score!`)
-        } else {
-            msgDisplay.text(`You Win!`);
+    const result = new Promise((resolve) => {
+        resolve(saveScore());
+    });
+    result.then((x) => {
+        if (x === true) {
+            msgDisplay.text(`You Win! New High Score!`);
         }
-        // SCORE
-        scoreDisplay.text(`${user.name} = ${user.score}`)
         // CONTROLS
         const btn1 = $('<button></button>');
         btn1.addClass("page-3-node");
         btn1.addClass("btn1");
         btn1.addClass("button");
         btn1.text(`New Game`);
-        controlSpace.append(btn1);
         
         const btn2 = $('<button></button>');
         btn2.addClass("page-3-node");
         btn2.addClass("btn2");
         btn2.addClass("button");
         btn2.text(`Main Menu`);
-        controlSpace.append(btn2);
+        controlSpace.append(btn1);
         
         const btn3 = $('<button></button>');
         btn3.attr("id", "fillspace");
@@ -313,12 +310,12 @@ function gameWinPage() {
         btn3.addClass("button");
         btn3.css("color", "#dedede");
         btn3.text(`Quit`);
-        controlSpace.append(btn3);
+        controlSpace.append(btn2);
 
         defaultDisplay();
         controlListenOff();
         controlListenOn();
-    })
+    }, (error) => {console.log(error)});
 };
 
 function scoreboardPage() {
@@ -342,18 +339,23 @@ function scoreboardPage() {
     
     defaultDisplay();
 
-    new Promise((resolve) => {
+    const gotData = new Promise((resolve) => {
         resolve(requestData());
-    }).then(() => {
-        if (page === 4) {
-            // remove placeholder
-            $(`.scoreboard`).remove();
-            // display returned data
-            for (let i = 0; i < scoreBoard.length; i++) {
-                msgDisplay.append(`<p class="page-4-node scoreboard">${i + 1}.) ${scoreBoard[i].name} : ${scoreBoard[i].score}</p>`);
+    });
+    gotData
+        .then(() => {
+            if (page === 4) {
+                // remove placeholder
+                $(`.scoreboard`).remove();
+                // display returned data
+                for (let i = 0; i < scoreBoard.length; i++) {
+                    msgDisplay.append(`<p class="page-4-node scoreboard">${i + 1}.)\t${scoreBoard[i].name}\t:\t${scoreBoard[i].score}</p>`);
+                }
             }
-        }
-    })
+        },
+        (error) => {
+            console.log(error);
+        });
 };
 
 function settingsPage() {
@@ -460,7 +462,6 @@ function controlsPageCustomize() {
 };
 
 function userNamePage() {
-    removePageNodes();
     page = 8;
     
     // TITLE
@@ -530,7 +531,6 @@ function pageHandler(p) {
 
     // turn on listeners for new page
     controlListenOn();
-    scrollTo(0,0);
 };
 
 //////////////////////////////////DISPLAY/////////////////////////////////
@@ -676,7 +676,6 @@ function buttonTester2(e) {
                 pageHandler(1);
                 newEnemy();
             } else {
-                console.log("Name must not contain numbers.");
                 scoreDisplay.text(`Name Must not contain numbers.`);
                 clearTimeout(scoreDisplayCache);
                 scoreDisplayCache = setTimeout(() => {
@@ -684,7 +683,6 @@ function buttonTester2(e) {
                 }, 2400);
             }
         } else {
-            console.log("Name must be 5 characters long.");
             scoreDisplay.text(`Name Must have 5 characters.`);
             clearTimeout(scoreDisplayCache);
             scoreDisplayCache = setTimeout(() => {
@@ -949,16 +947,20 @@ function enemyAttack() {
 
 /////////////////////////ENEMY GENERATORS///////////////////////////////
 function newEnemy() {
+    // get new enemy
     currentEnemy = aliens[Math.floor(Math.random() * aliens.length)];
     currentEnemyHealth = currentEnemy.maxHealth;
-    scoreDisplay.text(`A ${currentEnemy.name} approaches...`);
+
+    // rerender game page with new enemy information
+    pageHandler(1);
+    scoreDisplay.text(`${currentEnemy.name} approaches...`);
     $('.enemy-name').text(`${currentEnemy.name}`);
+
+    // display score after delay
     clearTimeout(scoreDisplayCache);
     scoreDisplayCache = setTimeout(() => {
         scoreDisplay.text(`Score: ${user.score}`);
-        pageHandler(1);
-    }, 1200)
-    dynamicBar();
+    }, 1250)
 };
 
 function newBossEnemy() {
@@ -981,7 +983,7 @@ function testDeath(x) {
         if (currentEnemyHealth <= 0) {
             enemiesDefeated += 1;
             user.score += currentEnemy.score;
-            alert("Alien obliterated!");
+            alert(`${currentEnemy.name} obliterated! +${currentEnemy.score} points`);
             bossTest();
         } else {
             enemyAttack();
