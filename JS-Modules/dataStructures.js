@@ -2,8 +2,8 @@ const user = {
     name: "User",
     score: 0,
     health: {level: 200, maxLevel: 200, minLevel: 0},
-    repair: {rechargeAmmount: 100, rechargeTime: 10},
-    shield: {level: 50, maxLevel: 50, minLevel: 0, rechargeAmmount: 50, rechargeTime: 10},
+    repair: {rechargeAmmount: 100, rechargeTime: 5},
+    shield: {level: 50, maxLevel: 50, minLevel: 0, rechargeAmmount: 50, rechargeTime: 5},
     pulsebeam: {damage: 25, accuracy: .6},
     lazercannon: {baseDamage: 50, baseCharge: 5, overDamage: 100, overCharge: 8, accuracy: .9},
 };
@@ -17,14 +17,14 @@ const aliens = [
 ];
 
 const bosses = [
-    {name: "Morphuos", maxHealth: 200, score: 5000, damage: 20, accuracy: .3},
+    {name: "Morphuos", maxHealth: 200, score: 5000, damage: 25, accuracy: .3},
     {name: "Grotek", maxHealth: 200, score: 5000, damage: 50, accuracy: .2},
     {name: "Harvester", maxHealth: 200, score: 10000, damage: 45, accuracy: .3},
     {name: "Mantlebrot", maxHealth: 200, score: 10000, damage: 40, accuracy: .4},
     {name: "Liminal", maxHealth: 250, score: 50000, damage: 75, accuracy: .3},
 ];
 
-const bossRound = [10, 20, 30, 40, 50];
+const bossRound = [20, 40, 60, 80, 100];
 
 export {
     user,

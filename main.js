@@ -83,7 +83,7 @@ function rankScore(score) {
         if (score > scoreBoard[i].score) {
             rank = i;
         } else if (score === scoreBoard[i].score) {
-            score += 1;
+            score -= 1;
             rank = i;
         }
     }
