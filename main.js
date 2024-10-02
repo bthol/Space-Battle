@@ -91,45 +91,43 @@ function rankScore(score) {
 };
 
 async function saveScore() {
-    // first update scoreboard from database
+    // first update scoreboard from database + sort scoreboard
     await requestData();
-    // determine rank using scoreboard
+    // determine rank using sorted scoreboard
     const rank = rankScore(user.score);
     // console.log(`address: ${rank}`);
     // console.log(`user score: ${user.score}`);
     // if new high score, then update database
     if (rank !== null) {
-        new Promise((resolve) => {
-            // update database with new high score
-            resolve(
-                $.ajax({
-                    type: 'PATCH',
-                    url: `https://space-battle-api.herokuapp.com/scoreboard/rank:${scoreBoard[rank].dataAddress}`,
-                    data: {"userName": `${user.name}`, "userScore": `${user.score}`},
-                })
-            )
-        }).then(() => {
-            // update scoreboard with new high score for display
-            scoreBoard[rank].name = user.name;
-            scoreBoard[rank].score = user.score;
-        }, (error) => {console.log(error)});
-
+        // update scoreboard with new high score for display
+        scoreBoard[rank].name = user.name;
+        scoreBoard[rank].score = user.score;
+        // update database with new high score
+        await $.ajax({
+            type: 'PATCH',
+            url: `https://space-battle-api.herokuapp.com/scoreboard/rank:${scoreBoard[rank].dataAddress}`,
+            data: {"userName": `${user.name}`, "userScore": `${user.score}`},
+        });
         return true;
-
     } else {
-
         return false;
     }
 };
 
-// for direct scoreboard writing
+// for direct database writing
 // $.ajax({
 //     type: 'PATCH',
 //     url: `https://space-battle-api.herokuapp.com/scoreboard/rank:${9}`,
-//     data: {"userName": `Grand`, "userScore": `800`}
+//     data: {"userName": `Gandr`, "userScore": `800`}
 // });
 
-// for direct scoreboard reading
+// $.ajax({
+//     type: 'PATCH',
+//     url: `https://space-battle-api.herokuapp.com/scoreboard/rank:${9}`,
+//     data: {"userName": `Purpl`, "userScore": `100`}
+// });
+
+// for direct database reading
 // const idForGet = 9;
 // $.get(`https://space-battle-api.herokuapp.com/scoreboard/rank:${idForGet}`, function(data) {
 //     console.log(data.datum);
@@ -230,13 +228,13 @@ function gameplayPage() {
     dynamicButton();
 };
 
-function gameoverPage() {
+async function gameoverPage() {
     page = 2;
     // CHANGE COLOR THEME
     document.body.classList.remove("style-game");
     document.body.classList.add("style-default");
     // MESSAGE
-    msgDisplay.text(`Defeat!`);
+    msgDisplay.text(`Defeat!\n\ntesting score...`);
     // SCORE
     scoreDisplay.text(`${user.name} = ${user.score}`);
     // CONTROLS
@@ -267,23 +265,21 @@ function gameoverPage() {
     controlListenOff();
     controlListenOn();
 
-    const result = new Promise((resolve) => {
-        resolve(saveScore());
-    })
-    result.then((x) => {
-        if (x === true) {
-            msgDisplay.text(`Defeat! New High Score!`);
-        }
-    })
+    const res = await saveScore();
+    if (res === true) {
+        msgDisplay.text(`Defeat! New High Score!`);
+    } else {
+        msgDisplay.text(`Defeat!`);
+    }
 };
 
-function gameWinPage() {
+async function gameWinPage() {
     page = 3;
     // CHANGE COLOR THEME
     document.body.classList.remove("style-game");
     document.body.classList.add("style-default");
     // MESSAGE
-    msgDisplay.text(`You Win!`);
+    msgDisplay.text(`You Win!\n\ntesting score...`);
     // SCORE
     scoreDisplay.text(`${user.name} = ${user.score}`);
     // CONTROLS
@@ -313,15 +309,13 @@ function gameWinPage() {
     defaultDisplay();
     controlListenOff();
     controlListenOn();
-
-    const result = new Promise((resolve) => {
-        resolve(saveScore());
-    });
-    result.then((x) => {
-        if (x === true) {
-            msgDisplay.text(`You Win! New High Score!`);
-        }
-    }, (error) => {console.log(error)});
+    
+    const res = await saveScore();
+    if (res === true) {
+        msgDisplay.text(`You Win! New High Score!`);
+    } else {
+        msgDisplay.text(`You Win!`);
+    }
 };
 
 function scoreboardPage() {
