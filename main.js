@@ -195,6 +195,7 @@ function gameplayPage() {
     enemyDisplay.append(`<div class="page-1-node enemy-name names">${currentEnemy.name}</div>`);
     enemyDisplay.append(`<div class="page-1-node"><div class="bar-back"><div id="enemy-health-bar"></div></div></div>`);
     // CONTROLS
+    // PULSEBEAM
     const btn1 = $('<button></button>');
     btn1.addClass("page-1-node");
     btn1.addClass("btn1");
@@ -202,6 +203,7 @@ function gameplayPage() {
     btn1.text(`Pulsebeam`);
     controlSpace.append(btn1);
     
+    // LAZERCANNON
     const btn2 = $('<button></button>');
     btn2.addClass("page-1-node");
     btn2.addClass("btn2");
@@ -209,6 +211,7 @@ function gameplayPage() {
     btn2.text(`Lazercannon`);
     controlSpace.append(btn2);
     
+    // REPAIR
     const btn3 = $('<button></button>');
     btn3.addClass("page-1-node");
     btn3.addClass("btn3");
@@ -216,6 +219,7 @@ function gameplayPage() {
     btn3.text(`Repair`);
     controlSpace.append(btn3);
     
+    // SHEILD
     const btn4 = $('<button></button>');
     btn4.addClass("page-1-node");
     btn4.addClass("btn4");
@@ -540,31 +544,61 @@ const colors = {
     btnText:"#515151",
     btnTextGame:"#e5e5e5",
     btnBorder: "1.5px solid #c8c4ac",
+    indicatorBorderColor: "#c8c4ac",
     lazerColor: "#ca141e",
     lazerBackground: "#101014",
 };
 
 function dynamicButton() {
+    // lazercannon charge
     if (cannonCharge >= user.lazercannon.overCharge) {
+        // SUPERCHARGED
         $('.btn2').css("color", `${colors.lazerColor}`);
         $('.btn2').css("backgroundColor", "#101014");
         $('.btn2').css("border", "none");
         $('.btn2').css("outline", `4px solid ${colors.lazerColor}`);
     } else if (cannonCharge === user.lazercannon.overCharge - 1) {
-        $('.btn2').css("outline", `4px solid ${colors.lazerColor}`);
+        // SUPERCHARGING 1
+        $('.btn2').css("outline", `3px solid ${colors.lazerColor}`);
+        // ADD CORNER INDICATOR
+        const crnr = $('<div></div>');
+        crnr.addClass("lazercannon-indicator");
+        crnr.css("outline", `1px solid ${colors.lazerColor}`);
+        crnr.css("color", `${colors.lazerColor}`);
+        crnr.text(`1`);
+        $('.btn2').append(crnr);
     } else if (cannonCharge === user.lazercannon.overCharge - 2) {
+        // SUPERCHARGING 2
         $('.btn2').css("outline", `2px solid ${colors.lazerColor}`);
+        // ADD CORNER INDICATOR
+        const crnr = $('<div></div>');
+        crnr.addClass("lazercannon-indicator");
+        crnr.css("outline", `1px solid ${colors.lazerColor}`);
+        crnr.css("color", `${colors.lazerColor}`);
+        crnr.text(`2`);
+        $('.btn2').append(crnr);
     } else if (cannonCharge >= user.lazercannon.baseCharge) {
+        // BASECHARGED
         $('.btn2').css("color", `${colors.btnTextGame}`);
+        // ADD CORNER INDICATOR
+        const crnr = $('<div></div>');
+        crnr.addClass("lazercannon-indicator");
+        crnr.css("outline", `1px solid ${colors.indicatorBorderColor}`);
+        crnr.css("color", `${colors.indicatorBorderColor}`);
+        crnr.text(`3`);
+        $('.btn2').append(crnr);
     } else {
+        // UNCHARGED
         $('.btn2').css("color", `${colors.uncharged}`);
         $('.btn2').css("border", `${colors.btnBorder}`);
     }
+    // repair charge
     if (repairCharge >= 10) {
         $('.btn3').css("color", `${colors.btnTextGame}`);
     } else {
         $('.btn3').css("color", `${colors.uncharged}`);
     }
+    // shield charge
     if (shieldCharge >= user.shield.rechargeTime) {
         $('.btn4').css("color", `${colors.btnTextGame}`);
     } else {
