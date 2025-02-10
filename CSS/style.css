@@ -8,7 +8,7 @@
 
     --color-crimson: #442822;
     
-    --color-detailing: #c8c4ac;
+    --color-detailing: #5d5a4c;
     --color-detailing-2: #cca299;
     
     --color-font-1: #515151;
@@ -23,7 +23,7 @@
 
 .style-default {
     --color-background: #e4ebf1;
-    --color-background-2: #eeeee8;
+    --color-background-2: #ebebe5;
     --color-crimson: #442822;
     
     --color-detailing: #c8c4ac;
@@ -36,7 +36,7 @@
     
     --color-button-background: #f5f5f5;
     --color-button-shadow: #595959;
-    --color-back: #f4f4ec;
+    --color-back: #f8f8f2;
 }
 
 /* ----------------------------LAYOUT---------------------------- */

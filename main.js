@@ -30,10 +30,12 @@ function init() {
     user.health.level = 200;
     user.shield.level = 50;
     user.score = 0;
-    page = 0;
+
     cannonCharge = 5;
     shieldCharge = 10;
     repairCharge = 10;
+    
+    page = 0;
     enemiesDefeated = 0;
     bossCount = 0;
 };
@@ -584,7 +586,7 @@ function dynamicButton() {
         const crnr = $('<div></div>');
         crnr.addClass("lazercannon-indicator");
         crnr.css("outline", `1px solid ${colors.indicatorBorderColor}`);
-        crnr.css("color", `${colors.indicatorBorderColor}`);
+        crnr.css("color", `${colors.btnTextGame}`);
         crnr.text(`3`);
         $('.btn2').append(crnr);
     } else {
