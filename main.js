@@ -44,39 +44,61 @@ function init() {
 
 /////////////////////////VOLUME////////////////////////////////////////
 let masterVolume = 1;
-let musicVolume = 1;
-let fxVolume = 1;
+let musicVolume = .7;
+let fxVolume = .9;
 
 // structure embedded audio assets
 
+// audio data
+
 // music
 const music = {
-    mainTheme: document.querySelector("#main-theme"),
+    mainTheme: {element: document.querySelector("#main-theme"), vol: 1},
+    // gameTheme: {element: document.querySelector("#game-theme"), vol: 0},
 };
 
 // FX
-// const FX = {
-//     // add fx
-// };
-
-// controller functions
-function masterVol(change) {
-    masterVolume += change;
-    music.mainTheme.volume += change;
+const FX = {
+    // add fx
+    // menuSelect: {element: document.querySelector("#menu-select"), vol: 1},
 };
 
-// function musicVol(change) {
-//     musicVolume += change;
-//     const vol = musicVolume * masterVolume;
-//     music.mainTheme.volume = vol;
-// };
+// initialize audio
 
-// function fxVol(change) {
-//     fxVolume += change;
-//     const vol = fxVolume * masterVolume;
-//     // apply to fx audio
-// };
+// init music
+const musicKeys = Object.keys(music);
+for (let i = 0; i < musicKeys.length; i++) {
+    // set initial volume
+    const obj = music[musicKeys[i]];
+    obj.element.volume = obj.vol * musicVolume * masterVolume;
+}
 
+// init FX
+const FXKeys = Object.keys(FX);
+for (let i = 0; i < FXKeys.length; i++) {
+    // set initial volume
+    const obj = FX[FXKeys[i]];
+    obj.element.volume = obj.vol * fxVolume * masterVolume;
+}
+
+// controller functions
+function setLevels() {
+    // updates volume levels for all audio assets
+
+    // music
+    for (let i = 0; i < musicKeys.length; i++) {
+        const obj = music[musicKeys[i]];
+        // volume = asset volume * category volume * master volume
+        obj.element.volume = obj.vol * musicVolume * masterVolume;
+    }
+    
+    // FX
+    for (let i = 0; i < FXKeys.length; i++) {
+        const obj =FX[FXKeys[i]];
+        // volume = asset volume * category volume * master volume
+        obj.element.volume = obj.vol * fxVolume * masterVolume;
+    }
+};
 
 /////////////////////////DATA////////////////////////////////////////
 function sortScoreBoard(board) {
@@ -542,7 +564,47 @@ function audioPage() {
     page = 9;
 
     // MESSAGE
-    msgDisplay.text(`Audio`);
+    msgDisplay.text(`Audio Volume`);
+
+    const max = 100;
+
+    // volume sliders
+    msgDisplay.append(`<p class="page-9-node master-vol">Master: <input type="range" min="0" max="${max}" value="${masterVolume * max}"></input></p>`);
+    
+    let masterVolumeC = {};
+    $('.master-vol').on('change', () => {
+        clearTimeout(masterVolumeC);
+        masterVolumeC = setTimeout(() => {
+            clearTimeout(masterVolumeC);
+            const lvl = document.querySelector(".master-vol").firstElementChild.value / max;
+            masterVolume = lvl;
+            setLevels();
+        }, 100);
+    });
+    
+    msgDisplay.append(`<p class="page-9-node music-vol">Music: <input type="range" min="0" max="${max}" value="${musicVolume * max}"></input></p>`);
+    let musicVolumeC = {};
+    $('.music-vol').on('change', () => {
+        clearTimeout(musicVolumeC);
+        musicVolumeC = setTimeout(() => {
+            clearTimeout(musicVolumeC);
+            const lvl = document.querySelector(".music-vol").firstElementChild.value / max;
+            musicVolume = lvl;
+            setLevels();
+        }, 100);
+    });
+    
+    msgDisplay.append(`<p class="page-9-node FX-vol">FX: <input type="range" min="0" max="${max}" value="${fxVolume * max}"></input></p>`);
+    let fxVolumeC = {};
+    $('.fx-vol').on('change', () => {
+        clearTimeout(fxVolumeC);
+        fxVolumeC = setTimeout(() => {
+            clearTimeout(fxVolumeC);
+            const lvl = document.querySelector(".fx-vol").firstElementChild.value / max;
+            fxVolumeC = lvl;
+            setLevels();
+        }, 100);
+    });
 
     // CONTROLS
     const btn1 = $('<button></button>');
@@ -551,20 +613,6 @@ function audioPage() {
     btn1.addClass("button");
     btn1.text(`Back`);
     controlSpace.append(btn1);
-    
-    const btn2 = $('<button></button>');
-    btn2.addClass("page-9-node");
-    btn2.addClass("btn2");
-    btn2.addClass("button");
-    btn2.text(`volume +`);
-    controlSpace.append(btn2);
-    
-    const btn3 = $('<button></button>');
-    btn3.addClass("page-9-node");
-    btn3.addClass("btn3");
-    btn3.addClass("button");
-    btn3.text(`volume -`);
-    controlSpace.append(btn3);
 
     defaultDisplay();
 };
@@ -721,13 +769,6 @@ function gameDisplay() {
     $('.btn4').css("border", `${colors.btnBorder}`);
 };
 
-////////////////////////////////SYSTEM-CONTROLS//////////////////////////////////////////
-function newGame() {
-    removePageNodes();
-    init();
-    pageHandler(8);
-};
-
 ////////////////////////////////PLAYER-CONTROLS//////////////////////////////////////////
 
 // BUTTON 1
@@ -800,8 +841,6 @@ function buttonTester2(e) {
             }, 2400);
         }
     } else if (page === 9) {
-        // add volume
-        masterVol(0.1);
     }
 };
 
@@ -826,8 +865,6 @@ function buttonTester3(e) {
     } else if (page === 8) {
         pageHandler(0);
     } else if (page == 9) {
-        // minus volume
-        masterVol(-0.1);
     }
 };
 
@@ -845,6 +882,8 @@ function buttonTester4(e) {
     } else if (page === 6) {
     } else if (page === 7) {
         keyBind(4);
+    } else if (page == 8) {
+    } else if (page == 9) {
     }
 };
 
@@ -1165,6 +1204,13 @@ function bossTest() {
         // next regular enemy
         newEnemy();
     }
+};
+
+////////////////////////////////SYSTEM-CONTROLS//////////////////////////////////////////
+function newGame() {
+    removePageNodes();
+    init();
+    pageHandler(8);
 };
 
 function start() {
