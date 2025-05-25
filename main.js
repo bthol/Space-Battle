@@ -42,6 +42,42 @@ function init() {
     bossCount = 0;
 };
 
+/////////////////////////VOLUME////////////////////////////////////////
+let masterVolume = 1;
+let musicVolume = 1;
+let fxVolume = 1;
+
+// structure embedded audio assets
+
+// music
+const music = {
+    mainTheme: document.querySelector("#main-theme"),
+};
+
+// FX
+// const FX = {
+//     // add fx
+// };
+
+// controller functions
+function masterVol(change) {
+    masterVolume += change;
+    music.mainTheme.volume += change;
+};
+
+// function musicVol(change) {
+//     musicVolume += change;
+//     const vol = musicVolume * masterVolume;
+//     music.mainTheme.volume = vol;
+// };
+
+// function fxVol(change) {
+//     fxVolume += change;
+//     const vol = fxVolume * masterVolume;
+//     // apply to fx audio
+// };
+
+
 /////////////////////////DATA////////////////////////////////////////
 function sortScoreBoard(board) {
     let x = [];
@@ -371,6 +407,7 @@ function settingsPage() {
 
     // MESSAGE
     msgDisplay.text(`Settings Menu`);
+
     // CONTROLS
     const btn1 = $('<button></button>');
     btn1.addClass("page-5-node");
@@ -385,6 +422,13 @@ function settingsPage() {
     btn2.addClass("button");
     btn2.text(`Controls`);
     controlSpace.append(btn2);
+    
+    const btn3 = $('<button></button>');
+    btn3.addClass("page-5-node");
+    btn3.addClass("btn3");
+    btn3.addClass("button");
+    btn3.text(`Audio`);
+    controlSpace.append(btn3);
 
     defaultDisplay();   
 };
@@ -494,6 +538,37 @@ function userNamePage() {
     })
 };
 
+function audioPage() {
+    page = 9;
+
+    // MESSAGE
+    msgDisplay.text(`Audio`);
+
+    // CONTROLS
+    const btn1 = $('<button></button>');
+    btn1.addClass("page-9-node");
+    btn1.addClass("btn1");
+    btn1.addClass("button");
+    btn1.text(`Back`);
+    controlSpace.append(btn1);
+    
+    const btn2 = $('<button></button>');
+    btn2.addClass("page-9-node");
+    btn2.addClass("btn2");
+    btn2.addClass("button");
+    btn2.text(`volume +`);
+    controlSpace.append(btn2);
+    
+    const btn3 = $('<button></button>');
+    btn3.addClass("page-9-node");
+    btn3.addClass("btn3");
+    btn3.addClass("button");
+    btn3.text(`volume -`);
+    controlSpace.append(btn3);
+
+    defaultDisplay();
+};
+
 function removePageNodes() {
     $(`.page-${page}-node`).remove();
 };
@@ -511,30 +586,24 @@ function pageHandler(p) {
     // render new page
     if (p === 0) {
         mainPage();
-    }
-    if (p === 1) {
+    } else if (p === 1) {
         gameplayPage();
-    }
-    if (p === 2) {
+    } else if (p === 2) {
         gameoverPage();
-    }
-    if (p === 3) {
+    } else if (p === 3) {
         gameWinPage();
-    }
-    if (p === 4) {
+    } else if (p === 4) {
         scoreboardPage();
-    }
-    if (p === 5) {
+    } else if (p === 5) {
         settingsPage();
-    }
-    if (p === 6) {
+    } else if (p === 6) {
         controlsPage();
-    }
-    if (p === 7) {
+    } else if (p === 7) {
         controlsPageCustomize();
-    }
-    if (p === 8) {
+    } else if (p === 8) {
         userNamePage();
+    } else if (p === 9) {
+        audioPage();
     }
 
     // turn on listeners for new page
@@ -682,6 +751,8 @@ function buttonTester1(e) {
     } else if (page === 8) {
         const form = $('#inform');
         form[0].data.focus();
+    } else if (page === 9) {
+        pageHandler(5);
     }
 };
 
@@ -728,6 +799,9 @@ function buttonTester2(e) {
                 scoreDisplay.text(``);
             }, 2400);
         }
+    } else if (page === 9) {
+        // add volume
+        masterVol(0.1);
     }
 };
 
@@ -743,6 +817,7 @@ function buttonTester3(e) {
         window.close();
     } else if (page === 4) {
     } else if (page === 5) {
+        pageHandler(9);
     } else if (page === 6) {
         resetKeyBinding();
         pageHandler(6);
@@ -750,6 +825,9 @@ function buttonTester3(e) {
         keyBind(3);
     } else if (page === 8) {
         pageHandler(0);
+    } else if (page == 9) {
+        // minus volume
+        masterVol(-0.1);
     }
 };
 

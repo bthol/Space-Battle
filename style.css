@@ -1,7 +1,8 @@
 /* ----------------------------THEMES---------------------------- */
 * {
-    font-family: 'Coda', cursive;
+    font-family: 'Coda', Times;
 }
+
 .style-game {
     --color-background: #43647f;
     --color-background-2: #2c2b2a;
@@ -22,8 +23,9 @@
 }
 
 .style-default {
-    --color-background: #e4ebf1;
-    --color-background-2: #ebebe5;
+    --color-background: #d6e1eb;
+    --color-background-2: #f4f4ec;
+
     --color-crimson: #442822;
     
     --color-detailing: #c8c4ac;
