@@ -45,7 +45,7 @@ function init() {
 /////////////////////////VOLUME////////////////////////////////////////
 let masterVolume = 1;
 let musicVolume = .7;
-let fxVolume = .9;
+let fxVolume = .6;
 
 // structure embedded audio assets
 
@@ -54,18 +54,18 @@ let fxVolume = .9;
 // music
 const music = {
     mainTheme: {element: document.querySelector("#main-theme"), vol: 1},
-    // gameTheme: {element: document.querySelector("#game-theme"), vol: 0},
+    gameTheme: {element: document.querySelector("#game-theme"), vol: 1},
 };
 
 // FX
 const FX = {
     // add fx
-    // menuSelect: {element: document.querySelector("#menu-select"), vol: 1},
+    menuSelect: {element: document.querySelector("#menu-select"), vol: 1},
 };
 
 // initialize audio
 
-// init music
+// init music volume
 const musicKeys = Object.keys(music);
 for (let i = 0; i < musicKeys.length; i++) {
     // set initial volume
@@ -73,7 +73,7 @@ for (let i = 0; i < musicKeys.length; i++) {
     obj.element.volume = obj.vol * musicVolume * masterVolume;
 }
 
-// init FX
+// init FX volume
 const FXKeys = Object.keys(FX);
 for (let i = 0; i < FXKeys.length; i++) {
     // set initial volume
@@ -94,11 +94,35 @@ function setLevels() {
     
     // FX
     for (let i = 0; i < FXKeys.length; i++) {
-        const obj =FX[FXKeys[i]];
+        const obj = FX[FXKeys[i]];
         // volume = asset volume * category volume * master volume
         obj.element.volume = obj.vol * fxVolume * masterVolume;
     }
 };
+
+// play main menu theme music
+function playAudio(audioElement) {
+    // plays the given audio element from the start
+    audioElement.currentTime = 0;
+    audioElement.play();
+};
+
+function stopMusic() {
+    // pauses all songs + seeks them to start
+    for (let i = 0; i < musicKeys.length; i++) {
+        const audioElement = music[musicKeys[i]].element;
+        audioElement.pause();
+        audioElement.currentTime = 0;
+    }
+};
+
+// function pauseSong(audioElement) {
+//     audioElement.pause();
+// };
+
+// function resumeSong(audioElement) {
+//     audioElement.play();
+// };
 
 /////////////////////////DATA////////////////////////////////////////
 function sortScoreBoard(board) {
@@ -296,6 +320,8 @@ function gameplayPage() {
 
 async function gameoverPage() {
     page = 2;
+    // STOP MUSIC
+    stopMusic();
     // CHANGE COLOR THEME
     document.body.classList.remove("style-game");
     document.body.classList.add("style-default");
@@ -341,6 +367,8 @@ async function gameoverPage() {
 
 async function gameWinPage() {
     page = 3;
+    // STOP MUSIC
+    stopMusic();
     // CHANGE COLOR THEME
     document.body.classList.remove("style-game");
     document.body.classList.add("style-default");
@@ -545,19 +573,35 @@ function userNamePage() {
     controlSpace.append(`
     <form id="inform" class="page-8-node">
         <input name="data" type="text" pattern="[a-zA-Z]{5,6}" maxLength="5" class="data-input" placeholder="name" title="must be 5 characters in length and contain only letters" style="width:4.5em;" required/>
-        <button type="submit" class="form-button btn2" >Begin</button>
+        <button id="begin-game-button" type="submit" class="form-button btn2" >Begin</button>
         <button type="button" class="form-button btn3" >Back</button>
     </form>`);
+
+    // button listener
+    const button = document.body.querySelector("#begin-game-button");
+    button.addEventListener("click", () => {
+        // stop main menu music
+        stopMusic();
+        // start gameplay music
+        playAudio(music.gameTheme.element);
+    }, { once: true });
+
+    // form listener
     const form = $('#inform');
     form[0].data.focus();
     form.on("submit", (e) => {
+        // prevent page refresh
         e.preventDefault();
+        
+        // format and store username
         const nameText = form[0].data.value.toLowerCase();
         const name = nameText.slice(0, 1).toUpperCase() + nameText.slice(1, nameText.length);
         user.name = name;
+
+        // serve next page
         pageHandler(1);
         newEnemy();
-    })
+    });
 };
 
 function audioPage() {
@@ -566,7 +610,7 @@ function audioPage() {
     // MESSAGE
     msgDisplay.text(`Audio Volume`);
 
-    const max = 100;
+    const max = 100; // maximum number of levels in volume sliders
 
     // volume sliders
     msgDisplay.append(`<p class="page-9-node master-vol">Master: <input type="range" min="0" max="${max}" value="${masterVolume * max}"></input></p>`);
@@ -596,12 +640,12 @@ function audioPage() {
     
     msgDisplay.append(`<p class="page-9-node FX-vol">FX: <input type="range" min="0" max="${max}" value="${fxVolume * max}"></input></p>`);
     let fxVolumeC = {};
-    $('.fx-vol').on('change', () => {
+    $('.FX-vol').on('change', () => {
         clearTimeout(fxVolumeC);
         fxVolumeC = setTimeout(() => {
             clearTimeout(fxVolumeC);
-            const lvl = document.querySelector(".fx-vol").firstElementChild.value / max;
-            fxVolumeC = lvl;
+            const lvl = document.querySelector(".FX-vol").firstElementChild.value / max;
+            fxVolume = lvl;
             setLevels();
         }, 100);
     });
@@ -611,6 +655,7 @@ function audioPage() {
     btn1.addClass("page-9-node");
     btn1.addClass("btn1");
     btn1.addClass("button");
+    btn1.attr("id", "fillspace");
     btn1.text(`Back`);
     controlSpace.append(btn1);
 
@@ -774,25 +819,55 @@ function gameDisplay() {
 // BUTTON 1
 function buttonTester1(e) {
     if (page === 0) {
+        // play select sound
+        playAudio(FX.menuSelect.element);
+        // start new game
         newGame();
     } else if (page === 1) {
         pulsebeamAttack();
     } else if (page === 2) {
+        // play select sound
+        playAudio(FX.menuSelect.element);
+        // restart game music
+        stopMusic();
+        playAudio(music.gameTheme.element);
+        // start new game
         newGame();
     } else if (page === 3) {
+        // play select sound
+        playAudio(FX.menuSelect.element);
+        // restart game music
+        stopMusic();
+        playAudio(music.gameTheme.element);
+        // start new game
         newGame();
     } else if (page === 4) {
+        // play select sound
+        playAudio(FX.menuSelect.element);
+        // serve page
         pageHandler(0);
     } else if (page === 5) {
+        // play select sound
+        playAudio(FX.menuSelect.element);
+        // serve page
         pageHandler(0);
     } else if (page === 6) {
+        // play select sound
+        playAudio(FX.menuSelect.element);
+        // serve page
         pageHandler(5);
     } else if (page === 7) {
+        // play select sound
+        playAudio(FX.menuSelect.element);
+        // bind key
         keyBind(1);
     } else if (page === 8) {
         const form = $('#inform');
         form[0].data.focus();
     } else if (page === 9) {
+        // play select sound
+        playAudio(FX.menuSelect.element);
+        // serve page
         pageHandler(5);
     }
 };
@@ -800,21 +875,47 @@ function buttonTester1(e) {
 // BUTTON 2
 function buttonTester2(e) {
     if (page === 0) {
+        // play select sound
+        playAudio(FX.menuSelect.element);
         pageHandler(4);
     } else if (page === 1) {
         lazercannonAttack();
     } else if (page === 2) {
+        // play select sound
+        playAudio(FX.menuSelect.element);
+        // restart main menu music
+        stopMusic();
+        playAudio(music.mainTheme.element);
+        // serve main menu page
         pageHandler(0);
     } else if (page === 3) {
+        // play select sound
+        playAudio(FX.menuSelect.element);
+        // restart main menu music
+        stopMusic();
+        playAudio(music.mainTheme.element);
+        // serve main menu page
         pageHandler(0);
     } else if (page === 4) {
     } else if (page === 5) {
+        // play select sound
+        playAudio(FX.menuSelect.element);
+        // serve page
         pageHandler(6);
     } else if (page == 6) {
+        // play select sound
+        playAudio(FX.menuSelect.element);
+        // serve page
         pageHandler(7);
     } else if (page === 7) {
+        // play select sound
+        playAudio(FX.menuSelect.element);
+        // bind key
         keyBind(2);
     } else if (page === 8) {
+        // play select sound
+        playAudio(FX.menuSelect.element);
+        // validate form data
         const form = $('#inform');
         const name = form[0].data.value;
         if (name.length === 5) {
@@ -847,22 +948,44 @@ function buttonTester2(e) {
 // BUTTON 3
 function buttonTester3(e) {
     if (page === 0) {
+        // play select sound
+        playAudio(FX.menuSelect.element);
+        // exit game
         window.close();
     } else if (page === 1) {
         repair();
     } else if (page === 2) {
+        // play select sound
+        playAudio(FX.menuSelect.element);
+        // exit game
         window.close();
     } else if (page === 3) {
+        // play select sound
+        playAudio(FX.menuSelect.element);
+        // exit game
         window.close();
     } else if (page === 4) {
     } else if (page === 5) {
+        // play select sound
+        playAudio(FX.menuSelect.element);
+        // serve page
         pageHandler(9);
     } else if (page === 6) {
+        // play select sound
+        playAudio(FX.menuSelect.element);
+        // reset bindings
         resetKeyBinding();
+        // refresh page to reflect changes
         pageHandler(6);
     } else if (page === 7) {
+        // play select sound
+        playAudio(FX.menuSelect.element);
+        // bind key
         keyBind(3);
     } else if (page === 8) {
+        // play select sound
+        playAudio(FX.menuSelect.element);
+        // serve page
         pageHandler(0);
     } else if (page == 9) {
     }
@@ -871,16 +994,25 @@ function buttonTester3(e) {
 // BUTTON 4
 function buttonTester4(e) {
     if (page === 0) {
+        // play select sound
+        playAudio(FX.menuSelect.element);
+        // serve page
         pageHandler(5)
     } else if (page === 1) {
         shield();
     } else if (page === 2) {
     } else if (page === 3) {
+        // play select sound
+        playAudio(FX.menuSelect.element);
+        // exit game
         window.close();
     } else if (page === 4) {
     } else if (page === 5) {
     } else if (page === 6) {
     } else if (page === 7) {
+        // play select sound
+        playAudio(FX.menuSelect.element);
+        // bind key
         keyBind(4);
     } else if (page == 8) {
     } else if (page == 9) {
@@ -1208,16 +1340,24 @@ function bossTest() {
 
 ////////////////////////////////SYSTEM-CONTROLS//////////////////////////////////////////
 function newGame() {
+    // clear page nodes
     removePageNodes();
+
+    // initialize states
     init();
+
+    // serve new gameplay page
     pageHandler(8);
 };
 
 function start() {
-    // Initalize State
+    // initalize States
     init();
+
+    // play main menu music
+    playAudio(music.mainTheme.element);
     
-    // Serve start page
+    // serve start page
     pageHandler(0);
 };
 start();
