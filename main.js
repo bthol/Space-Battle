@@ -59,8 +59,29 @@ const music = {
 
 // FX
 const FX = {
-    // add fx
+    // menu navigation
     menuSelect: {element: document.querySelector("#menu-select"), vol: 1},
+    menuSelectBack: {element: document.querySelector("#menu-select-back"), vol: 1},
+
+    // uncharged sound
+    uncharged: {element: document.querySelector('#uncharged'), vol: 1},
+
+    // defensive move sounds
+    repairSound: {element: document.querySelector('#repair-sound'), vol: 1},
+    shieldActivate: {element: document.querySelector('#shield-activate'), vol: 1},
+    shieldRegen: {element: document.querySelector('#shield-regen'), vol: 1},
+
+    // offensive move sounds
+    pulsebeamShoot: [
+        {element: document.querySelector('#pulsebeam-shoot-1'), vol: 1},
+        {element: document.querySelector('#pulsebeam-shoot-2'), vol: 1},
+        {element: document.querySelector('#pulsebeam-shoot-3'), vol: 1},
+    ],
+    lazercannonShoot: [
+        {element: document.querySelector('#lazercannon-shoot-1'), vol: 1},
+        {element: document.querySelector('#lazercannon-shoot-2'), vol: 1},
+        {element: document.querySelector('#lazercannon-shoot-3'), vol: 1},
+    ]
 };
 
 // initialize audio
@@ -78,7 +99,15 @@ const FXKeys = Object.keys(FX);
 for (let i = 0; i < FXKeys.length; i++) {
     // set initial volume
     const obj = FX[FXKeys[i]];
-    obj.element.volume = obj.vol * fxVolume * masterVolume;
+    if (Array.isArray(obj)) {
+        // iterate over array
+        for (let j = 0; j < obj.length; j++) {
+            obj[j].element.volume = obj[j].vol * fxVolume * masterVolume;
+        }
+    } else {
+        // object literal
+        obj.element.volume = obj.vol * fxVolume * masterVolume;
+    }
 }
 
 // controller functions
@@ -96,7 +125,15 @@ function setLevels() {
     for (let i = 0; i < FXKeys.length; i++) {
         const obj = FX[FXKeys[i]];
         // volume = asset volume * category volume * master volume
-        obj.element.volume = obj.vol * fxVolume * masterVolume;
+        if (Array.isArray(obj)) {
+            // iterate over array
+            for (let j = 0; j < obj.length; j++) {
+                obj[j].element.volume = obj[j].vol * fxVolume * masterVolume;
+            }
+        } else {
+            // object literal
+            obj.element.volume = obj.vol * fxVolume * masterVolume;
+        }
     }
 };
 
@@ -843,17 +880,17 @@ function buttonTester1(e) {
         newGame();
     } else if (page === 4) {
         // play select sound
-        playAudio(FX.menuSelect.element);
+        playAudio(FX.menuSelectBack.element);
         // serve page
         pageHandler(0);
     } else if (page === 5) {
         // play select sound
-        playAudio(FX.menuSelect.element);
+        playAudio(FX.menuSelectBack.element);
         // serve page
         pageHandler(0);
     } else if (page === 6) {
         // play select sound
-        playAudio(FX.menuSelect.element);
+        playAudio(FX.menuSelectBack.element);
         // serve page
         pageHandler(5);
     } else if (page === 7) {
@@ -866,7 +903,7 @@ function buttonTester1(e) {
         form[0].data.focus();
     } else if (page === 9) {
         // play select sound
-        playAudio(FX.menuSelect.element);
+        playAudio(FX.menuSelectBack.element);
         // serve page
         pageHandler(5);
     }
@@ -984,7 +1021,7 @@ function buttonTester3(e) {
         keyBind(3);
     } else if (page === 8) {
         // play select sound
-        playAudio(FX.menuSelect.element);
+        playAudio(FX.menuSelectBack.element);
         // serve page
         pageHandler(0);
     } else if (page == 9) {
@@ -1093,6 +1130,10 @@ function controlListenOn() {
 function repair() {
     if (repairCharge >= user.repair.rechargeTime) {
         if (user.health.level < user.health.maxLevel) {
+
+            // repair sound
+            playAudio(FX.repairSound.element);
+
             repairCharge = 0;
             cannonCharge += 1;
             shieldCharge += 1;
@@ -1117,6 +1158,10 @@ function repair() {
             }, 1200);
         }
     } else {
+
+        // uncharged sound
+        playAudio(FX.uncharged.element);
+
         scoreDisplay.text(``);
         msgDisplay.text(`${user.repair.rechargeTime - repairCharge} turns to charge repair`);
         clearTimeout(scoreDisplayCache);
@@ -1130,6 +1175,10 @@ function repair() {
 function shield() {
     if (shieldCharge >= user.shield.rechargeTime) {
         if (user.shield.level < user.shield.maxLevel) {
+
+            // shield activation sound
+            playAudio(FX.shieldActivate.element);
+
             // restart shield charge
             shieldCharge = 0;
             // enable shield regeneration
@@ -1146,6 +1195,10 @@ function shield() {
             }, 1200);
         }
     } else {
+
+        // uncharged sound
+        playAudio(FX.uncharged.element);
+
         scoreDisplay.text(``);
         msgDisplay.text(`${user.shield.rechargeTime - shieldCharge} turns to charge shield`);
         clearTimeout(scoreDisplayCache);
@@ -1158,6 +1211,10 @@ function shield() {
 
 //////////////////////////////OFFENSIVE MOVES///////////////////////////////////////
 function pulsebeamAttack() {
+
+    // shoot sound
+    playAudio(FX.pulsebeamShoot[Math.floor(Math.random() * FX.pulsebeamShoot.length)].element);
+
     cannonCharge += 1;
     repairCharge += 1;
     shieldCharge += 1;
@@ -1173,13 +1230,22 @@ function pulsebeamAttack() {
 
 function lazercannonAttack() {
     if (cannonCharge >= user.lazercannon.overCharge) {
+
+        // shoot sound
+        playAudio(FX.lazercannonShoot[Math.floor(Math.random() * FX.lazercannonShoot.length)].element);
+
         cannonCharge = 0;
         repairCharge += 1;
         shieldCharge += 1;
         currentEnemyHealth -= user.lazercannon.overDamage;
         alert(`Lazercannon attack hit ${currentEnemy.name} for ${user.lazercannon.overDamage} damage!`);
         testDeath(1);
+
     } else if (cannonCharge >= user.lazercannon.baseCharge) {
+
+        // shoot sound
+        playAudio(FX.lazercannonShoot[Math.floor(Math.random() * FX.lazercannonShoot.length)].element);
+
         cannonCharge = 0;
         repairCharge += 1;
         shieldCharge += 1;
@@ -1187,12 +1253,17 @@ function lazercannonAttack() {
             currentEnemyHealth -= user.lazercannon.baseDamage;
             alert(`Lazercannon attack hit ${currentEnemy.name} for ${user.lazercannon.baseDamage} damage!`);
             testDeath(1);
+
         } else {
             alert(`Lazercannon attack missed ${currentEnemy.name}!`);
             enemyAttack();
             pageHandler(1);
         }
     } else {
+
+        // uncharged sound
+        playAudio(FX.uncharged.element);
+
         scoreDisplay.text(``);
         msgDisplay.text(`${user.lazercannon.baseCharge - cannonCharge} turns to base charge.`);
         clearTimeout(scoreDisplayCache);
@@ -1236,6 +1307,10 @@ function enemyAttack() {
     } else {
         alert(`${currentEnemy.name} missed ${user.name}!`);
         if (shieldRegenerating) {
+
+            // shield regeneration sound
+            playAudio(FX.shieldRegen.element);
+
             // continue shield regeneration process
             if (user.shield.maxLevel - user.shield.level > user.shield.regenerate) {
                 user.shield.level += user.shield.regenerate;
